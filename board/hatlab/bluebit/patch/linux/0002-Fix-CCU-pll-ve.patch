@@ -1,0 +1,28 @@
+From 3396c4366881b00453f808bd302dea4617efb50d Mon Sep 17 00:00:00 2001
+From: Aodzip <aodzip@gmail.com>
+Date: Sun, 26 Jul 2020 00:07:21 +0800
+Subject: [PATCH 02/10] Fix CCU pll-ve
+
+---
+ drivers/clk/sunxi-ng/ccu-suniv-f1c100s.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/clk/sunxi-ng/ccu-suniv-f1c100s.c b/drivers/clk/sunxi-ng/ccu-suniv-f1c100s.c
+index 7ecc3a5a5..0517b397a 100644
+--- a/drivers/clk/sunxi-ng/ccu-suniv-f1c100s.c
++++ b/drivers/clk/sunxi-ng/ccu-suniv-f1c100s.c
+@@ -303,7 +303,10 @@ static SUNXI_CCU_M_WITH_MUX_TABLE_GATE(csi_clk, "csi", csi_parents, csi_table,
+  * TODO: BSP says the parent is pll-audio, however common sense and experience
+  * told us it should be pll-ve. pll-ve is totally not used in BSP code.
+  */
+-static SUNXI_CCU_GATE(ve_clk, "ve", "pll-audio", 0x13c, BIT(31), 0);
++/*
++ * It must be pll-ve
++*/
++static SUNXI_CCU_GATE(ve_clk, "ve", "pll-ve", 0x13c, BIT(31), 0);
+ 
+ static SUNXI_CCU_GATE(codec_clk, "codec", "pll-audio", 0x140, BIT(31), 0);
+ 
+-- 
+2.17.1
+

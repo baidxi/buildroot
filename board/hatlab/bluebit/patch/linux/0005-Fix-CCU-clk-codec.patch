@@ -1,0 +1,25 @@
+From 64769cfe69069af79c6a2b529906cb97a590e367 Mon Sep 17 00:00:00 2001
+From: Aodzip <aodzip@gmail.com>
+Date: Sun, 26 Jul 2020 16:45:47 +0800
+Subject: [PATCH 05/10] Fix CCU clk-codec
+
+---
+ drivers/clk/sunxi-ng/ccu-suniv-f1c100s.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/clk/sunxi-ng/ccu-suniv-f1c100s.c b/drivers/clk/sunxi-ng/ccu-suniv-f1c100s.c
+index 0517b397a..a16ca300d 100644
+--- a/drivers/clk/sunxi-ng/ccu-suniv-f1c100s.c
++++ b/drivers/clk/sunxi-ng/ccu-suniv-f1c100s.c
+@@ -308,7 +308,7 @@ static SUNXI_CCU_M_WITH_MUX_TABLE_GATE(csi_clk, "csi", csi_parents, csi_table,
+ */
+ static SUNXI_CCU_GATE(ve_clk, "ve", "pll-ve", 0x13c, BIT(31), 0);
+ 
+-static SUNXI_CCU_GATE(codec_clk, "codec", "pll-audio", 0x140, BIT(31), 0);
++static SUNXI_CCU_GATE(codec_clk, "codec", "pll-audio", 0x140, BIT(31), CLK_SET_RATE_PARENT);
+ 
+ static SUNXI_CCU_GATE(avs_clk, "avs", "osc24M", 0x144, BIT(31), 0);
+ 
+-- 
+2.17.1
+

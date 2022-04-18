@@ -1,0 +1,36 @@
+#!/bin/sh
+#
+# Start bluetooth....
+#
+
+start() {
+    printf "Starting Bluetooth: "
+    hciconfig hci0 up
+    start-stop-daemon -S -q -m -b -p /var/run/bluetoothd.pid -x /usr/libexec/bluetooth/bluetoothd
+    [ $? = 0 ] && echo "OK" || echo "FAIL"
+}
+
+stop() {
+    printf "Stopping Bluetooth: "
+    start-stop-daemon -K -q -p /var/run/bluetoothd.pid -x /usr/libexec/bluetooth/bluetoothd
+    [ $? = 0 ] && echo "OK" || echo "FAIL"
+}
+
+case "$1" in
+    start)
+    start
+    ;;
+    stop)
+    stop
+    ;;
+    restart|reload)
+    stop
+    sleep 1
+    start
+    ;;
+  *)
+    echo "Usage: $0 {start|stop|restart}"
+    exit 1
+esac
+
+exit $?
