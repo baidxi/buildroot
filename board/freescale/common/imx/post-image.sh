@@ -10,6 +10,15 @@ dtb_list()
 	local DTB_LIST
 
 	DTB_LIST="$(sed -n 's/^BR2_LINUX_KERNEL_INTREE_DTS_NAME="\([\/a-z0-9 \-]*\)"$/\1/p' "${BR2_CONFIG}")"
+	
+	if [ -n $DTB_LIST ]; then
+		list=$(cat ${BR2_CONFIG}|grep BR2_LINUX_KERNEL_CUSTOM_DTS_PATH|cut -d '=' -f2|sed 's/\"//g')
+		for l in $list;do 
+			if [[ $l = *.dts ]]; then 
+				DTB_LIST+=$(echo $l|cut -d"." -f1); 
+			fi ; 
+		done;
+	fi
 
 	for dt in $DTB_LIST; do
 		echo -n "\"$(basename "${dt}").dtb\", "

@@ -1,0 +1,25 @@
+From b1e43cfe90ea796c6002ddf8bcf5f92b0ee925df Mon Sep 17 00:00:00 2001
+From: Aodzip <aodzip@gmail.com>
+Date: Thu, 13 Aug 2020 16:30:20 +0800
+Subject: [PATCH 07/10] Fix CCU csi-clk
+
+---
+ drivers/clk/sunxi-ng/ccu-suniv-f1c100s.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/clk/sunxi-ng/ccu-suniv-f1c100s.c b/drivers/clk/sunxi-ng/ccu-suniv-f1c100s.c
+index 1134216be..094919167 100644
+--- a/drivers/clk/sunxi-ng/ccu-suniv-f1c100s.c
++++ b/drivers/clk/sunxi-ng/ccu-suniv-f1c100s.c
+@@ -297,7 +297,7 @@ static SUNXI_CCU_M_WITH_MUX_GATE(tvd_clk, "tvd", tvd_parents,
+ static const char * const csi_parents[] = { "pll-video", "osc24M" };
+ static const u8 csi_table[] = { 0, 5, };
+ static SUNXI_CCU_M_WITH_MUX_TABLE_GATE(csi_clk, "csi", csi_parents, csi_table,
+-				       0x120, 0, 4, 8, 3, BIT(15), 0);
++				       0x134, 0, 4, 8, 3, BIT(15), 0);
+ 
+ /*
+  * TODO: BSP says the parent is pll-audio, however common sense and experience
+-- 
+2.17.1
+

@@ -1,0 +1,278 @@
+Index: b/Makefile
+===================================================================
+--- a/Makefile
++++ b/Makefile
+@@ -772,10 +772,10 @@ KBUILD_CFLAGS += $(call cc-disable-warni
+ # change __FILE__ to the relative path from the srctree
+ KBUILD_CFLAGS	+= $(call cc-option,-fmacro-prefix-map=$(srctree)/=)
+ 
+-KBUILD_CFLAGS	+= -gdwarf-4
++KBUILD_CFLAGS	+= -gdwarf-2
+ # $(KBUILD_AFLAGS) sets -g, which causes gcc to pass a suitable -g<format>
+ # option to the assembler.
+-KBUILD_AFLAGS	+= -gdwarf-4
++KBUILD_AFLAGS	+= -gdwarf-2
+ 
+ # Report stack usage if supported
+ # ARC tools based on GCC 7.1 has an issue with stack usage
+Index: b/arch/arm/dts/sun8i-t113s-bingpi-m2-t113.dts
+===================================================================
+--- /dev/null
++++ b/arch/arm/dts/sun8i-t113s-bingpi-m2-t113.dts
+@@ -0,0 +1,148 @@
++#include <dt-bindings/interrupt-controller/irq.h>
++#include <dt-bindings/gpio/gpio.h>
++#include <dt-bindings/leds/common.h>
++
++/dts-v1/;
++
++#include "sun8i-t113s.dtsi"
++
++/ {
++    model = "BingPi M2-T113";
++    compatible = "bingpi,m2-t113","allwinner,sun8i-t113s";
++
++	aliases {
++		serial3 = &uart3;
++		spi0 = &spi0;
++	};
++
++	chosen {
++		stdout-path = "serial3:115200n8";
++	};
++
++	leds {
++		compatible = "gpio-leds";
++
++		led-0 {
++			color = <LED_COLOR_ID_BLUE>;
++			function = LED_FUNCTION_STATUS;
++			gpios = <&pio 3 22 GPIO_ACTIVE_LOW>; /* PD22 */
++		};
++	};
++
++	/* board wide 5V supply directly from the USB-C socket */
++	reg_vcc5v: regulator-5v {
++		compatible = "regulator-fixed";
++		regulator-name = "vcc-5v";
++		regulator-min-microvolt = <5000000>;
++		regulator-max-microvolt = <5000000>;
++		regulator-always-on;
++	};
++
++	/* SY8008 DC/DC regulator on the board */
++	reg_3v3: regulator-3v3 {
++		compatible = "regulator-fixed";
++		regulator-name = "vcc-3v3";
++		regulator-min-microvolt = <3300000>;
++		regulator-max-microvolt = <3300000>;
++		vin-supply = <&reg_vcc5v>;
++	};
++
++	/* SY8008 DC/DC regulator on the board, also supplying VDD-SYS */
++	reg_vcc_core: regulator-core {
++		compatible = "regulator-fixed";
++		regulator-name = "vcc-core";
++		regulator-min-microvolt = <880000>;
++		regulator-max-microvolt = <880000>;
++		vin-supply = <&reg_vcc5v>;
++	};
++
++	/* XC6206 LDO on the board */
++	reg_avdd2v8: regulator-avdd {
++		compatible = "regulator-fixed";
++		regulator-name = "avdd2v8";
++		regulator-min-microvolt = <2800000>;
++		regulator-max-microvolt = <2800000>;
++		vin-supply = <&reg_3v3>;
++	};
++
++	wifi_pwrseq: wifi-pwrseq {
++		compatible = "mmc-pwrseq-simple";
++		reset-gpios = <&pio 6 12 GPIO_ACTIVE_LOW>; /* PG12 */
++	};
++};
++
++&cpu0 {
++	cpu-supply = <&reg_vcc_core>;
++};
++
++&cpu1 {
++	cpu-supply = <&reg_vcc_core>;
++};
++
++&dcxo {
++	clock-frequency = <24000000>;
++};
++
++&ehci1 {
++	status = "okay";
++};
++
++&ohci1 {
++	status = "okay";
++};
++
++&pio {
++	vcc-pb-supply = <&reg_3v3>;
++	vcc-pd-supply = <&reg_3v3>;
++	vcc-pe-supply = <&reg_avdd2v8>;
++	vcc-pf-supply = <&reg_3v3>;
++	vcc-pg-supply = <&reg_3v3>;
++};
++
++&uart3 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&uart3_pb_pins>;
++	status = "okay";
++};
++
++/* The USB-C socket has its CC pins pulled to GND, so is hardwired as a UFP. */
++&usb_otg {
++	dr_mode = "peripheral";
++	status = "okay";
++};
++
++&usbphy {
++	usb1_vbus-supply = <&reg_vcc5v>;
++	status = "okay";
++};
++
++&spi0_pins {
++	pins = "PC2","PC3","PC4","PC5","PC6","PC7";
++	function = "spi0";
++};
++
++&spi0 {
++	compatible = "allwinner,sun8i-h3-spi";
++	pinctrl-0 = <&spi0_pins>;
++	pinctrl-names = "default";
++	
++	status = "okay";
++
++	spi-nand@0 {
++		compatible = "spi-nand";
++		spi-max-frequency=<0x5f5e100>;
++		reg = <0x0>;
++		spi-rx-bus-width = <0x01>;
++		spi-tx-bus-width = <0x01>;
++		status = "okay";
++	};
++};
++&mmc0 {
++	pinctrl-0 = <&mmc0_pins>;
++	pinctrl-names = "default";
++	vmmc-supply = <&reg_3v3>;
++	cd-gpios = <&pio 5 6 GPIO_ACTIVE_LOW>;
++	disable-wp;
++	bus-width = <4>;
++	status = "okay";
++};
+Index: b/configs/bingpi_m2_defconfig
+===================================================================
+--- /dev/null
++++ b/configs/bingpi_m2_defconfig
+@@ -0,0 +1,44 @@
++CONFIG_ARM=y
++CONFIG_ARCH_SUNXI=y
++CONFIG_DEFAULT_DEVICE_TREE="sun8i-t113s-bingpi-m2-t113"
++CONFIG_SPL=y
++CONFIG_MACH_SUN8I_R528=y
++CONFIG_DRAM_CLK=792
++CONFIG_DRAM_ZQ=8092667
++CONFIG_SUNXI_MINIMUM_DRAM_MB=128
++# CONFIG_SYS_MALLOC_CLEAR_ON_INIT is not set
++CONFIG_DRAM_SUNXI_ODT_EN=0
++CONFIG_DRAM_SUNXI_TPR0=0x004a2195
++CONFIG_DRAM_SUNXI_TPR11=0x340000
++CONFIG_DRAM_SUNXI_TPR12=0x46
++CONFIG_DRAM_SUNXI_TPR13=0x34000100
++CONFIG_CONS_INDEX=4
++CONFIG_SPI=y
++CONFIG_SPI_FLASH_MTD=y
++CONFIG_CMD_SPI=y
++CONFIG_DM_SPI=y
++CONFIG_MTD=y
++CONFIG_DM_MTD=y
++CONFIG_CMD_MTD=y
++CONFIG_CMD_MTDPARTS=y
++CONFIG_SPI_FLASH=y
++CONFIG_MTD_SPI_NAND=y
++CONFIG_BOOTDEV_SPI_FLASH=y
++CONFIG_SPI_FLASH_MACRONIX=y
++CONFIG_SPI_FLASH_XTX=y
++CONFIG_USB_MUSB_GADGET=y
++CONFIG_CMD_USB=y
++CONFIG_CMD_FASTBOOT=y
++CONFIG_CMD_USB_MASS_STORAGE=y
++CONFIG_USB_GADGET_DOWNLOAD=y
++CONFIG_CMD_USB_SDP=y
++CONFIG_CMD_UMS_ABORT_KEYED=y
++CONFIG_MTD_RAW_NAND=y
++CONFIG_CMD_UBI=y
++CONFIG_CMD_UBIFS=y
++CONFIG_ENV_UBI_PART=y
++CONFIG_MTD_UBI=y
++CONFIG_MTD_UBI_BLOCK=y
++CONFIG_SYS_NAND_BLOCK_SIZE=128
++CONFIG_SYS_NAND_PAGE_SIZE=2048
++CONFIG_SYS_NAND_OOBSIZE=128
+
+Index: b/drivers/mtd/nand/raw/nand.c
+===================================================================
+--- a/drivers/mtd/nand/raw/nand.c
++++ b/drivers/mtd/nand/raw/nand.c
+@@ -11,18 +11,22 @@
+ #include <linux/mtd/concat.h>
+ #include <linux/mtd/rawnand.h>
+ 
++#if !CONFIG_IS_ENABLED(MTD_SPI_NAND)
+ #ifndef CFG_SYS_NAND_BASE_LIST
+ #define CFG_SYS_NAND_BASE_LIST { CFG_SYS_NAND_BASE }
+ #endif
++#endif
+ 
+ int nand_curr_device = -1;
+ 
+ static struct mtd_info *nand_info[CONFIG_SYS_MAX_NAND_DEVICE];
+ 
+-#if !CONFIG_IS_ENABLED(SYS_NAND_SELF_INIT)
++#if !CONFIG_IS_ENABLED(MTD_SPI_NAND)
++#if !CONFIG_IS_ENABLED(SYS_NAND_SELF_INIT) 
+ static struct nand_chip nand_chip[CONFIG_SYS_MAX_NAND_DEVICE];
+ static ulong base_address[CONFIG_SYS_MAX_NAND_DEVICE] = CFG_SYS_NAND_BASE_LIST;
+ #endif
++#endif
+ 
+ static char dev_name[CONFIG_SYS_MAX_NAND_DEVICE][8];
+ 
+@@ -94,6 +98,7 @@ void nand_unregister(struct mtd_info *mt
+ 	nand_info[devnum] = NULL;
+ }
+ 
++#if !CONFIG_IS_ENABLED(MTD_SPI_NAND)
+ #if !CONFIG_IS_ENABLED(SYS_NAND_SELF_INIT)
+ static void nand_init_chip(int i)
+ {
+@@ -116,6 +121,7 @@ static void nand_init_chip(int i)
+ 	nand_register(i, mtd);
+ }
+ #endif
++#endif
+ 
+ #ifdef CONFIG_MTD_CONCAT
+ struct mtd_info *concat_mtd;
+@@ -190,11 +196,13 @@ void nand_init(void)
+ #if CONFIG_IS_ENABLED(SYS_NAND_SELF_INIT)
+ 	board_nand_init();
+ #else
++#if !CONFIG_IS_ENABLED(MTD_SPI_NAND)
+ 	int i;
+ 
+ 	for (i = 0; i < CONFIG_SYS_MAX_NAND_DEVICE; i++)
+ 		nand_init_chip(i);
+ #endif
++#endif
+ 
+ #ifdef CONFIG_SYS_NAND_SELECT_DEVICE
+ 	/*

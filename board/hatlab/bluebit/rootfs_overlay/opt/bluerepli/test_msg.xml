@@ -1,0 +1,51 @@
+<bmessage-object>::= {
+    "BEGIN:BMSG"
+    <bmessage-property>
+    [<bmessage-originator>]?
+    <bmessage-envelope>
+    "END:BMSG"
+}
+
+<bmessage-property>::=<bmessage-version-property>
+    <bmessage-readstatus-property> <bmessage-type-property>
+    <bmessage-folder-property> <bmessage-extendeddata-property>
+
+<bmessage-version-property>::="VERSION:1.1"
+<common-digit>*"."                                                <common-digit>*                                                    
+<bmessage-readstatus-property>::="STATUS:" 'readstatus' 
+<bmessage-type-property>::="TYPE:" 'type' 
+<bmessage-folder-property>::="FOLDER:" 'foldername' 
+<bmessage-extendeddata-property>::="EXTENDEDDATA:" 'extendeddata' 
+<bmessage-originator>::=                                                                            <vcard>
+
+<bmessage-envelope> ::= {
+"BEGIN:BENV" 
+[                                                                                        <bmessage-recipient>]*
+<bmessage-envelope> |                                                                                                <bmessage-content>
+"END:BENV" 
+}
+<bmessage-recipient> ::=                                                                                                        <vcard>
+
+<bmessage-content>::= {
+"BEGIN:BBODY"
+[                                                                                                                    <bmessage-body-part-ID>
+]
+<bmessage-body-property>
+<bmessage-body-content>*                                                                                                                                    
+"END:BBODY"
+}
+<bmessage-body-part-ID>::="PARTID:" 'Part-ID'
+<bmessage-body-property>::=[                                                                                                                                                <bmessage-body-encoding-property>]
+[                                                                                                                                                    <bmessage-body-charset-property>]
+[                                                                                                                                                        <bmessage-body-language-property>]
+<bmessage-body-content-length-property>
+<bmessage-body-encoding-property>::="ENCODING:"'encoding' 
+<bmessage-body-charset-property>::="CHARSET:"'charset' 
+<bmessage-body-language-property>::="LANGUAGE:"'language' 
+<bmessage-body-content-length-property>::=
+"LENGTH:" <common-digit>*                                                                                                                                                                                
+<bmessage-body-content>::={
+"BEGIN:MSG"
+'message'
+"END:MSG"
+}

@@ -1,0 +1,12 @@
+Index: b/configure
+===================================================================
+--- a/configure
++++ b/configure
+@@ -2757,7 +2757,6 @@ target_libraries="target-libgcc \
+ 		target-libatomic \
+ 		target-libitm \
+ 		target-libstdc++-v3 \
+-		target-libsanitizer \
+ 		target-libvtv \
+ 		target-libmpx \
+ 		target-libssp \

@@ -1,0 +1,145 @@
+Index: b/drivers/soc/samsung/Makefile
+===================================================================
+--- a/drivers/soc/samsung/Makefile
++++ b/drivers/soc/samsung/Makefile
+@@ -15,3 +15,4 @@ obj-$(CONFIG_EXYNOS_REGULATOR_COUPLER) +
+ 
+ obj-$(CONFIG_SAMSUNG_PM_CHECK)	+= s3c-pm-check.o
+ obj-$(CONFIG_SAMSUNG_PM_DEBUG)	+= s3c-pm-debug.o
++obj-$(CONFIG_CPU_S5PV210)	+= s5pv210-srom.o
+Index: b/drivers/soc/samsung/s5pv210-srom.c
+===================================================================
+--- /dev/null
++++ b/drivers/soc/samsung/s5pv210-srom.c
+@@ -0,0 +1,131 @@
++#include <linux/init.h>
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include <linux/slab.h>
++#include <linux/platform_device.h>
++#include <linux/of.h>
++#include <asm/io.h>
++
++struct s5p_srom {
++	struct list_head list;
++	void __iomem *base;
++	int bank;
++	int width;
++	int mode;
++	int config;
++};
++
++const static struct of_device_id s5p_srom_ids[] = {
++	{
++		.compatible = "samsung,s5p-srom",
++	},
++	{}
++};
++
++#define SMC_BC_TACS(x) (x << 28) /* 0clk     address set-up */
++#define SMC_BC_TCOS(x) (x << 24) /* 4clk     chip selection set-up */
++#define SMC_BC_TACC(x) (x << 16) /* 14clk    access cycle */
++#define SMC_BC_TCOH(x) (x << 12) /* 1clk     chip selection hold */
++#define SMC_BC_TAH(x)  (x << 8)  /* 4clk     address holding time */
++#define SMC_BC_TACP(x) (x << 4)  /* 6clk     page mode access cycle */
++#define SMC_BC_PMC(x)  (x << 0)  /* normal(1data)page mode configuration */
++
++static int s5pv210_srom_probe(struct platform_device *pdev)
++{
++	struct device_node *np = pdev->dev.of_node, *child;	
++	struct s5p_srom *srom;
++	struct resource *res;
++	int ret;
++	u32 val;
++
++	srom = kzalloc(sizeof(*srom), GFP_KERNEL);
++
++	if (!srom)
++		return -ENOMEM;
++
++	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
++
++	if (!res)
++		return -EINVAL;
++
++	srom->base = ioremap(res->start, resource_size(res));
++
++	if (!srom->base) {
++		dev_err(&pdev->dev, "ioremap FAIL\n");
++		kfree(srom);
++		return -ENOMEM;
++	}
++
++	for_each_available_child_of_node(np, child) {
++		ret = of_property_read_u32(child, "reg", &val);
++
++		if (ret) {
++			dev_err(&pdev->dev, "bank not found\n");
++			continue;
++		}
++
++		if (val > 6) {
++			dev_err(&pdev->dev, "invalid bank %d\n", val);
++			continue;
++		}
++
++		srom->bank = val;
++
++		of_property_read_u32(child, "srom,width", &srom->width);
++		of_property_read_u32(child, "srom,mode", &srom->mode);
++
++		of_property_read_u32(child, "srom,tacs", &val);
++		srom->config |= SMC_BC_TACS(val);
++
++		of_property_read_u32(child, "srom,tcos", &val);
++		srom->config |= SMC_BC_TCOS(val);
++
++		of_property_read_u32(child, "srom,tacc", &val);
++		srom->config |= SMC_BC_TACC(val);
++
++		of_property_read_u32(child, "srom,tcoh", &val);
++		srom->config |= SMC_BC_TCOH(val);
++
++		of_property_read_u32(child, "srom,tah", &val);
++		srom->config |= SMC_BC_TAH(val);
++
++		of_property_read_u32(child, "srom,tacp", &val);
++		srom->config |= SMC_BC_TACP(val);
++
++		of_property_read_u32(child, "srom,pmc", &val);
++		srom->config |= SMC_BC_PMC(val);
++
++		val = (srom->width << ( srom->bank * 4) + 0) | (srom->mode << (srom->bank * 4) + 1);
++
++		writel(val, srom->base);
++
++		writel(srom->config, srom->base + ((srom->bank + 1) * 4));
++
++		dev_info(&pdev->dev, "name:%s, bank@%d, config:%x\n", child->name, srom->bank, srom->config);
++	}
++
++	platform_set_drvdata(pdev, srom);
++
++	return 0;
++}
++
++static int s5pv210_srom_remove(struct platform_device *pdev)
++{
++	struct s5p_srom *srom = platform_get_drvdata(pdev);
++	kfree(srom);
++	return 0;
++}
++
++static struct platform_driver s5pv210_srom_drv = {
++	.probe = s5pv210_srom_probe,
++	.remove = s5pv210_srom_remove,
++	.driver = {
++		.name = "s5p-srom",
++		.of_match_table = s5p_srom_ids,
++	},
++};
++
++module_platform_driver(s5pv210_srom_drv);
++MODULE_LICENSE("GPL");
++
++

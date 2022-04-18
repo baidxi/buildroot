@@ -1,0 +1,8 @@
+#!/bin/sh
+
+case $1 in
+	start)
+		[ ! -d /boot ] && mkdir /boot
+		mount /dev/mmcblk0p1 /boot
+	;;
+esac

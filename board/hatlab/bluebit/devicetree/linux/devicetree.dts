@@ -1,0 +1,103 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR X11)
+
+/dts-v1/;
+#include "suniv-f1c200s.dtsi"
+
+/ {
+	model = "DAS-Security BlueBit";
+	compatible = "allwinner,suniv-f1c200s",
+			 "allwinner,suniv-f1c100s";
+
+	aliases {
+		serial0 = &uart0;
+	};
+
+	chosen {
+		#address-cells = <1>;
+		#size-cells = <1>;
+		ranges;
+
+		stdout-path = "serial0:115200n8";
+	};
+
+	wifi_pwrseq: wifi_pwrseq {
+		compatible = "mmc-pwrseq-simple";
+		reset-gpios = <&pio 4 5 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
+	};
+
+	rfkill_wwan0 {
+		compatible = "rfkill-gpio";
+		rfkill-name = "wwan0";
+		rfkill-type = <5>;
+		shutdown-gpios = <&pio 3 1 (GPIO_ACTIVE_HIGH | GPIO_PULL_UP)>;
+	};
+};
+
+&pio {
+	brcmf_pins: brcmf-pins {
+		pins = "PE3";
+		function = "gpio_in";
+		bias-pull-up;
+	};
+};
+
+&uart0 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&uart0_pe_pins>;
+	status = "okay";
+};
+
+&uart1 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&uart1_pa_pins>, <&uart1_pa_rcts_pins>;
+	uart-has-rtscts;
+	status = "okay";
+
+	btbcm: bluetooth {
+		compatible = "brcm,bcm43438-bt";
+		device-wakeup-gpios = <&pio 4 4 (GPIO_ACTIVE_HIGH | GPIO_PULL_UP)>;
+		host-wakeup-gpios = <&pio 4 2 (GPIO_ACTIVE_HIGH | GPIO_PULL_UP)>;
+		shutdown-gpios = <&pio 4 6 (GPIO_ACTIVE_HIGH | GPIO_PULL_UP)>;
+	};
+};
+
+&mmc0 {
+	status = "okay";
+	mmc-pwrseq = <&wifi_pwrseq>;
+	bus-width = <4>;
+	non-removable;
+
+	brcmf: wifi@0 {
+		compatible = "brcm,bcm4329-fmac";
+		pinctrl-names = "default";
+		pinctrl-0 = <&brcmf_pins>;
+		interrupt-parent = <&pio>;
+		interrupt-names = "host-wake";
+		interrupts = <4 3 IRQ_TYPE_LEVEL_LOW>;
+	};
+};
+
+&mmc1 {
+	status = "okay";
+	bus-width = <1>;
+	non-removable;
+};
+
+&otg_sram {
+	status = "okay";
+};
+
+&usb_otg {
+	dr_mode = "host";
+	status = "okay";
+};
+
+&usbphy {
+	status = "okay";
+};
+
+&i2c0 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&i2c0_pd_pins>;
+	status = "okay";
+};
