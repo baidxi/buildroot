@@ -41,7 +41,8 @@
 
 	ethernet@a8000000 {
 		compatible = "davicom,dm9000";
-		reg = <0x88000000 0x4 0x88000004 0x2>;
+		reg = <0x88000000 0x4 0x88000004 0x4>;
+		reg-names="io","data";
 		interrupt-parent = <&gph1>;
 		interrupts = <1 IRQ_TYPE_LEVEL_HIGH>;
 		local-mac-address = [00 00 de ad be ef];
