@@ -18,6 +18,7 @@
 
 # This script generates a random configuration for testing Buildroot.
 
+from binascii import hexlify
 import contextlib
 import csv
 import os
@@ -200,6 +201,8 @@ def fixup_config(sysinfo, configfile):
     with open(configfile) as configf:
         configlines = configf.readlines()
 
+    ROOTFS_SIZE = '5G'
+
     BR2_TOOLCHAIN_EXTERNAL_URL = 'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/'
 
     if "BR2_NEEDS_HOST_JAVA=y\n" in configlines and not sysinfo.has("java"):
@@ -237,12 +240,9 @@ def fixup_config(sysinfo, configfile):
     if 'BR2_PACKAGE_PYTHON3=y\n' in configlines and \
        BR2_TOOLCHAIN_EXTERNAL_URL + 'mips64el-ctng_n64-linux-gnu.tar.xz"\n' in configlines:
         return False
-    # libffi not available on sh2a and ARMv7-M, but propagating libffi
-    # arch dependencies in Buildroot is really too much work, so we
-    # handle this here.
-    if 'BR2_sh2a=y\n' in configlines and \
-       'BR2_PACKAGE_LIBFFI=y\n' in configlines:
-        return False
+    # libffi not available on ARMv7-M, but propagating libffi arch
+    # dependencies in Buildroot is really too much work, so we handle
+    # this here.
     if 'BR2_ARM_CPU_ARMV7M=y\n' in configlines and \
        'BR2_PACKAGE_LIBFFI=y\n' in configlines:
         return False
@@ -299,7 +299,9 @@ def fixup_config(sysinfo, configfile):
        'BR2_PACKAGE_FLANN=y\n' in configlines:
         return False
 
-    if 'BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE=y\n' in configlines:
+    if 'BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE=y\n' in configlines and \
+       'BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE_SOURCE=""\n' in configlines and \
+       'BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE_SIZE=""\n' in configlines:
         bootenv = os.path.join(args.outputdir, "boot_env.txt")
         with open(bootenv, "w+") as bootenvf:
             bootenvf.write("prop=value")
@@ -308,7 +310,8 @@ def fixup_config(sysinfo, configfile):
         configlines.remove('BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE_SIZE=""\n')
         configlines.append('BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE_SIZE="0x1000"\n')
 
-    if 'BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y\n' in configlines:
+    if 'BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y\n' in configlines and \
+       'BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE=""\n' in configlines:
         bootscr = os.path.join(args.outputdir, "boot_script.txt")
         with open(bootscr, "w+") as bootscrf:
             bootscrf.write("prop=value")
@@ -382,6 +385,9 @@ def fixup_config(sysinfo, configfile):
         if 'BR2_LINUX_KERNEL_APPENDED_ZIMAGE=y\n' in configlines:
             configlines.remove('BR2_LINUX_KERNEL_APPENDED_ZIMAGE=y\n')
             configlines.append('BR2_LINUX_KERNEL_ZIMAGE=y\n')
+        if 'BR2_LINUX_KERNEL_CUIMAGE=y\n' in configlines:
+            configlines.remove('BR2_LINUX_KERNEL_CUIMAGE=y\n')
+            configlines.append('BR2_LINUX_KERNEL_UIMAGE=y\n')
         if 'BR2_LINUX_KERNEL_SIMPLEIMAGE=y\n' in configlines:
             configlines.remove('BR2_LINUX_KERNEL_SIMPLEIMAGE=y\n')
             configlines.append('BR2_LINUX_KERNEL_VMLINUX=y\n')
@@ -443,6 +449,16 @@ def fixup_config(sysinfo, configfile):
        'BR2_TARGET_OPTEE_OS_PLATFORM=""\n' in configlines:
         configlines.remove('BR2_TARGET_OPTEE_OS=y\n')
         configlines.remove('BR2_TARGET_OPTEE_OS_PLATFORM=""\n')
+
+    if 'BR2_TARGET_ROOTFS_EXT2=y\n' in configlines and \
+       'BR2_TARGET_ROOTFS_EXT2_SIZE="60M"\n' in configlines:
+        configlines.remove('BR2_TARGET_ROOTFS_EXT2_SIZE="60M"\n')
+        configlines.append('BR2_TARGET_ROOTFS_EXT2_SIZE="%s"\n' % ROOTFS_SIZE)
+
+    if 'BR2_TARGET_ROOTFS_F2FS=y\n' in configlines and \
+       'BR2_TARGET_ROOTFS_F2FS_SIZE="100M"\n' in configlines:
+        configlines.remove('BR2_TARGET_ROOTFS_F2FS_SIZE="100M"\n')
+        configlines.append('BR2_TARGET_ROOTFS_F2FS_SIZE="%s"\n' % ROOTFS_SIZE)
 
     if 'BR2_TARGET_S500_BOOTLOADER=y\n' in configlines and \
        'BR2_TARGET_S500_BOOTLOADER_BOARD=""\n' in configlines:
@@ -596,9 +612,13 @@ def gen_config(args):
                   file=sys.stderr)
             return 1
         bounded_loop -= 1
-        subprocess.check_call(["make", "O=%s" % args.outputdir, "-C", args.buildrootdir,
-                               "KCONFIG_PROBABILITY=%d" % randint(1, 20),
-                               "randpackageconfig" if args.toolchains_csv else "randconfig"])
+        make_rand = [
+            "make", "O=%s" % args.outputdir, "-C", args.buildrootdir,
+            "KCONFIG_SEED=0x%s" % hexlify(os.urandom(4)).decode("ascii").upper(),
+            "KCONFIG_PROBABILITY=%d" % randint(1, 20),
+            "randpackageconfig" if args.toolchains_csv else "randconfig"
+        ]
+        subprocess.check_call(make_rand)
 
         if fixup_config(sysinfo, configfile):
             break

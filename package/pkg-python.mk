@@ -33,78 +33,77 @@ PKG_PYTHON_HOST_PLATFORM = linux-$(PKG_PYTHON_ARCH)
 PKG_PYTHON_SYSCONFIGDATA_PATH = $(PYTHON3_PATH)/_sysconfigdata__linux_*.py
 PKG_PYTHON_SYSCONFIGDATA_NAME = `{ [ -e $(PKG_PYTHON_SYSCONFIGDATA_PATH) ] && basename $(PKG_PYTHON_SYSCONFIGDATA_PATH) .py; } || true`
 
-# Target distutils-based packages
-PKG_PYTHON_DISTUTILS_ENV = \
-	PATH=$(BR_PATH) \
-	$(TARGET_CONFIGURE_OPTS) \
-	LDSHARED="$(TARGET_CROSS)gcc -shared" \
-	PYTHONPATH="$(PYTHON3_PATH)" \
-	PYTHONNOUSERSITE=1 \
-	SETUPTOOLS_USE_DISTUTILS=stdlib \
+# Target python packages
+PKG_PYTHON_ENV = \
 	_PYTHON_HOST_PLATFORM="$(PKG_PYTHON_HOST_PLATFORM)" \
 	_PYTHON_PROJECT_BASE="$(PYTHON3_DIR)" \
 	_PYTHON_SYSCONFIGDATA_NAME="$(PKG_PYTHON_SYSCONFIGDATA_NAME)" \
+	PATH=$(BR_PATH) \
+	$(TARGET_CONFIGURE_OPTS) \
+	PYTHONPATH="$(PYTHON3_PATH)" \
+	PYTHONNOUSERSITE=1 \
 	_python_sysroot=$(STAGING_DIR) \
 	_python_prefix=/usr \
 	_python_exec_prefix=/usr
 
+# Host python packages
+HOST_PKG_PYTHON_ENV = \
+	PATH=$(BR_PATH) \
+	PYTHONNOUSERSITE=1 \
+	$(HOST_CONFIGURE_OPTS)
+
+# Target distutils-based packages
+PKG_PYTHON_DISTUTILS_ENV = \
+	$(PKG_PYTHON_ENV) \
+	LDSHARED="$(TARGET_CROSS)gcc -shared" \
+	SETUPTOOLS_USE_DISTUTILS=stdlib \
+
 PKG_PYTHON_DISTUTILS_BUILD_OPTS = \
 	--executable=/usr/bin/python
 
-PKG_PYTHON_DISTUTILS_INSTALL_TARGET_OPTS = \
+PKG_PYTHON_DISTUTILS_INSTALL_OPTS = \
 	--install-headers=/usr/include/python$(PYTHON3_VERSION_MAJOR) \
-	--prefix=/usr \
+	--prefix=/usr
+
+PKG_PYTHON_DISTUTILS_INSTALL_TARGET_OPTS = \
+	$(PKG_PYTHON_DISTUTILS_INSTALL_OPTS) \
 	--root=$(TARGET_DIR)
 
 PKG_PYTHON_DISTUTILS_INSTALL_STAGING_OPTS = \
-	--install-headers=/usr/include/python$(PYTHON3_VERSION_MAJOR) \
-	--prefix=/usr \
+	$(PKG_PYTHON_DISTUTILS_INSTALL_OPTS) \
 	--root=$(STAGING_DIR)
 
 # Host distutils-based packages
 HOST_PKG_PYTHON_DISTUTILS_ENV = \
-	PATH=$(BR_PATH) \
-	PYTHONNOUSERSITE=1 \
-	SETUPTOOLS_USE_DISTUTILS=stdlib \
-	$(HOST_CONFIGURE_OPTS)
+	$(HOST_PKG_PYTHON_ENV) \
+	SETUPTOOLS_USE_DISTUTILS=stdlib
 
 HOST_PKG_PYTHON_DISTUTILS_INSTALL_OPTS = \
 	--prefix=$(HOST_DIR)
 
 # Target setuptools-based packages
 PKG_PYTHON_SETUPTOOLS_ENV = \
-	_PYTHON_HOST_PLATFORM="$(PKG_PYTHON_HOST_PLATFORM)" \
-	_PYTHON_PROJECT_BASE="$(PYTHON3_DIR)" \
-	_PYTHON_SYSCONFIGDATA_NAME="$(PKG_PYTHON_SYSCONFIGDATA_NAME)" \
-	PATH=$(BR_PATH) \
-	$(TARGET_CONFIGURE_OPTS) \
-	PYTHONPATH="$(PYTHON3_PATH)" \
-	PYTHONNOUSERSITE=1 \
-	SETUPTOOLS_USE_DISTUTILS=stdlib \
-	_python_sysroot=$(STAGING_DIR) \
-	_python_prefix=/usr \
-	_python_exec_prefix=/usr
+	$(PKG_PYTHON_ENV) \
+	SETUPTOOLS_USE_DISTUTILS=stdlib
 
-PKG_PYTHON_SETUPTOOLS_INSTALL_TARGET_OPTS = \
+PKG_PYTHON_SETUPTOOLS_INSTALL_OPTS = \
 	--install-headers=/usr/include/python$(PYTHON3_VERSION_MAJOR) \
 	--prefix=/usr \
 	--executable=/usr/bin/python \
-	--single-version-externally-managed \
+	--single-version-externally-managed
+
+PKG_PYTHON_SETUPTOOLS_INSTALL_TARGET_OPTS = \
+	$(PKG_PYTHON_SETUPTOOLS_INSTALL_OPTS) \
 	--root=$(TARGET_DIR)
 
 PKG_PYTHON_SETUPTOOLS_INSTALL_STAGING_OPTS = \
-	--install-headers=/usr/include/python$(PYTHON3_VERSION_MAJOR) \
-	--prefix=/usr \
-	--executable=/usr/bin/python \
-	--single-version-externally-managed \
+	$(PKG_PYTHON_SETUPTOOLS_INSTALL_OPTS) \
 	--root=$(STAGING_DIR)
 
 # Host setuptools-based packages
 HOST_PKG_PYTHON_SETUPTOOLS_ENV = \
-	PATH=$(BR_PATH) \
-	PYTHONNOUSERSITE=1 \
-	SETUPTOOLS_USE_DISTUTILS=stdlib \
-	$(HOST_CONFIGURE_OPTS)
+	$(HOST_PKG_PYTHON_ENV) \
+	SETUPTOOLS_USE_DISTUTILS=stdlib
 
 HOST_PKG_PYTHON_SETUPTOOLS_INSTALL_OPTS = \
 	--prefix=$(HOST_DIR) \
@@ -113,28 +112,21 @@ HOST_PKG_PYTHON_SETUPTOOLS_INSTALL_OPTS = \
 
 # Target pep517-based packages
 PKG_PYTHON_PEP517_ENV = \
-	_PYTHON_HOST_PLATFORM="$(PKG_PYTHON_HOST_PLATFORM)" \
-	_PYTHON_PROJECT_BASE="$(PYTHON3_DIR)" \
-	_PYTHON_SYSCONFIGDATA_NAME="$(PKG_PYTHON_SYSCONFIGDATA_NAME)" \
-	PATH=$(BR_PATH) \
-	$(TARGET_CONFIGURE_OPTS) \
-	PYTHONPATH="$(PYTHON3_PATH)" \
-	PYTHONNOUSERSITE=1 \
-	_python_sysroot=$(STAGING_DIR) \
-	_python_prefix=/usr \
-	_python_exec_prefix=/usr
+	$(PKG_PYTHON_ENV)
+
+PKG_PYTHON_PEP517_INSTALL_OPTS = \
+	--interpreter=/usr/bin/python \
+	--script-kind=posix
 
 PKG_PYTHON_PEP517_INSTALL_TARGET_OPTS = \
-	--interpreter=/usr/bin/python \
-	--script-kind=posix \
+	$(PKG_PYTHON_PEP517_INSTALL_OPTS) \
 	--purelib=$(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages \
 	--headers=$(TARGET_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR) \
 	--scripts=$(TARGET_DIR)/usr/bin \
 	--data=$(TARGET_DIR)/usr
 
 PKG_PYTHON_PEP517_INSTALL_STAGING_OPTS = \
-	--interpreter=/usr/bin/python \
-	--script-kind=posix \
+	$(PKG_PYTHON_PEP517_INSTALL_OPTS) \
 	--purelib=$(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages \
 	--headers=$(STAGING_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR) \
 	--scripts=$(STAGING_DIR)/usr/bin \
@@ -142,17 +134,10 @@ PKG_PYTHON_PEP517_INSTALL_STAGING_OPTS = \
 
 # Host pep517-based packages
 HOST_PKG_PYTHON_PEP517_ENV = \
-	PATH=$(BR_PATH) \
-	PYTHONNOUSERSITE=1 \
-	$(HOST_CONFIGURE_OPTS)
+	$(HOST_PKG_PYTHON_ENV)
 
-HOST_PKG_PYTHON_PEP517_INSTALL_OPTS = \
-	--interpreter=/bin/python \
-	--script-kind=posix \
-	--purelib=$(HOST_DIR)/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages \
-	--headers=$(HOST_DIR)/include/python$(PYTHON3_VERSION_MAJOR) \
-	--scripts=$(HOST_DIR)/bin \
-	--data=$(HOST_DIR)
+HOST_PKG_PYTHON_PEP517_BOOTSTRAP_INSTALL_OPTS = \
+	--installdir=$(HOST_DIR)/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages
 
 ################################################################################
 # inner-python-package -- defines how the configuration, compilation
@@ -212,7 +197,15 @@ $(2)_BASE_INSTALL_STAGING_CMD = $(TOPDIR)/support/scripts/pyinstaller.py dist/* 
 else
 $(2)_BASE_ENV = $$(HOST_PKG_PYTHON_PEP517_ENV)
 $(2)_BASE_BUILD_CMD = -m build -n -w
-$(2)_BASE_INSTALL_CMD = $(TOPDIR)/support/scripts/pyinstaller.py dist/* $$(HOST_PKG_PYTHON_PEP517_INSTALL_OPTS)
+$(2)_BASE_INSTALL_CMD = -m installer dist/*
+endif
+else ifeq ($$($(2)_SETUP_TYPE),flit-bootstrap)
+ifeq ($(4),target)
+$$(error flit-bootstrap setup type only supported for host packages)
+else
+$(2)_BASE_ENV = $$(HOST_PKG_PYTHON_PEP517_ENV)
+$(2)_BASE_BUILD_CMD = -m flit_core.wheel
+$(2)_BASE_INSTALL_CMD ?= -m installer dist/*
 endif
 else
 $$(error "Invalid $(2)_SETUP_TYPE. Valid options are 'distutils', 'setuptools', 'pep517' or 'flit'.")
@@ -238,6 +231,12 @@ else ifneq ($$(filter flit pep517,$$($(2)_SETUP_TYPE)),)
 $(2)_DEPENDENCIES += host-python-pypa-build host-python-installer
 ifeq ($$($(2)_SETUP_TYPE),flit)
 $(2)_DEPENDENCIES += host-python-flit-core
+endif
+else ifeq ($$($(2)_SETUP_TYPE),flit-bootstrap)
+# Don't add dependency on host-python-installer for
+# host-python-installer itself, and its dependencies.
+ifeq ($$(filter host-python-flit-core host-python-installer,$(1)),)
+$(2)_DEPENDENCIES += host-python-installer
 endif
 endif # SETUP_TYPE
 
