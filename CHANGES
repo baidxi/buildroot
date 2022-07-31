@@ -1,3 +1,237 @@
+2022.05.1, released July 24th, 2022
+
+	Important / security related fixes.
+
+	Disable big endian no-mmu on ARM as it is not supported by
+	elf2flt.
+
+	Tighten dependencies for external Bootlin toolchains to ensure
+	they can only be selected in compatible configurations.
+
+	Support external toolchains without gdbserver.
+
+	Updated/fixed packages: apache, avahi, bdwgc, bind, bpftool,
+	cups, darkhttpd, dmalloc, ecryptfs-utils, fxload, ghostscript,
+	gnutls, gst-omx, gst1-devtools, gst1-libav, gst1-plugins-base,
+	gst1-plugins-bad, gst1-plugins-good, gst1-plugins-ugly,
+	gst1-python, gst1-rtsp-server, gst1-vaapi, gstreamer1,
+	gstreamer1-editing-services, gtest, iptables, keyutils, lcms2,
+	libabseil-cpp, libcamera, libcurl, libeastl, libgpgme,
+	libgtk3, libmdbx, libmediaart, libmodsecurity, libnetconf2,
+	libopenssl, libpjsip, libsamplerate, libsndfile, libtalloc,
+	logrotate, luajit, nginx, noip, paxtest, php, postgresql,
+	procrank_linux, pure-ftpd, python-pillow, qdecoder,
+	rabbitmq-server, rpi-userland, ruby, rustc, sofia-sip,
+	systemd, tcpreplay, tinyproxy, tor, uacme, uboot-tools, vim,
+	watchdogd, webkitgtk, weston, wireguard-linux-compat,
+	wpa_supplicant, wpewebkit, zstd
+
+	Issues resolved (http://bugs.uclibc.org):
+
+	#14881: Watchdogd Package missing INSTALL_STAGING
+
+2022.05, released June 6th, 2022
+
+	Fixes all over the tree.
+
+	Rework BR2_STATIC_LIBS handling to ensure it can only be
+	enabled if a suitable C library is available.
+
+	Updated/fixed packages: arm-trusted-firmware, at91bootstap,
+	boinc, boost, cpulimit, diffutils, edk2, eigen, fbv, gcr,
+	gensio, glibc, go, gtest, iucode-tool, kvm-unit-tests, libcec,
+	libcurl, libks, linux, linux-tools, lttng-modules, mariadb,
+	memcached, mono, musl, mutt, netdata, network-manager, nginx,
+	ogre, openjpeg, openvpn, pipewire, python-crossbar, qemu,
+	qpid-proton, rauc, rockchip-mali, rsyslog,
+	rtl8812au-aircrack-ng, ruby, runc, rustc, samba4, tiff,
+	uclibc, unrar, vim, webkitgtk, wpewebkit,
+	xdriver_xf86-video-ati, xml-security-c, zchunk, zlib-ng
+
+	Issues resolved (http://bugs.uclibc.org):
+
+	#14821: Samba server is failing to compile
+	#14826: make qemu_x86_64_defconfig stopped working
+
+2022.05-rc2, released May 30th, 2022
+
+	Fixes all over the tree.
+
+	Defconfigs: qemu_ppc64*: Use binutils 2.36.1 to fix build
+	issue, qemu_arm_vexpress_tz: Fix optee-os build issue,
+	qemu_arm_versatile_nommu: Drop now that nommu for ARMv5 is no
+	longer available
+
+	Updated/fixed packages: dhcp, edk2, gcr, glibc, i2pd, janet,
+	janus-gateway, libfreeimage, libnftnl, libnss, libodb-boost,
+	libostree, libwebsockets, linux-tools, midori, ntfs-3g, ola,
+	optee-client, pcsc-lite, pipewire, python-flask,
+	python-service-identity, python-werkzeug, qemu, rng-tools,
+	rockchip-mali, strace, xdriver_xf86-video-amdgpu
+
+	Removed packages: ktap
+
+2022.05-rc1, released May 18th, 2022
+
+	Fixes all over the tree and new features.
+
+	Toolchain:
+	- glibc update to 2.35, musl updated to 1.2.3
+	- gcc 11.x updated to 11.3, support for external gcc 12.x
+	- binutils 2.38 added, 2.32/2.35.2 removed, default changed to 2.37
+	- s390x Bootlin external toolchain added
+	- 5.17.x kernel headers support added
+
+	Filesystem:
+	- Rework OCI entrypoint/command logic to handle command arguments
+	- Squashfs block size is now configurable
+
+	Graphs: Also generate a build time timeline graph (for top
+	level parallel builds).
+
+	scripts/pkg-stats: Optimize memory consumption for CPE parsing
+
+	Fix compatibility issue with the fakeroot script logic and
+	modern versions of dash.
+
+	Change git:// URLs pointing to Github to https://, now that
+	Github has turned off support for git://
+
+	New defconfigs: Octavo osd32mp1_brk / osd32mp1_red
+
+	New packages: falcosecurity-libs, lzma-alone, octave,
+	python-flit-core, python-orjson, python-pydevmem,
+	qt5webengine-chromium, qt5webengine-chromium-catapult, ragel,
+	tbb, wilc-driver, wtfutil
+
+	Wilc1000-firmware renamed to wilc-firmware
+
+	Issues resolved (http://bugs.uclibc.org):
+
+	#14596: package dialog is outdated and contains a bug
+	#14651: OpenSSH 8.9p1 compiler error under ARM
+	#14656: Adding dependencies from an external tree does not work
+	#14661: Fakeroot script relies on bash-isms, does not work with..
+	#14681: QT5WEBENGINE not building
+	#14686: genimage.cfg have a hard-coded .ext4 extension which..
+	#14701: Multiple unresolved symbols while building kernel ..
+	#14706: nodjs build problem
+	#14711: nodjs build problem missing bzip
+	#14721: python-argon2_cffi no longer works
+	#14731: BR2_PACKAGE_IOSTAT
+	#14751: LVM2 Outdated Link
+
+2022.02.4, released July 28th, 2022
+
+	Important / security related fixes.
+
+	Disable big endian no-mmu on ARM as it is not supported by
+	elf2flt.
+
+	Tighten dependencies for external Bootlin toolchains to ensure
+	they can only be selected in compatible configurations.
+
+	Support external toolchains without gdbserver.
+
+	Updated/fixed packages: apache, avahi, bdwgc, bind, bpftool,
+	cups, darkhttpd, dmalloc, ecryptfs-utils, fxload, ghostscript,
+	gnutls, gst-omx, gst1-devtools, gst1-libav, gst1-plugins-base,
+	gst1-plugins-bad, gst1-plugins-good, gst1-plugins-ugly,
+	gst1-python, gst1-rtsp-server, gst1-vaapi, gstreamer1,
+	gstreamer1-editing-services, gtest, iptables, keyutils, lcms2,
+	libabseil-cpp, libcamera, libcurl, libeastl, libgpgme,
+	libgtk3, libmdbx, libmediaart, libmodsecurity, libnetconf2,
+	libopenssl, libpjsip, libsamplerate, libsndfile, libtalloc,
+	logrotate, luajit, nginx, noip, paxtest, php, postgresql,
+	procrank_linux, pure-ftpd, python-pillow, qdecoder,
+	rabbitmq-server, rpi-userland, rustc, sofia-sip, systemd,
+	tcpreplay, tinyproxy, tor, uacme, uboot-tools, vim, watchdogd,
+	webkitgtk, wireguard-linux-compat, wpa_supplicant, wpewebkit,
+	zstd
+
+	Issues resolved (http://bugs.uclibc.org):
+
+	#14881: Watchdogd Package missing INSTALL_STAGING
+
+2022.02.3, released June 19th, 2022
+
+	Important / security related fixes.
+
+	Infrastructure: Fix building under paths containing regex
+	characters (E.G. '+')
+
+	Toolchain: Only allow ppc64le variants for which a
+	glibc/musl/uclibc toolchain is supported.
+	Mark codescape mti/img mips toolchains as shared library only
+	(glibc).
+
+	Updated/fixed packages: arm-trusted-firmware,
+	at91dataflashboot, boinc, dhcp, diffutils, edk2, fbv, gensio,
+	glibc, go, gtest, iucode-tool, janet, libcec, libcurl,
+	libfreeimage, libnftnl, libodb-boost, linux, linux-tools,
+	lttng-modules, mariadb, memcached, mono, mutt,
+	network-manager, nginx, ntfs-3g, ogre, openjpeg, openvpn,
+	qemu, qpid-proton, qt5webengine, rauc, rockchip-mali, rsyslog,
+	ruby, runc, rustc, samba4, strace, tiff, uclibc, unrar, vim,
+	webkitgtk, wpewebkit, xdriver_xf86-video-amdgpu,
+	xdriver_xf86-video-ati, zlib-ng
+
+	New packages: qt5webengine-chromium,
+	qt5webengine-chromium-catapult
+
+	Issues resolved (http://bugs.uclibc.org):
+
+	#14766: package dhcp on buildroot 2022.02.1 failed
+	#14821: Samba server is failing to compile
+	#14826: make qemu_x86_64_defconfig stopped working
+
+2022.02.2, released May 29th, 2022
+
+	Important / security related fixes.
+
+	Archictures: Drop sh2a, correct x86 Bonnell variant
+
+	Toolchain: Bump GCC 11.x to 11.3, correct pre-installed
+	external toolchain logic when toolchain is available in path.
+
+	Rework OCI filesystem entrypoint/command logic to handle
+	command arguments
+
+	Defconfigs: Update Zynqmp zcu102/106 to final 2022.1 release,
+	fix zcu106 PLL config
+
+	Updated/fixed packages: adwaita-icon-theme, afboot-stm32,
+	aircrack-ng, alchemy, alsa-lib, arptables, assimp, asterisk,
+	aubio, avrdude, azure-iot-sdk-c, batman-adv, binutils,
+	bpftool, brotli, cairo, cifs-utils, clamav, cryptodev-linux,
+	dhcp, diffutils, dmalloc, duktape, e2fsprogs, elf2flt, espeak,
+	expat, ffmpeg, fluidsynth, freerdp, gcc, git, glorytun,
+	glslsandbox-player, gnutls, go, gst1-imx, gst1-plugins-good,
+	gzip, imagemagick, janus-gateway, keepalived, kompexsqlite,
+	kvm-unit-tests, libarchive, libcgi, libcurl, libevdev,
+	libeXosip2, libhtp, libinput, libkcapi, libkrb5, libks,
+	libmdbx, libmnl, libnpupnp, libnspr, libopenssl, liboping,
+	libpjsip, libpri, libselinux, libsigsegv, libv4l,
+	libwebsockets, libxml2, linux, linux-tools, ltp-testsuite,
+	luajit, lvm2, mali-driver, mariadb, mc, minizip, mpd, mutt,
+	netatalk, netsurf, network-manager, nodejs, numactl, nut,
+	omniorb, openbox, opencv4, openjdk, openjdk-bin, openocd,
+	pamtester, pango, pcre2, php, php-apcu, pinentry, pixman,
+	polkit, postgis, postgresql, pure-ftpd, python-aenum,
+	python-avro, python-django, python-pillow, python-simplejson,
+	python-urllib3, python-zopfli, python3, qemu, qpdf, quazip,
+	redis, rockchip-mali, rsync, rt-tests, rust, rtl8818eu,
+	rtl8189es, rtl8189fs, rtl_433, sam-ba, samba4, sdl2_ttf,
+	shadowsocks-libev, shim, subversion, sun20i-d1-spl, suricata,
+	systemd, tftpd, trinity, tvheadend, udev, uftrace,
+	urandom-scripts, usb_modeswitch, valgrind, vde2, vim,
+	wireplumber, wolfssl, wpa_supplicant, xlib_libXfont2, xz,
+	zlib, zlog
+
+	Issues resolved (http://bugs.uclibc.org):
+
+	#14751: LVM2 Outdated Link
+
 2022.02.1, released April 11th, 2022
 
 	Important / security related fixes.

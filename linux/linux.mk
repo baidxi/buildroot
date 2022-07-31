@@ -147,11 +147,14 @@ endif
 
 # We don't want to run depmod after installing the kernel. It's done in a
 # target-finalize hook, to encompass modules installed by packages.
+# Disable building host tools with -Werror: newer gcc versions can be
+# extra picky about some code (https://bugs.busybox.net/show_bug.cgi?id=14826)
 LINUX_MAKE_FLAGS = \
 	HOSTCC="$(HOSTCC) $(HOST_CFLAGS) $(HOST_LDFLAGS)" \
 	ARCH=$(KERNEL_ARCH) \
 	INSTALL_MOD_PATH=$(TARGET_DIR) \
 	CROSS_COMPILE="$(TARGET_CROSS)" \
+	WERROR=0 \
 	DEPMOD=$(HOST_DIR)/sbin/depmod
 
 ifeq ($(BR2_REPRODUCIBLE),y)
@@ -307,7 +310,11 @@ endif
 ifeq ($(BR2_LINUX_KERNEL_USE_DEFCONFIG),y)
 LINUX_KCONFIG_DEFCONFIG = $(call qstrip,$(BR2_LINUX_KERNEL_DEFCONFIG))_defconfig
 else ifeq ($(BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG),y)
+ifeq ($(BR2_powerpc64le),y)
+LINUX_KCONFIG_DEFCONFIG = ppc64le_defconfig
+else
 LINUX_KCONFIG_DEFCONFIG = defconfig
+endif
 else ifeq ($(BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG),y)
 LINUX_KCONFIG_FILE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE))
 endif
@@ -367,6 +374,14 @@ define LINUX_KCONFIG_FIXUP_CMDS
 		$(call KCONFIG_DISABLE_OPT,CONFIG_ARC_PAGE_SIZE_4K)
 		$(call KCONFIG_DISABLE_OPT,CONFIG_ARC_PAGE_SIZE_8K)
 		$(call KCONFIG_ENABLE_OPT,CONFIG_ARC_PAGE_SIZE_16K))
+	$(if $(BR2_ARM64_PAGE_SIZE_4K),
+		$(call KCONFIG_ENABLE_OPT,CONFIG_ARM64_4K_PAGES)
+		$(call KCONFIG_DISABLE_OPT,CONFIG_ARM64_16K_PAGES)
+		$(call KCONFIG_DISABLE_OPT,CONFIG_ARM64_64K_PAGES))
+	$(if $(BR2_ARM64_PAGE_SIZE_64K),
+		$(call KCONFIG_DISABLE_OPT,CONFIG_ARM64_4K_PAGES)
+		$(call KCONFIG_DISABLE_OPT,CONFIG_ARM64_16K_PAGES)
+		$(call KCONFIG_ENABLE_OPT,CONFIG_ARM64_64K_PAGES))
 	$(if $(BR2_TARGET_ROOTFS_CPIO),
 		$(call KCONFIG_ENABLE_OPT,CONFIG_BLK_DEV_INITRD))
 	# As the kernel gets compiled before root filesystems are

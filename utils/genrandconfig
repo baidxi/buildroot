@@ -246,9 +246,6 @@ def fixup_config(sysinfo, configfile):
     if 'BR2_ARM_CPU_ARMV7M=y\n' in configlines and \
        'BR2_PACKAGE_LIBFFI=y\n' in configlines:
         return False
-    if 'BR2_nds32=y\n' in configlines and \
-       'BR2_PACKAGE_LIBFFI=y\n' in configlines:
-        return False
     if 'BR2_PACKAGE_SUNXI_BOARDS=y\n' in configlines:
         configlines.remove('BR2_PACKAGE_SUNXI_BOARDS_FEX_FILE=""\n')
         configlines.append('BR2_PACKAGE_SUNXI_BOARDS_FEX_FILE="a10/hackberry.fex"\n')
@@ -426,6 +423,27 @@ def fixup_config(sysinfo, configfile):
         configlines.remove('BR2_KERNEL_HEADERS_CUSTOM_TARBALL=y\n')
         configlines.remove('BR2_KERNEL_HEADERS_CUSTOM_TARBALL_LOCATION=""\n')
 
+    if 'BR2_TARGET_ARM_TRUSTED_FIRMWARE=y\n' in configlines and \
+       'BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y\n' in configlines and \
+       'BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE=""\n' in configlines:
+        configlines.remove('BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y\n')
+        configlines.append('BR2_TARGET_ARM_TRUSTED_FIRMWARE_LATEST_VERSION=y\n')
+        configlines.remove('BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE=""\n')
+
+    if 'BR2_TARGET_ARM_TRUSTED_FIRMWARE=y\n' in configlines and \
+       'BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y\n' in configlines and \
+       'BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION=""\n' in configlines:
+        configlines.remove('BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y\n')
+        configlines.append('BR2_TARGET_ARM_TRUSTED_FIRMWARE_LATEST_VERSION=y\n')
+        configlines.remove('BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION=""\n')
+
+    if 'BR2_TARGET_ARM_TRUSTED_FIRMWARE=y\n' in configlines and \
+       'BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y\n' in configlines and \
+       'BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL=""\n' in configlines:
+        configlines.remove('BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y\n')
+        configlines.append('BR2_TARGET_ARM_TRUSTED_FIRMWARE_LATEST_VERSION=y\n')
+        configlines.remove('BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL=""\n')
+
     if 'BR2_TARGET_AT91BOOTSTRAP3=y\n' in configlines and \
        'BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG=""\n' in configlines:
         configlines.remove('BR2_TARGET_AT91BOOTSTRAP3=y\n')
@@ -444,6 +462,13 @@ def fixup_config(sysinfo, configfile):
         configlines.remove('BR2_TARGET_BAREBOX=y\n')
         configlines.remove('BR2_TARGET_BAREBOX_USE_DEFCONFIG=y\n')
         configlines.remove('BR2_TARGET_BAREBOX_BOARD_DEFCONFIG=""\n')
+
+    if 'BR2_TARGET_OPTEE_OS=y\n' in configlines and \
+       'BR2_TARGET_OPTEE_OS_CUSTOM_TARBALL=y\n' in configlines and \
+       'BR2_TARGET_OPTEE_OS_CUSTOM_TARBALL_LOCATION=""\n' in configlines:
+        configlines.remove('BR2_TARGET_OPTEE_OS_CUSTOM_TARBALL=y\n')
+        configlines.append('BR2_TARGET_OPTEE_OS_LATEST=y\n')
+        configlines.remove('BR2_TARGET_OPTEE_OS_CUSTOM_TARBALL_LOCATION=""\n')
 
     if 'BR2_TARGET_OPTEE_OS=y\n' in configlines and \
        'BR2_TARGET_OPTEE_OS_PLATFORM=""\n' in configlines:

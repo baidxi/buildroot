@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-RUST_VERSION = 1.60.0
+RUST_VERSION = 1.62.0
 RUST_SOURCE = rustc-$(RUST_VERSION)-src.tar.xz
 RUST_SITE = https://static.rust-lang.org/dist
 RUST_LICENSE = Apache-2.0 or MIT
@@ -14,6 +14,7 @@ HOST_RUST_PROVIDES = host-rustc
 
 HOST_RUST_DEPENDENCIES = \
 	toolchain \
+	host-pkgconf \
 	host-python3 \
 	host-rust-bin \
 	host-openssl \

@@ -277,6 +277,9 @@ HOST_QEMU_DEPENDENCIES = host-meson host-pkgconf host-zlib host-libglib2 host-pi
 #       xtensa          xtensa
 
 HOST_QEMU_ARCH = $(ARCH)
+ifeq ($(HOST_QEMU_ARCH),armeb)
+HOST_QEMU_SYS_ARCH = arm
+endif
 ifeq ($(HOST_QEMU_ARCH),i486)
 HOST_QEMU_ARCH = i386
 endif
@@ -387,6 +390,7 @@ define HOST_QEMU_CONFIGURE_CMDS
 		--disable-vnc-jpeg \
 		--disable-vnc-png \
 		--disable-vnc-sasl \
+		--enable-tools \
 		$(HOST_QEMU_OPTS)
 endef
 
@@ -399,6 +403,12 @@ define HOST_QEMU_INSTALL_CMDS
 	unset TARGET_DIR; \
 	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) install
 endef
+
+# install symlink to qemu-system
+define HOST_QEMU_POST_INSTALL_SYMLINK
+	ln -sf ./qemu-system-$(HOST_QEMU_ARCH) $(HOST_DIR)/bin/qemu-system
+endef
+HOST_QEMU_POST_INSTALL_HOOKS += HOST_QEMU_POST_INSTALL_SYMLINK
 
 $(eval $(host-generic-package))
 

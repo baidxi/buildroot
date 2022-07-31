@@ -4,8 +4,8 @@
 #
 ################################################################################
 
-MARIADB_VERSION = 10.3.34
-MARIADB_SITE = https://dlm.mariadb.com/2117285/MariaDB/mariadb-$(MARIADB_VERSION)/source
+MARIADB_VERSION = 10.3.35
+MARIADB_SITE = https://downloads.mariadb.org/interstitial/mariadb-$(MARIADB_VERSION)/source
 MARIADB_LICENSE = GPL-2.0 (server), GPL-2.0 with FLOSS exception (GPL client library), LGPL-2.0 (LGPL client library)
 # Tarball no longer contains LGPL license text
 # https://jira.mariadb.org/browse/MDEV-12297
@@ -80,6 +80,10 @@ MARIADB_CXXFLAGS = $(TARGET_CXXFLAGS)
 
 ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
 MARIADB_CXXFLAGS += -latomic
+endif
+
+ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_68485),y)
+MARIADB_CXXFLAGS += -O0
 endif
 
 MARIADB_CONF_OPTS += \

@@ -144,7 +144,92 @@ endif
 
 ###############################################################################
 
+comment "Legacy options removed in 2022.08"
+
+config BR2_ECLIPSE_REGISTER
+	bool "Eclipse integration removed"
+	select BR2_LEGACY
+	help
+	  The Buildroot integration with the Eclipse IDE has been
+	  removed, as the corresponding Eclipse plugin is no longer
+	  maintained, and is no longer usable with current versions of
+	  Eclipse.
+
+config BR2_csky
+	bool "csky architecture removed"
+	select BR2_LEGACY
+	help
+	  The csky architecture was removed, by lack of toolchain
+	  support.
+
+config BR2_PACKAGE_MESA3D_DRI_DRIVER_I915
+	bool "mesa DRI i915 driver removed"
+	select BR2_LEGACY
+	help
+	  The DRI i915 driver was removed upstream.
+
+config BR2_PACKAGE_MESA3D_DRI_DRIVER_I965
+	bool "mesa DRI i965 driver removed"
+	select BR2_LEGACY
+	help
+	  The DRI i965 driver was removed upstream.
+
+config BR2_PACKAGE_MESA3D_DRI_DRIVER_NOUVEAU
+	bool "mesa DRI nouveau driver removed"
+	select BR2_LEGACY
+	help
+	  The DRI radeon nouveau was removed upstream.
+
+config BR2_PACKAGE_MESA3D_DRI_DRIVER_RADEON
+	bool "mesa DRI radeon r100 driver removed"
+	select BR2_LEGACY
+	help
+	  The DRI radeon r100 driver was removed upstream.
+
+config BR2_GCC_VERSION_9_X
+	bool "gcc 9.x support removed"
+	select BR2_LEGACY
+	help
+	  Support for gcc version 9.x has been removed. The current
+	  default version (11.x or later) has been selected instead.
+
+config BR2_PACKAGE_PHP_EXT_WDDX
+	bool "php wddx removed"
+	select BR2_LEGACY
+	help
+	  The WDDX extension was removed from php.
+
+config BR2_nds32
+	bool "nds32 architecture removed"
+	select BR2_LEGACY
+	help
+	  Support for the nds32 architecture has been removed, due to
+	  its support being removed from the upstream Linux kernel,
+	  and its lack of maintenance in Buildroot.
+
+config BR2_PACKAGE_RTL8723BS
+	bool "rtl8723bs removed"
+	select BR2_LEGACY
+	help
+	  Package was removed because it is not compatible with latest
+	  kernels and is not maintained anymore: code has been removed
+	  in 2017 as driver is available in the linux-next tree.
+
 comment "Legacy options removed in 2022.05"
+
+config BR2_PACKAGE_KTAP
+	bool "ktap removed"
+	select BR2_LEGACY
+	help
+	  Package was removed because it is not compatible with latest
+	  kernels and is not maintained anymore (no release since 2013).
+
+config BR2_KERNEL_HEADERS_5_16
+	bool "kernel headers version 5.16.x are no longer supported"
+	select BR2_LEGACY
+	help
+	  Version 5.16.x of the Linux kernel headers are no longer
+	  maintained upstream and are now removed.
 
 config BR2_KERNEL_HEADERS_4_4
 	bool "kernel headers version 4.4.x are no longer supported"
@@ -187,6 +272,26 @@ config BR2_PACKAGE_BOOST_LAYOUT_VERSIONED
 	  and cmake packages (e.g. azmq, cc-tool, i2pd).
 
 comment "Legacy options removed in 2022.02"
+
+config BR2_TARGET_ROOTFS_OCI_ENTRYPOINT_ARGS
+	string "entrypoint argumetns has been changed as command"
+	help
+	  The OCI image BR2_TARGET_ROOTFS_OCI_ENTRYPOINT_ARGS option
+	  has been renamed to BR2_TARGET_ROOTFS_OCI_CMD to better
+	  reflect its relation to the actual 'command' of the OCI
+	  image.
+
+	  The new semantic for BR2_TARGET_ROOTFS_OCI_CMD is slightly
+	  differnt in relation to how it is interpreted, so be sure to
+	  review the help entry for it.
+
+	  Due to this breaking change, the old value here could not be
+	  set to the new variable.
+
+config BR2_TARGET_ROOTFS_OCI_ENTRYPOINT_ARGS_WRAP
+	bool
+	default y if BR2_TARGET_ROOTFS_OCI_ENTRYPOINT_ARGS != ""
+	select BR2_LEGACY
 
 config BR2_PACKAGE_LIBCURL_LIBNSS
 	bool "libcurl NSS removed"
