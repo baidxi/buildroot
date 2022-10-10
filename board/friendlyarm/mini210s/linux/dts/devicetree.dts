@@ -39,13 +39,13 @@
 		clock-frequency = <32768>;
 	};
 
-	ethernet@a8000000 {
+	ethernet@a8800000 {
 		compatible = "davicom,dm9000";
-		reg = <0x88000000 0x2 0x88000004 0x2>;
-		reg-names="io","data";
+		reg = <0x88000000 0x2>,<0x88000004 0x2>;
 		interrupt-parent = <&gph1>;
 		interrupts = <1 IRQ_TYPE_LEVEL_HIGH>;
-		local-mac-address = [00 00 de ad be ef];
+		davicom,no-eeprom;
+		local-mac-address = [22 33 44 ad be 88];
 	};
 
 	backlight {
@@ -247,4 +247,21 @@
 
 &i2s0 {
 	status = "okay";
+};
+
+&srom {
+	status = "okay";
+
+	bank1 {
+		reg = <1>;
+		srom,width = <1>;
+		srom,mode = <1>;
+		srom,tacs = <0>;
+		srom,tcos = <1>;
+		srom,tacc = <2>;
+		srom,tcoh = <1>;
+		srom,tah = <0>;
+		srom,tacp = <0>;
+		srom,pmc = <0>;
+	};
 };
