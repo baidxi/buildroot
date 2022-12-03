@@ -24,7 +24,7 @@ else
 OPTEE_OS_SITE = $(call github,OP-TEE,optee_os,$(OPTEE_OS_VERSION))
 endif
 
-ifeq ($(BR2_TARGET_OPTEE_OS):$(BR2_TARGET_OPTEE_OS_LATEST_VERSION),y:)
+ifeq ($(BR2_TARGET_OPTEE_OS):$(BR2_TARGET_OPTEE_OS_LATEST),y:)
 BR_NO_CHECK_HASH_FOR += $(OPTEE_OS_SOURCE)
 endif
 
@@ -34,10 +34,6 @@ ifeq ($(BR2_TARGET_OPTEE_OS_NEEDS_PYTHON_CRYPTOGRAPHY),y)
 OPTEE_OS_DEPENDENCIES += host-python-cryptography
 else
 OPTEE_OS_DEPENDENCIES += host-python-pycryptodomex
-endif
-
-ifeq ($(BR2_TARGET_OPTEE_OS_NEEDS_PYTHON_PILLOW),y)
-OPTEE_OS_DEPENDENCIES += host-python-pillow
 endif
 
 ifeq ($(BR2_TARGET_OPTEE_OS_NEEDS_DTC),y)

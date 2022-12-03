@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-BOOST_VERSION = 1.79.0
+BOOST_VERSION = 1.80.0
 BOOST_SOURCE = boost_$(subst .,_,$(BOOST_VERSION)).tar.bz2
 BOOST_SITE = https://boostorg.jfrog.io/artifactory/main/release/$(BOOST_VERSION)/source
 BOOST_INSTALL_STAGING = YES
@@ -128,8 +128,8 @@ BOOST_WITHOUT_FLAGS_COMMASEPARATED += $(subst $(space),$(comma),$(strip $(BOOST_
 BOOST_FLAGS += $(if $(BOOST_WITHOUT_FLAGS_COMMASEPARATED), --without-libraries=$(BOOST_WITHOUT_FLAGS_COMMASEPARATED))
 
 # how verbose should the build be?
-BOOST_OPTS += $(if $(QUIET),-d,-d+1)
-HOST_BOOST_OPTS += $(if $(QUIET),-d,-d+1)
+BOOST_OPTS += $(if $(QUIET),-d0,-d+1)
+HOST_BOOST_OPTS += $(if $(QUIET),-d0,-d+1)
 
 define BOOST_CONFIGURE_CMDS
 	cd $(@D) && ./bootstrap.sh $(BOOST_FLAGS)

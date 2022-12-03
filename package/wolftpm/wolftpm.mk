@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-WOLFTPM_VERSION = 2.4.0
+WOLFTPM_VERSION = 2.6.0
 WOLFTPM_SITE = $(call github,wolfSSL,wolfTPM,v$(WOLFTPM_VERSION))
 WOLFTPM_INSTALL_STAGING = YES
 WOLFTPM_LICENSE = GPL-2.0+
@@ -41,10 +41,16 @@ else
 WOLFTPM_CONF_OPTS += --disable-st33
 endif
 
-ifeq ($(BR2_PACKAGE_WOLFTPM_NPCT750),y)
+ifeq ($(BR2_PACKAGE_WOLFTPM_NUVOTON),y)
 WOLFTPM_CONF_OPTS += --enable-nuvoton
 else
 WOLFTPM_CONF_OPTS += --disable-nuvoton
+endif
+
+ifeq ($(BR2_PACKAGE_WOLFTPM_DEBUG),y)
+WOLFTPM_CONF_OPTS += --enable-debug
+else
+WOLFTPM_CONF_OPTS += --disable-debug
 endif
 
 $(eval $(autotools-package))

@@ -168,11 +168,12 @@ config BR2_TOOLCHAIN_HAS_GCC_BUG_85862
 
 # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=90620
 # ICE: in do_output_reload, at reload1.c:7978 on microblaze.
-# This bug no longer exists in gcc 10.x
+# This bug no longer exists in gcc 10.x but reappeared in gcc 11.x
 config BR2_TOOLCHAIN_HAS_GCC_BUG_90620
 	bool
 	default y if BR2_microblaze
-	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_10
+	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_10 \
+		|| BR2_TOOLCHAIN_GCC_AT_LEAST_11
 
 # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=93847
 # ICE: compiler error: Segmentation fault on Nios II. This bug
@@ -200,7 +201,7 @@ config BR2_TOOLCHAIN_HAS_GCC_BUG_101737
 
 # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=101915
 # ICE: in extract_insn, at recog.c:2294 on microblaze.
-# This bug still exists in gcc = 11.1.0
+# This bug still exists in gcc = 12.1.0
 config BR2_TOOLCHAIN_HAS_GCC_BUG_101915
 	bool
 	default y if BR2_microblaze
@@ -225,6 +226,18 @@ config BR2_TOOLCHAIN_HAS_GCC_BUG_101952
 config BR2_TOOLCHAIN_HAS_GCC_BUG_104028
 	bool
 	default y if BR2_m68k
+
+# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=107728
+# https://sourceware.org/bugzilla/show_bug.cgi?id=29621
+config BR2_TOOLCHAIN_HAS_GCC_BUG_107728
+	bool
+	default y if BR2_microblazebe || BR2_microblazeel \
+		|| BR2_mips || BR2_mipsel \
+		|| BR2_nios2 \
+		|| BR2_or1k \
+		|| BR2_sh
+	depends on BR2_TOOLCHAIN_USES_GLIBC
+	depends on BR2_OPTIMIZE_0
 
 config BR2_TOOLCHAIN_HAS_NATIVE_RPC
 	bool
@@ -566,6 +579,18 @@ config BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_16
 config BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_17
 	bool
 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_16
+
+config BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_18
+	bool
+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_17
+
+config BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_19
+	bool
+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_18
+
+config BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_0
+	bool
+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_19
 	select BR2_TOOLCHAIN_HEADERS_LATEST
 
 # This should be selected by the latest version, above, to indicate that
@@ -579,6 +604,10 @@ config BR2_TOOLCHAIN_HEADERS_LATEST
 # stops affecting a value on the first matching default.
 config BR2_TOOLCHAIN_HEADERS_AT_LEAST
 	string
+	default "6.0"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_0
+	default "5.19" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_19
+	default "5.18" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_18
+	default "5.17" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_17
 	default "5.16" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_16
 	default "5.15" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_15
 	default "5.14" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_14

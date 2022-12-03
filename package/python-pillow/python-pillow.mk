@@ -4,8 +4,8 @@
 #
 ################################################################################
 
-PYTHON_PILLOW_VERSION = 9.2.0
-PYTHON_PILLOW_SITE = https://files.pythonhosted.org/packages/8c/92/2975b464d9926dc667020ed1abfa6276e68c3571dcb77e43347e15ee9eed
+PYTHON_PILLOW_VERSION = 9.3.0
+PYTHON_PILLOW_SITE = https://files.pythonhosted.org/packages/16/11/da8d395299ca166aa56d9436e26fe8440e5443471de16ccd9a1d06f5993a
 PYTHON_PILLOW_SOURCE = Pillow-$(PYTHON_PILLOW_VERSION).tar.gz
 PYTHON_PILLOW_LICENSE = HPND
 PYTHON_PILLOW_LICENSE_FILES = LICENSE
@@ -71,18 +71,4 @@ else
 PYTHON_PILLOW_BUILD_OPTS += --disable-webp --disable-webpmux
 endif
 
-HOST_PYTHON_PILLOW_DEPENDENCIES = host-pkgconf
-HOST_PYTHON_PILLOW_BUILD_OPTS = \
-	build_ext \
-	--disable-freetype \
-	--disable-jpeg \
-	--disable-lcms \
-	--disable-xcb \
-	--disable-jpeg2000 \
-	--disable-tiff \
-	--disable-webp \
-	--disable-webpmux
-HOST_PYTHON_PILLOW_INSTALL_OPTS = $(HOST_PYTHON_PILLOW_BUILD_OPTS)
-
 $(eval $(python-package))
-$(eval $(host-python-package))
