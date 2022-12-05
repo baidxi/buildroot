@@ -10,7 +10,7 @@ BR2_GCC_ENABLE_LTO=y
 
 # GDB Options
 BR2_PACKAGE_HOST_GDB=y
-BR2_PACKAGE_HOST_GDB_PYTHON=y
+# BR2_PACKAGE_HOST_GDB_PYTHON is not set
 BR2_PACKAGE_HOST_GDB_SIM=y
 BR2_PACKAGE_HOST_GDB_TUI=y
 BR2_PACKAGE_GDB=y
@@ -46,7 +46,7 @@ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
 BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/hatlab/badge200/linux.defconfig"
 BR2_LINUX_KERNEL_DTS_SUPPORT=y
 BR2_LINUX_KERNEL_PATCH="board/allwinner/suniv-f1c100s/patch/linux"
-BR2_LINUX_KERNEL_CUSTOM_DTS_PATH="board/hatlab/bluebit/devicetree/linux/suniv-f1c200s.dtsi board/hatlab/badge200/devicetree/linux/devicetree.dts"
+BR2_LINUX_KERNEL_CUSTOM_DTS_PATH="board/hatlab/badge200/devicetree/linux/devicetree.dts"
 
 # Filesystem
 BR2_TARGET_ROOTFS_EXT2=y

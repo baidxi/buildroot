@@ -17,8 +17,8 @@ cd "${BINARIES_DIR}"
 "${MKIMAGE}" -f ${IMAGE_ITS} ${OUTPUT_NAME}
 rm ${IMAGE_ITS}
 
-cd "${STARTDIR}/board/allwinner/generic/"
-cp splash.bmp "${BINARIES_DIR}/"
+#cd "${STARTDIR}/board/allwinner/generic/"
+#cp splash.bmp "${BINARIES_DIR}/"
 
 cd "${STARTDIR}/"
 
