@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-PIPEWIRE_VERSION = 0.3.59
+PIPEWIRE_VERSION = 0.3.62
 PIPEWIRE_SOURCE = pipewire-$(PIPEWIRE_VERSION).tar.bz2
 PIPEWIRE_SITE = https://gitlab.freedesktop.org/pipewire/pipewire/-/archive/$(PIPEWIRE_VERSION)
 PIPEWIRE_LICENSE = MIT, LGPL-2.1+ (libspa-alsa), GPL-2.0 (libjackserver)
@@ -105,6 +105,12 @@ endif
 ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS)$(BR2_PACKAGE_SBC),yy)
 PIPEWIRE_CONF_OPTS += -Dbluez5=enabled
 PIPEWIRE_DEPENDENCIES += bluez5_utils sbc
+ifeq ($(BR2_PACKAGE_MODEM_MANAGER),y)
+PIPEWIRE_CONF_OPTS += -Dbluez5-backend-native-mm=enabled
+PIPEWIRE_DEPENDENCIES += modem-manager
+else
+PIPEWIRE_CONF_OPTS += -Dbluez5-backend-native-mm=disabled
+endif
 ifeq ($(BR2_PACKAGE_OPUS),y)
 PIPEWIRE_CONF_OPTS += -Dbluez5-codec-opus=enabled
 PIPEWIRE_DEPENDENCIES += opus
@@ -160,6 +166,13 @@ else
 PIPEWIRE_CONF_OPTS += -Dx11-xfixes=disabled
 endif
 
+ifeq ($(BR2_PACKAGE_LIBGLIB2),y)
+PIPEWIRE_CONF_OPTS += -Dgsettings=enabled
+PIPEWIRE_DEPENDENCIES += libglib2
+else
+PIPEWIRE_CONF_OPTS += -Dgsettings=disabled
+endif
+
 ifeq ($(BR2_PACKAGE_LIBUSB),y)
 PIPEWIRE_CONF_OPTS += -Dlibusb=enabled
 PIPEWIRE_DEPENDENCIES += libusb
@@ -189,7 +202,10 @@ PIPEWIRE_CONF_OPTS += -Dlibpulse=disabled
 endif
 
 ifeq ($(BR2_PACKAGE_READLINE),y)
+PIPEWIRE_CONF_OPTS += -Dreadline=enabled
 PIPEWIRE_DEPENDENCIES += readline
+else
+PIPEWIRE_CONF_OPTS += -Dreadline=disabled
 endif
 
 ifeq ($(BR2_PACKAGE_SDL2),y)
