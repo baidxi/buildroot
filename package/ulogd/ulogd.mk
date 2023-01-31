@@ -23,7 +23,9 @@ else
 ULOGD_CONF_OPTS += --disable-dbi
 endif
 ifeq ($(BR2_PACKAGE_MYSQL),y)
-ULOGD_CONF_OPTS += --enable-mysql
+ULOGD_CONF_OPTS += \
+	--enable-mysql \
+	--with-mysql-config=$(STAGING_DIR)/usr/bin/mysql_config
 ULOGD_DEPENDENCIES += mysql
 else
 ULOGD_CONF_OPTS += --disable-mysql
@@ -41,7 +43,11 @@ else
 ULOGD_CONF_OPTS += --disable-sqlite3
 endif
 else
-ULOGD_CONF_OPTS += --disable-mysql --disable-pgsql --disable-sqlite3
+ULOGD_CONF_OPTS += \
+	--disable-dbi \
+	--disable-mysql \
+	--disable-pgsql \
+	--disable-sqlite3
 endif
 
 ifeq ($(BR2_PACKAGE_LIBPCAP),y)

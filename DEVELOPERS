@@ -225,6 +225,8 @@ F:	configs/snps_archs38_haps_defconfig
 F:	configs/snps_archs38_hsdk_defconfig
 
 N:	Ariel D'Alessandro <ariel@vanguardiasur.com.ar>
+F:	board/bsh/
+F:	configs/imx8mn_bsh_smm_s2_pro_defconfig
 F:	package/axfsutils/
 F:	package/mali-t76x/
 
@@ -294,6 +296,7 @@ F:	package/ebtables/
 F:	package/i2c-tools/
 F:	package/libcurl/
 F:	package/libpcap/
+F:	package/sexpect/
 F:	package/socat/
 F:	package/strace/
 F:	package/tcpdump/
@@ -685,6 +688,9 @@ F:	package/luaexpat/
 F:	package/xinetd/
 
 N:	Dario Binacchi <dario.binacchi@amarulasolutions.com>
+F:	board/bsh/
+F:	configs/imx8mn_bsh_smm_s2_defconfig
+F:	configs/imx8mn_bsh_smm_s2_pro_defconfig
 F:	package/sscep/
 F:	package/uuu/
 
@@ -1333,11 +1339,13 @@ N:	James Hilliard <james.hilliard1@gmail.com>
 F:	package/apcupsd/
 F:	package/bpftool/
 F:	package/exfatprogs/
+F:	package/fxdiv/
 F:	package/gensio/
 F:	package/lua-std-debug/
 F:	package/lua-std-normalize/
 F:	package/lilv/
 F:	package/lv2/
+F:	package/neon-2-sse/
 F:	package/pipewire/
 F:	package/python-aioconsole/
 F:	package/python-aiodns/
@@ -1359,6 +1367,7 @@ F:	package/python-aiosignal/
 F:	package/python-aiozipkin/
 F:	package/python-argon2-cffi/
 F:	package/python-argon2-cffi-bindings/
+F:	package/python-async-generator/
 F:	package/python-async-lru/
 F:	package/python-async-timeout/
 F:	package/python-bidict/
@@ -1381,6 +1390,7 @@ F:	package/python-logstash/
 F:	package/python-maturin/
 F:	package/python-multidict/
 F:	package/python-mypy-extensions/
+F:	package/python-outcome/
 F:	package/python-pathspec/
 F:	package/python-pep517/
 F:	package/python-pycares/
@@ -1388,14 +1398,20 @@ F:	package/python-pydyf/
 F:	package/python-pypa-build/
 F:	package/python-pyphen/
 F:	package/python-rtoml/
+F:	package/python-selenium/
 F:	package/python-snappy/
+F:	package/python-sniffio/
 F:	package/python-sockjs/
 F:	package/python-terminaltables/
 F:	package/python-tinycss2/
 F:	package/python-tomli/
+F:	package/python-trio/
+F:	package/python-trio-websocket/
 F:	package/python-typeguard/
 F:	package/python-typing-inspect/
+F:	package/python-uhid/
 F:	package/python-weasyprint/
+F:	package/python-wsproto/
 F:	package/python-yarl/
 F:	package/python-zopfli/
 F:	package/rtl8192eu/
@@ -1890,6 +1906,8 @@ F:	support/testing/tests/package/test_python_pytest.py
 F:	support/testing/tests/package/test_python_pytest_asyncio.py
 
 N:	Marcus Folkesson <marcus.folkesson@gmail.com>
+F:	package/libcamera/
+F:	package/libcamera-apps/
 F:	package/libostree/
 F:	package/libselinux/
 F:	package/libsemanage/
@@ -2084,6 +2102,7 @@ F:	package/libgeos/
 F:	package/libosmium/
 F:	package/osm2pgsql/
 F:	package/postgis/
+F:	package/postgresql/
 F:	package/protozero/
 F:	package/timescaledb/
 
@@ -2114,6 +2133,9 @@ F:	package/python-crc16/
 F:	package/python-pyzmq/
 
 N:	Michael Trimarchi <michael@amarulasolutions.com>
+F:	board/bsh/
+F:	configs/imx8mn_bsh_smm_s2_defconfig
+F:	configs/imx8mn_bsh_smm_s2_pro_defconfig
 F:	package/python-spidev/
 
 N:	Michael Vetter <jubalh@iodoru.org>
@@ -2818,6 +2840,9 @@ F:	support/testing/tests/package/test_perl_lwp_protocol_https.py
 F:	utils/size-stats-compare
 F:	toolchain/
 
+N:	Thomas Devoogdt <thomas@devoogdt.com>
+F:	package/fluent-bit/
+
 N:	Thomas Huth <huth@tuxfamily.org>
 F:	board/qemu/m68k-mcf5208/
 F:	configs/qemu_m68k_mcf5208_defconfig
@@ -2961,7 +2986,9 @@ F:	package/utp_com/
 
 N:	Vincent Stehlé <vincent.stehle@arm.com>
 F:	board/qemu/aarch64-ebbr/
+F:	board/qemu/arm-ebbr/
 F:	configs/qemu_aarch64_ebbr_defconfig
+F:	configs/qemu_arm_ebbr_defconfig
 F:	package/edk2-non-osi/
 
 N:	Vincent Stehlé <vincent.stehle@laposte.net>
