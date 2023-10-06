@@ -6,9 +6,9 @@
 
 # When updating the version, check whether the list of supported targets
 # needs to be updated.
-QEMU_VERSION = 7.2.0
+QEMU_VERSION = 8.1.0
 QEMU_SOURCE = qemu-$(QEMU_VERSION).tar.xz
-QEMU_SITE = http://download.qemu.org
+QEMU_SITE = https://download.qemu.org
 QEMU_LICENSE = GPL-2.0, LGPL-2.1, MIT, BSD-3-Clause, BSD-2-Clause, Others/BSD-1c
 QEMU_LICENSE_FILES = COPYING COPYING.LIB
 # NOTE: there is no top-level license file for non-(L)GPL licenses;
@@ -26,6 +26,7 @@ QEMU_DEPENDENCIES = \
 	host-meson \
 	host-pkgconf \
 	host-python3 \
+	host-python-distlib \
 	libglib2 \
 	zlib
 
@@ -159,10 +160,22 @@ else
 QEMU_OPTS += --disable-fdt
 endif
 
+ifeq ($(BR2_PACKAGE_QEMU_TRACING),y)
+QEMU_OPTS += --enable-trace-backends=log
+else
+QEMU_OPTS += --enable-trace-backends=nop
+endif
+
 ifeq ($(BR2_PACKAGE_QEMU_TOOLS),y)
 QEMU_OPTS += --enable-tools
 else
 QEMU_OPTS += --disable-tools
+endif
+
+ifeq ($(BR2_PACKAGE_QEMU_GUEST_AGENT),y)
+QEMU_OPTS += --enable-guest-agent
+else
+QEMU_OPTS += --disable-guest-agent
 endif
 
 ifeq ($(BR2_PACKAGE_LIBFUSE3),y)
@@ -228,6 +241,13 @@ else
 QEMU_OPTS += --disable-numa
 endif
 
+ifeq ($(BR2_PACKAGE_PIPEWIRE),y)
+QEMU_OPTS += --enable-pipewire
+QEMU_DEPENDENCIES += pipewire
+else
+QEMU_OPTS += --disable-pipewire
+endif
+
 ifeq ($(BR2_PACKAGE_SPICE),y)
 QEMU_OPTS += --enable-spice
 QEMU_DEPENDENCIES += spice
@@ -246,6 +266,12 @@ ifeq ($(BR2_STATIC_LIBS),y)
 QEMU_OPTS += --static
 endif
 
+ifeq ($(BR2_PACKAGE_QEMU_BLOBS),y)
+QEMU_OPTS += --enable-install-blobs
+else
+QEMU_OPTS += --disable-install-blobs
+endif
+
 # Override CPP, as it expects to be able to call it like it'd
 # call the compiler.
 define QEMU_CONFIGURE_CMDS
@@ -260,7 +286,7 @@ define QEMU_CONFIGURE_CMDS
 			--prefix=/usr \
 			--cross-prefix=$(TARGET_CROSS) \
 			--audio-drv-list= \
-			--meson=$(HOST_DIR)/bin/meson \
+			--python=$(HOST_DIR)/bin/python3 \
 			--ninja=$(HOST_DIR)/bin/ninja \
 			--disable-alsa \
 			--disable-bpf \
@@ -296,13 +322,13 @@ define QEMU_CONFIGURE_CMDS
 			--disable-vhost-crypto \
 			--disable-vhost-user-blk-server \
 			--disable-virtfs \
-			--disable-virtiofsd \
 			--disable-whpx \
 			--disable-xen \
 			--enable-attr \
 			--enable-kvm \
 			--enable-vhost-net \
-			--with-git-submodules=ignore \
+			--disable-download \
+			--disable-hexagon-idef-parser \
 			$(QEMU_OPTS)
 endef
 
@@ -327,6 +353,7 @@ HOST_QEMU_DEPENDENCIES = \
 	host-pixman \
 	host-pkgconf \
 	host-python3 \
+	host-python-distlib \
 	host-slirp \
 	host-zlib
 
@@ -446,7 +473,7 @@ define HOST_QEMU_CONFIGURE_CMDS
 		--host-cc="$(HOSTCC)" \
 		--extra-cflags="$(HOST_QEMU_CFLAGS)" \
 		--extra-ldflags="$(HOST_LDFLAGS)" \
-		--meson=$(HOST_DIR)/bin/meson \
+		--python=$(HOST_DIR)/bin/python3 \
 		--ninja=$(HOST_DIR)/bin/ninja \
 		--disable-alsa \
 		--disable-bpf \
@@ -464,16 +491,17 @@ define HOST_QEMU_CONFIGURE_CMDS
 		--disable-netmap \
 		--disable-oss \
 		--disable-pa \
+		--disable-pipewire \
 		--disable-sdl \
 		--disable-selinux \
 		--disable-vde \
 		--disable-vhost-user-blk-server \
-		--disable-virtiofsd \
 		--disable-vnc-jpeg \
 		--disable-png \
 		--disable-vnc-sasl \
 		--enable-slirp \
 		--enable-tools \
+		--disable-guest-agent \
 		$(HOST_QEMU_OPTS)
 endef
 
@@ -488,10 +516,12 @@ define HOST_QEMU_INSTALL_CMDS
 endef
 
 # install symlink to qemu-system
+ifeq ($(BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE),y)
 define HOST_QEMU_POST_INSTALL_SYMLINK
 	ln -sf ./qemu-system-$(HOST_QEMU_ARCH) $(HOST_DIR)/bin/qemu-system
 endef
 HOST_QEMU_POST_INSTALL_HOOKS += HOST_QEMU_POST_INSTALL_SYMLINK
+endif
 
 $(eval $(host-generic-package))
 

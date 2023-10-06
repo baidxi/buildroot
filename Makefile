@@ -90,9 +90,9 @@ all:
 .PHONY: all
 
 # Set and export the version string
-export BR2_VERSION := 2023.02-rc2
+export BR2_VERSION := 2023.11-git
 # Actual time the release is cut (for reproducible builds)
-BR2_VERSION_EPOCH = 1677516000
+BR2_VERSION_EPOCH = 1694030000
 
 # Save running make version since it's clobbered by the make package
 RUNNING_MAKE_VERSION := $(MAKE_VERSION)
@@ -123,7 +123,7 @@ endif
 noconfig_targets := menuconfig nconfig gconfig xconfig config oldconfig randconfig \
 	defconfig %_defconfig allyesconfig allnoconfig alldefconfig syncconfig release \
 	randpackageconfig allyespackageconfig allnopackageconfig \
-	print-version olddefconfig distclean manual manual-% check-package check-flake8
+	print-version olddefconfig distclean manual manual-% check-package
 
 # Some global targets do not trigger a build, but are used to collect
 # metadata, or do various checks. When such targets are triggered,
@@ -594,8 +594,12 @@ world: target-post-image
 .PHONY: prepare-sdk
 prepare-sdk: world
 	@$(call MESSAGE,"Rendering the SDK relocatable")
-	PER_PACKAGE_DIR=$(PER_PACKAGE_DIR) $(TOPDIR)/support/scripts/fix-rpath host
-	PER_PACKAGE_DIR=$(PER_PACKAGE_DIR) $(TOPDIR)/support/scripts/fix-rpath staging
+	PARALLEL_JOBS=$(PARALLEL_JOBS) \
+		PER_PACKAGE_DIR=$(PER_PACKAGE_DIR) \
+		$(TOPDIR)/support/scripts/fix-rpath host
+	PARALLEL_JOBS=$(PARALLEL_JOBS) \
+		PER_PACKAGE_DIR=$(PER_PACKAGE_DIR) \
+		$(TOPDIR)/support/scripts/fix-rpath staging
 	$(INSTALL) -m 755 $(TOPDIR)/support/misc/relocate-sdk.sh $(HOST_DIR)/relocate-sdk.sh
 	mkdir -p $(HOST_DIR)/share/buildroot
 	echo $(HOST_DIR) > $(HOST_DIR)/share/buildroot/sdk-location
@@ -765,7 +769,9 @@ endif
 	ln -sf ../usr/lib/os-release $(TARGET_DIR)/etc
 
 	@$(call MESSAGE,"Sanitizing RPATH in target tree")
-	PER_PACKAGE_DIR=$(PER_PACKAGE_DIR) $(TOPDIR)/support/scripts/fix-rpath target
+	PARALLEL_JOBS=$(PARALLEL_JOBS) \
+		PER_PACKAGE_DIR=$(PER_PACKAGE_DIR) \
+		$(TOPDIR)/support/scripts/fix-rpath target
 
 # For a merged /usr, ensure that /lib, /bin and /sbin and their /usr
 # counterparts are appropriately setup as symlinks ones to the others.
@@ -926,14 +932,6 @@ pkg-stats:
 		--json $(O)/pkg-stats.json \
 		--html $(O)/pkg-stats.html \
 		--nvd-path $(DL_DIR)/buildroot-nvd
-
-.PHONY: missing-cpe
-missing-cpe:
-	$(Q)mkdir -p $(CPE_UPDATES_DIR)
-	$(Q)cd "$(CONFIG_DIR)" ; \
-	$(TOPDIR)/support/scripts/gen-missing-cpe \
-		--nvd-path $(DL_DIR)/buildroot-nvd \
-		--output $(CPE_UPDATES_DIR)
 
 else # ifeq ($(BR2_HAVE_DOT_CONFIG),y)
 
@@ -1191,7 +1189,6 @@ help:
 	@echo '  legal-info             - generate info about license compliance'
 	@echo '  show-info              - generate info about packages, as a JSON blurb'
 	@echo '  pkg-stats              - generate info about packages as JSON and HTML'
-	@echo '  missing-cpe            - generate XML snippets for missing CPE identifiers'
 	@echo '  printvars              - dump internal variables selected with VARS=...'
 	@echo '  show-vars              - dump all internal variables as a JSON blurb; use VARS=...'
 	@echo '                           to limit the list to variables names matching that pattern'
@@ -1249,13 +1246,6 @@ release:
 print-version:
 	@echo $(BR2_VERSION_FULL)
 
-check-flake8:
-	$(Q)git ls-tree -r --name-only HEAD \
-	| xargs file \
-	| grep 'Python script' \
-	| cut -d':' -f1 \
-	| xargs -- python3 -m flake8 --statistics
-
 check-package:
 	$(Q)./utils/check-package `git ls-tree -r --name-only HEAD` \
 		--ignore-list=$(TOPDIR)/.checkpackageignore
@@ -1269,5 +1259,8 @@ include docs/manual/manual.mk
 -include $(foreach dir,$(BR2_EXTERNAL_DIRS),$(sort $(wildcard $(dir)/docs/*/*.mk)))
 
 .PHONY: $(noconfig_targets)
+
+# .WAIT was introduced in make 4.4. For older make, define it as phony.
+.PHONY: .WAIT
 
 endif #umask / $(CURDIR) / $(O)
