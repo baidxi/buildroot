@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-FIREWALLD_VERSION = 1.3.2
+FIREWALLD_VERSION = 2.0.1
 FIREWALLD_SITE = $(call github,firewalld,firewalld,v$(FIREWALLD_VERSION))
 FIREWALLD_LICENSE = GPL-2.0
 FIREWALLD_LICENSE_FILES = COPYING
@@ -22,6 +22,8 @@ FIREWALLD_DEPENDENCIES = \
 	nftables \
 	python3 \
 	python-gobject
+
+FIREWALLD_SELINUX_MODULES = firewalld
 
 # Firewalld hard codes the python shebangs to the full path of the
 # python-interpreter. IE: #!/home/buildroot/output/host/bin/python.

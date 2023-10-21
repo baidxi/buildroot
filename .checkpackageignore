@@ -650,7 +650,6 @@ package/libdnet/0001-python-makefile.patch Upstream
 package/libdrm/0001-tests-meson.build-disable-nouveau-tests-for-static-b.patch Upstream
 package/libdvbcsa/0001-altivec-powerpc64.patch Upstream
 package/libeXosip2/0001-src-eXtl_dtls.c-fix-build-with-libressl-3.4.1.patch Upstream
-package/libebml/0001-include-appropriate-header-files-for-std-numeric_limits.patch Upstream
 package/libedit/0001-check-bsd-functions-in-libbsd.patch Upstream
 package/libevent/0001-Don-t-define-BIO_get_init-for-LibreSSL-3-5.patch Upstream
 package/libfcgi/0001-link-against-math.patch Upstream
@@ -946,8 +945,6 @@ package/netsurf/0002-do-not-cross-compile-nsgenbind.patch Upstream
 package/netsurf/0003-fix-compilation-without-curl.patch Upstream
 package/netsurf/0004-framebuffer-Fix-internal-font-generated-source-for-GCC-10.patch Upstream
 package/nettle/0001-disable-testsuite-examples.patch Upstream
-package/network-manager/0001-build-meson-add-option-to-set-the-mobile-broadband-p.patch Upstream
-package/network-manager/0002-meson.build-fix-build-failure-with-Dmodem_manager-fa.patch Upstream
 package/network-manager/S45network-manager ConsecutiveEmptyLines EmptyLastLine Shellcheck Variables
 package/nfs-utils/S60nfs ConsecutiveEmptyLines Shellcheck Variables
 package/nginx-modsecurity/0001-config-use-pkg-config.patch Upstream
@@ -967,10 +964,10 @@ package/ngrep/0002-Check-for-libnet_init-in-configure-in.patch Upstream
 package/ngrep/0003-fix-disable-tcpkill.patch Upstream
 package/nilfs-utils/0001-nilfs_cleanerd-link-dynamically.patch Upstream
 package/nmap/0001-libdnet-wrapper-configure.patch Upstream
-package/nodejs/0001-add-qemu-wrapper-support.patch Upstream
-package/nodejs/0002-check-if-uclibc-has-backtrace-support.patch Upstream
-package/nodejs/0003-include-obj-name-in-shared-intermediate.patch Upstream
-package/nodejs/0004-lib-internal-modules-cjs-loader.js-adjust-default-pa.patch Upstream
+package/nodejs/nodejs-src/0001-add-qemu-wrapper-support.patch Upstream
+package/nodejs/nodejs-src/0002-check-if-uclibc-has-backtrace-support.patch Upstream
+package/nodejs/nodejs-src/0003-include-obj-name-in-shared-intermediate.patch Upstream
+package/nodejs/nodejs-src/0004-lib-internal-modules-cjs-loader.js-adjust-default-pa.patch Upstream
 package/nodm/S90nodm Indent Shellcheck Variables
 package/norm/0001-protolib-drop-linux-version-check.patch Upstream
 package/norm/0002-Use-print-as-function-call-for-Python3-compatibility.patch Upstream
