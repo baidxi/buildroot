@@ -21,6 +21,12 @@ define FREERADIUS_SERVER_RUN_KRB5_AUTORECONF
 endef
 FREERADIUS_SERVER_PRE_CONFIGURE_HOOKS += FREERADIUS_SERVER_RUN_KRB5_AUTORECONF
 
+# We're patching src/modules/rlm_python3/configure.ac
+define FREERADIUS_SERVER_RUN_PYTHON3_AUTORECONF
+	cd $(@D)/src/modules/rlm_python3; $(AUTORECONF) -I$(@D)/m4
+endef
+FREERADIUS_SERVER_PRE_CONFIGURE_HOOKS += FREERADIUS_SERVER_RUN_PYTHON3_AUTORECONF
+
 # some compiler checks are not supported while cross compiling.
 # instead of removing those checks, we cache the answers
 FREERADIUS_SERVER_CONF_OPTS += \
@@ -134,9 +140,9 @@ else
 FREERADIUS_SERVER_CONF_OPTS += --without-rlm_cache_memcached
 endif
 
-ifeq ($(BR2_PACKAGE_MYSQL),y)
+ifeq ($(BR2_PACKAGE_MARIADB),y)
 FREERADIUS_SERVER_CONF_OPTS += --with-rlm_sql_mysql
-FREERADIUS_SERVER_DEPENDENCIES += mysql
+FREERADIUS_SERVER_DEPENDENCIES += mariadb
 else
 FREERADIUS_SERVER_CONF_OPTS += --without-rlm_sql_mysql
 endif

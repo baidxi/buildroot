@@ -6,7 +6,7 @@
 
 # When updating the version, please also update kodi-jsonschemabuilder
 # and kodi-texturepacker
-KODI_VERSION_MAJOR = 20.2
+KODI_VERSION_MAJOR = 20.5
 KODI_VERSION_NAME = Nexus
 KODI_VERSION = $(KODI_VERSION_MAJOR)-$(KODI_VERSION_NAME)
 KODI_SITE = $(call github,xbmc,xbmc,$(KODI_VERSION))
@@ -216,7 +216,7 @@ endif
 
 ifeq ($(BR2_PACKAGE_KODI_MYSQL),y)
 KODI_CONF_OPTS += -DENABLE_MYSQLCLIENT=ON
-KODI_DEPENDENCIES += mysql
+KODI_DEPENDENCIES += mariadb
 else
 KODI_CONF_OPTS += -DENABLE_MYSQLCLIENT=OFF
 endif

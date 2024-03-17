@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-LIBHEIF_VERSION = 1.17.5
+LIBHEIF_VERSION = 1.17.6
 LIBHEIF_SITE = https://github.com/strukturag/libheif/releases/download/v$(LIBHEIF_VERSION)
 LIBHEIF_LICENSE = LGPL-3.0+
 LIBHEIF_LICENSE_FILES = COPYING
@@ -51,9 +51,9 @@ else
 LIBHEIF_CONF_OPTS += -DWITH_LIBDE265=OFF
 endif
 
-ifeq ($(BR2_PACKAGE_LIBJPEG),y)
+ifeq ($(BR2_PACKAGE_JPEG),y)
 LIBHEIF_CONF_OPTS += -DWITH_JPEG_DECODER=ON -DWITH_JPEG_ENCODER=ON
-LIBHEIF_DEPENDENCIES += libjpeg
+LIBHEIF_DEPENDENCIES += jpeg
 else
 LIBHEIF_CONF_OPTS += -DWITH_JPEG_DECODER=OFF -DWITH_JPEG_ENCODER=OFF
 endif
