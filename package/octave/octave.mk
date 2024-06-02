@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-OCTAVE_VERSION = 8.4.0
+OCTAVE_VERSION = 9.1.0
 OCTAVE_SITE = https://ftp.gnu.org/gnu/octave
 OCTAVE_SOURCE = octave-$(OCTAVE_VERSION).tar.lz
 OCTAVE_LICENSE = GPL-3.0+
@@ -19,6 +19,13 @@ OCTAVE_DEPENDENCIES = \
 	openblas \
 	pcre2
 
+ifeq ($(BR2_PACKAGE_BZIP2),y)
+OCTAVE_CONF_OPTS += --with-bz2
+OCTAVE_DEPENDENCIES += bzip2
+else
+OCTAVE_CONF_OPTS += --without-bz2
+endif
+
 ifeq ($(BR2_PACKAGE_READLINE),y)
 OCTAVE_CONF_OPTS += \
 	--enable-readline \
@@ -26,6 +33,13 @@ OCTAVE_CONF_OPTS += \
 OCTAVE_DEPENDENCIES += readline
 else
 OCTAVE_CONF_OPTS += --disable-readline
+endif
+
+ifeq ($(BR2_PACKAGE_ZLIB),y)
+OCTAVE_CONF_OPTS += --with-z
+OCTAVE_DEPENDENCIES += zlib
+else
+OCTAVE_CONF_OPTS += --without-z
 endif
 
 $(eval $(autotools-package))

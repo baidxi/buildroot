@@ -146,8 +146,73 @@ endif
 
 comment "Legacy options removed in 2024.05"
 
+config BR2_GCC_VERSION_11_X
+	bool "gcc 11.x support removed"
+	select BR2_LEGACY
+	help
+	  Support for gcc version 11.x has been removed. The current
+	  default version (13.x or later) has been selected instead.
+
+config BR2_BINFMT_FLAT_SHARED
+	bool "FLAT shared binary format removed"
+	select BR2_LEGACY
+	help
+	  Support for the FLAT shared binary format has been removed:
+	  its support was removed from the Linux kernel, and also from
+	  uClibc-ng, the only C library that supported it.
+
+config BR2_PACKAGE_OMXPLAYER
+	bool "omxplayer removed"
+	select BR2_LEGACY
+	help
+	  Package was deprecated in 2020 and is broken with ffmpeg 6.x
+
+config BR2_KERNEL_HEADERS_6_7
+	bool "kernel headers version 6.7.x are no longer supported"
+	select BR2_LEGACY
+	help
+	  Version 6.7.x of the Linux kernel headers are no longer
+	  maintained upstream and are now removed.
+
+config BR2_TARGET_TI_K3_IMAGE_GEN
+	bool "ti-k3-image-gen removed"
+	select BR2_LEGACY
+	help
+	  ti-k3-image-gen tool  has been removed and replaced by
+	  U-Boot binman tool (requires U-boot >= 2023.10).
+
+config BR2_TARGET_UBOOT_NEEDS_TI_K3_DM
+	bool "u-boot TI K3 DM option has been removed."
+	select BR2_LEGACY
+	help
+	  The TI K3 Device Manager is already included in
+	  ti-k3-boot-firmware.
+
+config BR2_PACKAGE_FLUTTER_GALLERY
+	bool "flutter-gallery removed"
+	select BR2_LEGACY
+	help
+	  flutter-gallery has been removed due to being abandoned
+	  and no longer working with flutter 3.19+. It is replaced by
+	  flutter-packages, where individual sub-packages (examples)
+	  must be selected for the build.
+
+config BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS
+	bool "Codescape IMG GNU Linux Toolchain 2018.09 has been removed"
+	select BR2_LEGACY
+	help
+	  The Codescape IMG GNU Linux toolchain has been removed, use a
+	  Bootlin toolchain instead.
+
+config BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS
+	bool "Codescape MTI GNU Linux Toolchain 2018.09 has been removed"
+	select BR2_LEGACY
+	help
+	  The Codescape MTI GNU Linux toolchain has been removed, use a
+	  Bootlin toolchain instead.
+
 config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64
-	bool "CodeSourcery AArch64 2014.11"
+	bool "CodeSourcery AArch64 2014.11 has been removed"
 	select BR2_LEGACY
 	help
 	  The Sourcery CodeBench AArch64 toolchain has been removed,
