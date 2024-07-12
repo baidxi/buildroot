@@ -25,7 +25,7 @@ for more information on obtaining a Buildroot git tree.
 === Reproducing, analyzing and fixing bugs
 
 A first way of contributing is to have a look at the open bug reports in
-the https://bugs.buildroot.org/buglist.cgi?product=buildroot[Buildroot bug
+the https://gitlab.com/buildroot.org/buildroot/-/issues[Buildroot bug
 tracker]. As we strive to keep the bug count as small as possible, all
 help in reproducing, analyzing and fixing reported bugs is more than
 welcome. Don't hesitate to add a comment to bug reports reporting your
@@ -263,6 +263,10 @@ separated from it by a plus `+` sign. E.g.:
   their name and surname:
 +
 `Your-Name Your-Surname <your-name.your-surname+their-name.their-surname@mail.com>`
+
+Alternatively, especially if your email server does not support
+subaddressing, you can include the sponsor in your author name in
+parentheses, e.g. "Your Name (Sponsor Name)".
 
 When adding new packages, you should submit every package in a
 separate patch. This patch should have the update to

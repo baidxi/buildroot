@@ -25,8 +25,6 @@ import os
 from random import randint
 import sys
 import traceback
-from distutils.version import StrictVersion
-import platform
 
 
 class SystemInfo:
@@ -166,23 +164,6 @@ async def is_toolchain_usable(configfile, config):
             print("      Missing: %s" % toolchainline.strip(), file=sys.stderr)
             return False
 
-    # The latest Linaro toolchains on x86-64 hosts requires glibc
-    # 2.14+ on the host.
-    if platform.machine() == 'x86_64':
-        if 'BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM=y\n' in configlines or \
-           'BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64=y\n' in configlines or \
-           'BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_BE=y\n' in configlines or \
-           'BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB=y\n' in configlines:
-            proc = await asyncio.create_subprocess_exec(
-                'ldd', '--version', stdout=asyncio.subprocess.PIPE)
-            ldd_version_output, _ = await proc.communicate()
-            if proc.returncode:
-                return False
-            glibc_version = ldd_version_output.decode().splitlines()[0].split()[-1]
-            if StrictVersion('2.14') > StrictVersion(glibc_version):
-                print("WARN: ignoring the Linaro ARM toolchains because too old host glibc", file=sys.stderr)
-                return False
-
     return True
 
 
@@ -286,12 +267,19 @@ async def fixup_config(sysinfo, configfile):
        BR2_TOOLCHAIN_EXTERNAL_URL + 'mipsel-ctng-linux-uclibc.tar.xz"\n' in configlines:
         return False
     # No C library for internal toolchain
-    if 'BR2_TOOLCHAIN_BUILDROOT_NONE=y' in configlines:
+    if 'BR2_TOOLCHAIN_BUILDROOT_NONE=y\n' in configlines:
         return False
     # Xtensa custom cores require an overlay file with internal
     # toolchains
-    if 'BR2_XTENSA_CUSTOM=y' in configlines and \
-       'BR2_TOOLCHAIN_BUILDROOT=y' in configlines:
+    if 'BR2_XTENSA_CUSTOM=y\n' in configlines and \
+       'BR2_TOOLCHAIN_BUILDROOT=y\n' in configlines:
+        return False
+
+    # On xtensa, python needs headers >= 3.17, but propagating that to all packages
+    # is a bit tedious, so just catch it here.
+    if 'BR2_XTENSA_CUSTOM=y\n' in configlines and \
+       'BR2_PACKAGE_PYTHON3=y\n' in configlines and \
+       'BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17=y\n' not in configlines:
         return False
 
     if 'BR2_TOOLCHAIN_BARE_METAL_BUILDROOT=y\n' in configlines:
@@ -688,7 +676,8 @@ async def gen_config(args):
         configlines += minimalf.readlines()
 
     # Allow hosts with old certificates to download over https
-    configlines.append("BR2_WGET=\"wget --passive-ftp -nd -t 3 --no-check-certificate\"\n")
+    configlines.append("BR2_WGET=\"wget -nd -t 3 --no-check-certificate\"\n")
+    configlines.append("BR2_CURL=\"curl --ftp-pasv --retry 3 --insecure\"\n")
 
     # Per-package folder
     if randint(0, 15) == 0:

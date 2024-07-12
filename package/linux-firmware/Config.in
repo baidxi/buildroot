@@ -79,6 +79,11 @@ config BR2_PACKAGE_LINUX_FIRMWARE_MEDIATEK_MT7922_BT
 	help
 	  Firmware files for MediaTek MT7922 bluetooth support
 
+config BR2_PACKAGE_LINUX_FIRMWARE_MEDIATEK_MT7925_BT
+	bool "MediaTek MT7925"
+	help
+	  Firmware files for MediaTek MT7925 bluetooth support
+
 config BR2_PACKAGE_LINUX_FIRMWARE_QUALCOMM_6174A_BT
 	bool "Qualcomm Atheros Rome 6174A Bluetooth"
 	help
@@ -444,6 +449,11 @@ config BR2_PACKAGE_LINUX_FIRMWARE_MEDIATEK_MT7922
 	help
 	  MediaTek MT7922
 
+config BR2_PACKAGE_LINUX_FIRMWARE_MEDIATEK_MT7925
+	bool "MediaTek MT7925"
+	help
+	  MediaTek MT7925
+
 config BR2_PACKAGE_LINUX_FIRMWARE_QUALCOMM_6174
 	bool "Qualcomm Atheros 6174"
 	help
@@ -678,6 +688,16 @@ config BR2_PACKAGE_LINUX_FIRMWARE_INTEL_ATOMISP
 	help
 	  Firmware files for Intel AtomISP v2 (also know as IPU2)
 	  needed by the Linux AtomISP v2 driver.
+
+endmenu
+
+menu "GPU Firmware"
+
+config BR2_PACKAGE_LINUX_FIRMWARE_ARM_MALI_CSF
+	bool "Arm Mali CSF firmware"
+	help
+	  Firmware files for Arm Mali 10th generation GPU
+	  needed by the linux panthor kernel driver.
 
 endmenu
 

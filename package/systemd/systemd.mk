@@ -19,7 +19,7 @@
 # - Diff sysusers.d with the previous version
 # - Diff factory/etc/nsswitch.conf with the previous version
 #   (details are often sprinkled around in README and manpages)
-SYSTEMD_VERSION = 254.9
+SYSTEMD_VERSION = 254.13
 SYSTEMD_SITE = $(call github,systemd,systemd-stable,v$(SYSTEMD_VERSION))
 SYSTEMD_LICENSE = \
 	LGPL-2.1+, \
@@ -575,6 +575,13 @@ ifeq ($(BR2_PACKAGE_SYSTEMD_HIBERNATE),y)
 SYSTEMD_CONF_OPTS += -Dhibernate=true
 else
 SYSTEMD_CONF_OPTS += -Dhibernate=false
+endif
+
+ifeq ($(BR2_PACKAGE_TPM2_TSS),y)
+SYSTEMD_DEPENDENCIES += tpm2-tss
+SYSTEMD_CONF_OPTS += -Dtpm2=true
+else
+SYSTEMD_CONF_OPTS += -Dtpm2=false
 endif
 
 ifeq ($(BR2_PACKAGE_SYSTEMD_BOOT),y)
