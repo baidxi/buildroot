@@ -506,6 +506,11 @@ config BR2_PACKAGE_LINUX_FIRMWARE_REDPINE_RS9113
 	help
 	  Firmware files for WLAN and Bluetooth modules rs9113
 
+config BR2_PACKAGE_LINUX_FIRMWARE_REDPINE_RS9116
+	bool "Redpine rs9116"
+	help
+	  Firmware files for WLAN and Bluetooth modules rs9116
+
 config BR2_PACKAGE_LINUX_FIRMWARE_TI_WL127X
 	bool "TI wl127x"
 	help
@@ -521,6 +526,11 @@ config BR2_PACKAGE_LINUX_FIRMWARE_TI_WL18XX
 	bool "TI wl18xx"
 	help
 	  Firmware files for WLAN and Bluetooth modules wl18xx
+
+config BR2_PACKAGE_LINUX_FIRMWARE_TI_CC33XX
+	bool "TI cc33xx"
+	help
+	  Firmware files for cc33xx WLAN and BLE family of chips
 
 config BR2_PACKAGE_LINUX_FIRMWARE_QUALCOMM_WIL6210
 	bool "Qualcomm Atheros wil6210"
@@ -591,7 +601,7 @@ config BR2_PACKAGE_LINUX_FIRMWARE_QLOGIC_4X
 	  (qede)
 
 config BR2_PACKAGE_LINUX_FIRMWARE_RTL_815X
-	bool "Realtek 8152/8153/8156 USB Ethernet Adapaters"
+	bool "Realtek 8152/8153/8156 USB Ethernet Adapters"
 	help
 	  Firmware files for Realtek 8152/8153/8156 based USB Ethernet
 	  adapters.
@@ -698,6 +708,16 @@ config BR2_PACKAGE_LINUX_FIRMWARE_ARM_MALI_CSF
 	help
 	  Firmware files for Arm Mali 10th generation GPU
 	  needed by the linux panthor kernel driver.
+
+endmenu
+
+menu "Serial adapters firmware"
+
+config BR2_PACKAGE_LINUX_FIRMWARE_RP2
+	bool "Comtrol RocketPort EXPRESS/INFINITY firmware"
+	help
+	  Firmware files for the Comtrol RocketPort EXPRESS/INFINITY
+	  needed by the Linux rp2 kernel driver.
 
 endmenu
 

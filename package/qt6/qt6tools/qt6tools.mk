@@ -41,5 +41,23 @@ ifeq ($(BR2_PACKAGE_QT6DECLARATIVE),y)
 QT6TOOLS_DEPENDENCIES += qt6declarative
 endif
 
+HOST_QT6TOOLS_CONF_OPTS = \
+	-DQT_BUILD_EXAMPLES=OFF \
+	-DQT_BUILD_TESTS=OFF
+
+HOST_QT6TOOLS_DEPENDENCIES = host-qt6base
+
+ifeq ($(BR2_PACKAGE_HOST_QT6TOOLS_LINGUIST_TOOLS),y)
+HOST_QT6TOOLS_CONF_OPTS += -DFEATURE_linguist=ON
+# When we have qt6declarative for the target, we need to build the
+# linguist tool with host-qt6declarative support so that it handles
+# QML/JS files
+ifeq ($(BR2_PACKAGE_QT6DECLARATIVE),y)
+HOST_QT6TOOLS_DEPENDENCIES += host-qt6declarative
+endif
+else
+HOST_QT6TOOLS_CONF_OPTS += -DFEATURE_linguist=OFF
+endif
+
 $(eval $(cmake-package))
 $(eval $(host-cmake-package))

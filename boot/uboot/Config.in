@@ -41,7 +41,7 @@ choice
 	  Select the specific U-Boot version you want to use
 
 config BR2_TARGET_UBOOT_LATEST_VERSION
-	bool "2024.04"
+	bool "2024.07"
 
 config BR2_TARGET_UBOOT_CUSTOM_VERSION
 	bool "Custom version"
@@ -85,7 +85,7 @@ endif
 
 config BR2_TARGET_UBOOT_VERSION
 	string
-	default "2024.04"	if BR2_TARGET_UBOOT_LATEST_VERSION
+	default "2024.07"	if BR2_TARGET_UBOOT_LATEST_VERSION
 	default BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE \
 		if BR2_TARGET_UBOOT_CUSTOM_VERSION
 	default "custom"	if BR2_TARGET_UBOOT_CUSTOM_TARBALL
@@ -135,6 +135,42 @@ config BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES
 	  A space-separated list of configuration fragment files,
 	  that will be merged to the main U-Boot configuration file.
 endif
+
+# Hidden boolean that allows to select BR2_TARGET_UBOOT_NEEDS_XXD when
+# needed.
+config BR2_TARGET_UBOOT_DEFAULT_ENV_FILE_ENABLED
+	bool
+	default y if BR2_TARGET_UBOOT_DEFAULT_ENV_FILE != ""
+	select BR2_TARGET_UBOOT_NEEDS_XXD
+
+config BR2_TARGET_UBOOT_DEFAULT_ENV_FILE
+	string "Text file with default environment"
+	depends on BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG
+	help
+	  Text file containing the variables to be used as the default
+	  environment in U-Boot.
+
+	  If empty, let U-Boot generate the default enviromnent from the
+	  source code and other U-Boot configuration values, which is
+	  the default behaviour.
+
+	  If set to the path to a file, instructs U-Boot to define the
+	  entire U-Boot default environment from the provided file,
+	  disabling all the default behaviour.
+
+	  From the U-Boot documentation:
+
+	    The format is the same as accepted by the mkenvimage tool,
+	    with lines containing key=value pairs. Blank lines and
+	    lines beginning with '#' are ignored.
+
+	  Based on the USE_DEFAULT_ENV_FILE and DEFAULT_ENV_FILE U-Boot
+	  configuration variables.
+
+	  For more info see:
+	  https://docs.u-boot.org/en/latest/usage/environment.html#external-environment-file
+
+	  Requires U-Boot >= v2018.05.
 
 config BR2_TARGET_UBOOT_NEEDS_DTC
 	bool "U-Boot needs dtc"
@@ -279,7 +315,7 @@ config BR2_TARGET_UBOOT_USE_BINMAN
 	help
 	  Use binman tool for generation and signing of boot images.
 
-	  https://docs.u-boot.org/en/v2024.04/develop/package/binman.html
+	  https://docs.u-boot.org/en/v2024.07/develop/package/binman.html
 
 menu "U-Boot binary format"
 

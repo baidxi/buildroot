@@ -6,7 +6,7 @@
 
 # When bumping, make sure *all* --without-libfoo-prefix options are in GNUTLS_CONF_OPTS
 GNUTLS_VERSION_MAJOR = 3.8
-GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).3
+GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).6
 GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
 GNUTLS_SITE = https://www.gnupg.org/ftp/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
 GNUTLS_LICENSE = LGPL-2.1+ (core library)
@@ -14,6 +14,8 @@ GNUTLS_LICENSE_FILES = doc/COPYING.LESSER
 
 GNUTLS_DEPENDENCIES = host-pkgconf libtasn1 libunistring nettle
 GNUTLS_CPE_ID_VENDOR = gnu
+# Don't add an optional dependency on tpm2-tss as it creates a
+# circular dependency: tpm2-tss -> libcurl -> gnutls -> tmp2-tss.
 GNUTLS_CONF_OPTS = \
 	--disable-doc \
 	--disable-libdane \
@@ -30,6 +32,7 @@ GNUTLS_CONF_OPTS = \
 	--without-librt-prefix \
 	--without-libz-prefix \
 	--without-tpm \
+	--without-tpm2 \
 	$(if $(BR2_PACKAGE_GNUTLS_TOOLS),--enable-tools,--disable-tools) \
 	$(if $(BR2_PACKAGE_GNUTLS_ENABLE_SSL2),--enable,--disable)-ssl2-support \
 	$(if $(BR2_PACKAGE_GNUTLS_ENABLE_GOST),--enable,--disable)-gost
@@ -97,13 +100,6 @@ GNUTLS_CONF_OPTS += --with-p11-kit
 GNUTLS_DEPENDENCIES += p11-kit
 else
 GNUTLS_CONF_OPTS += --without-p11-kit
-endif
-
-ifeq ($(BR2_PACKAGE_TPM2_TSS),y)
-GNUTLS_CONF_OPTS += --with-tpm2
-GNUTLS_DEPENDENCIES += tpm2-tss
-else
-GNUTLS_CONF_OPTS += --without-tpm2
 endif
 
 ifeq ($(BR2_PACKAGE_ZLIB),y)
