@@ -1,0 +1,87 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/*
+ * Copyright 2022 NXP
+ */
+
+#include "myir-imx93-11x11.dts"
+/ {
+	panel {
+		compatible = "myirtft_panel_7inch";
+		power-supply = <&reg_vdd_3v3>;
+		enable-gpios = <&gpio1 10 GPIO_ACTIVE_HIGH>;
+		// reset-gpios = <&at9555 0 GPIO_ACTIVE_HIGH>;
+		port {
+			panel_in: endpoint {
+				remote-endpoint = <&display_out>;
+			};
+		};
+	};
+};
+
+&parallel_disp_fmt {
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_lcdif>;
+	// fsl,interface-pix-fmt = "rgb888";
+	status = "okay";
+
+	ports {
+		port@1 {
+			reg = <1>;
+
+			display_out: endpoint {
+				remote-endpoint = <&panel_in>;
+			};
+		};
+	};
+};
+
+
+
+&lcdif {
+	assigned-clock-rates = <484000000>, <121000000>, <400000000>, <133333333>;
+};
+
+
+&lpi2c2 {
+	edt-ft5x06-1@38 {
+		compatible = "edt,edt-ft5406";
+		reg = <0x38>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&rgb_tpcs_pins>;
+		interrupt-parent = <&gpio2>;
+		interrupts = <28 IRQ_TYPE_EDGE_FALLING>;
+		reset-gpios = <&at9555 2 GPIO_ACTIVE_LOW>;
+		touchscreen-size-x=<1024>;
+		touchscreen-size-y=<600>;
+		status = "okay";
+	};
+};
+
+
+&iomuxc {
+	rgb_tpcs_pins: rgbtpcspins {
+		fsl,pins = <
+			MX93_PAD_GPIO_IO28__GPIO2_IO28             0x0000051E
+		>;
+	};
+};
+
+&media_blk_ctrl {
+	status = "okay";
+};
+
+// &lt9611_hdmi {
+// 	status = "disabled";
+// };
+
+/* pin conflicts */
+&lpuart6{
+	status = "disabled";
+};
+
+&lpuart3{
+	status = "disabled";
+};
+&lpuart8{
+	status = "disabled";
+};
