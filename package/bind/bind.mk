@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-BIND_VERSION = 9.18.28
+BIND_VERSION = 9.18.30
 BIND_SOURCE= bind-$(BIND_VERSION).tar.xz
 BIND_SITE = https://ftp.isc.org/isc/bind9/$(BIND_VERSION)
 # bind does not support parallel builds.
@@ -33,6 +33,7 @@ BIND_CONF_OPTS = \
 	--enable-epoll \
 	--disable-doh \
 	--disable-backtrace \
+	--disable-static \
 	--with-openssl=$(STAGING_DIR)/usr
 
 BIND_DEPENDENCIES = host-pkgconf libuv openssl
