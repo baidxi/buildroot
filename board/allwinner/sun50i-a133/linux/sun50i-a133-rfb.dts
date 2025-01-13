@@ -21,12 +21,16 @@
 		linux,stdout-path = &uart0;
 	};
 
-	// reserved_memory:reserved-memory {
-	// 	#address-cells = <2>;
-	// 	#size-cells = <2>;
-	// 	ranges;
-	// 	reg = <0x0 0x48000000 0x0 0x01000000>;
-	// };
+	reserved-memory {
+		#address-cells = <2>;
+		#size-cells = <2>;
+		ranges;
+
+		secmon@0x48000000 {
+			reg = <0x0 0x48000000 0x0 0x200000>;
+			no-map;
+		};
+	};
 };
 
 &pio {
