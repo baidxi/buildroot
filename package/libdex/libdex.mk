@@ -4,7 +4,8 @@
 #
 ################################################################################
 
-LIBDEX_VERSION_MAJOR = 0.6
+# The middle number is even for stable releases, odd for development ones.
+LIBDEX_VERSION_MAJOR = 0.8
 LIBDEX_VERSION = $(LIBDEX_VERSION_MAJOR).1
 LIBDEX_SOURCE = libdex-$(LIBDEX_VERSION).tar.xz
 LIBDEX_SITE = https://download.gnome.org/sources/libdex/$(LIBDEX_VERSION_MAJOR)
