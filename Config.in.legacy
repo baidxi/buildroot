@@ -146,12 +146,110 @@ endif
 
 comment "Legacy options removed in 2025.02"
 
+config BR2_PACKAGE_ANGULARJS
+	bool "angularjs has been removed"
+	select BR2_LEGACY
+	help
+	  The angularjs package was removed as the upstream
+	  project has been archived.
+
+config BR2_PACKAGE_ANGULAR_WEBSOCKET
+	bool "angular-websocket has been removed"
+	select BR2_LEGACY
+	help
+	  The angular-websocket package was removed as the upstream
+	  project has been archived.
+
+config BR2_PACKAGE_LATENCYTOP
+	bool "latencytop has been removed"
+	select BR2_LEGACY
+	help
+	  The latencytop package is no longer available for download.
+
+config BR2_PACKAGE_OBSIDIAN_CURSORS
+	bool "obsidian-cursors has been removed"
+	select BR2_LEGACY
+	help
+	  The obsidian cursors package is no longer available for
+	  direct download.
+
+config BR2_PACKAGE_W_SCAN
+	bool "w_scan has been removed"
+	select BR2_LEGACY
+	help
+	  The w_scan package was removed as it is not maintained
+	  anymore and the upstream URL is gone.
+
+config BR2_PACKAGE_GENROMFS
+	bool "genromfs"
+	select BR2_LEGACY
+	help
+	  Romfs root filesystem support has been removed.
+
+config BR2_TARGET_ROOTFS_ROMFS
+	bool "romfs root filesystem has been removed"
+	select BR2_LEGACY
+	help
+	  Romfs root filesystem support has been removed.
+
+config BR2_BINUTILS_VERSION_2_41_X
+	bool "binutils 2.41 has been removed"
+	select BR2_LEGACY
+	help
+	  binutils 2.41 has been removed, use a newer version.
+
+config BR2_TARGET_ROOTFS_EXT2_2r0
+	bool "ext2 rev0 support been removed"
+	select BR2_LEGACY
+	help
+	  Support for ext2 revision 0 format has been removed and
+	  revision 1 is now unconditionally used.
+
+config BR2_GDB_VERSION_13
+	bool "gdb 13.x has been removed"
+	select BR2_LEGACY
+	help
+	  GDB 13.x support has been removed, a newer version should be
+	  used instead.
+
+config BR2_nios2
+	bool "nios2 architecture removed"
+	select BR2_LEGACY
+	help
+	  The nios2 architecture was removed, by lack of toolchain
+	  support.
+
+config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_NIOS2_GLIBC_BLEEDING_EDGE
+	bool "Bootlin nios2 glibc bleeding-edge toolchain removed"
+	select BR2_LEGACY
+	help
+	  The nios2 Bootlin toolchains have been removed.
+
+config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_NIOS2_GLIBC_STABLE
+	bool "Bootlin nios2 glibc stable toolchain removed"
+	select BR2_LEGACY
+	help
+	  The nios2 Bootlin toolchains have been removed.
+
 config BR2_PACKAGE_DIRECTFB
 	bool "directfb has been removed"
 	select BR2_LEGACY
 	help
 	  This package was no longer maintained upstream, so it was
 	  dropped from Buildroot.
+
+config BR2_PACKAGE_GST_OMX
+	bool "gst-omx has been removed"
+	select BR2_LEGACY
+	help
+	  The gst-omx module has been removed from Gstreamer in
+	  release 1.24 in favor of Video4Linux-based video encoders.
+
+config BR2_PACKAGE_MIMIC
+	bool "mimic has been removed"
+	select BR2_LEGACY
+	help
+	  The mimic package has been removed from Buildroot.
 
 config BR2_PACKAGE_SDL2_DIRECTFB
 	bool "sdl2 directfb support removed"
@@ -264,6 +362,13 @@ config BR2_PACKAGE_QUAGGA
 	select BR2_LEGACY
 	help
 	  The quagga package was removed as it is not maintained
+	  anymore and the upstream repo is gone.
+
+config BR2_PACKAGE_RAMSMP
+	bool "ramsmp has been removed"
+	select BR2_LEGACY
+	help
+	  The ramsmp package was removed as it is not maintained
 	  anymore and the upstream repo is gone.
 
 comment "Legacy options removed in 2024.11"
