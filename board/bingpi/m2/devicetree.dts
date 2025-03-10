@@ -108,6 +108,16 @@
 /* The USB-C socket has its CC pins pulled to GND, so is hardwired as a UFP. */
 &usb_otg {
 	dr_mode = "peripheral";
+	dmas =  <&dma 30>,<&dma 30>,
+			<&dma 31>,<&dma 31>,
+			<&dma 32>,<&dma 32>,
+			<&dma 33>,<&dma 33>,
+			<&dma 34>,<&dma 34>;
+	dma-names = "ep1_tx","ep1_rx",
+				"ep2_tx","ep2_rx",
+				"ep3_tx","ep3_rx",
+				"ep4_tx","ep4_rx",
+				"ep5_tx","ep5_rx";
 	status = "okay";
 };
 
