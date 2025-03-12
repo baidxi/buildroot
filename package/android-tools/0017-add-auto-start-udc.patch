@@ -1,0 +1,80 @@
+Index: b/core/adbd/transport.c
+===================================================================
+--- a/core/adbd/transport.c
++++ b/core/adbd/transport.c
+@@ -19,6 +19,10 @@
+ #include <unistd.h>
+ #include <string.h>
+ #include <errno.h>
++#include <sys/types.h>
++#include <dirent.h>
++#include <string.h>
++#include <stdlib.h>
+ 
+ #include "sysdeps.h"
+ 
+@@ -307,11 +311,49 @@ oops:
+     return 0;
+ }
+ 
++static int lookup_udc_controller(char **udc)
++{
++    DIR *dir;
++    struct dirent *d;
++    int ret = -ENOENT;
++
++    if (!udc)
++        return -EINVAL;
++
++    dir = opendir("/sys/class/udc");
++    if (!dir)
++        return -errno;
++
++    while((d = readdir(dir))) {
++        if (d->d_name[0] == '.' || d->d_name[1] == '.')
++            continue;
++        
++        if (d->d_type != DT_LNK)
++            continue;
++        
++        *udc = strdup(d->d_name);
++
++        ret = 0;
++        break;
++    }
++
++    closedir(dir);
++
++    return ret;
++}
++
+ static void *input_thread(void *_t)
+ {
+     atransport *t = _t;
+     apacket *p;
++    char *udc_name = NULL;
+     int active = 0;
++    int ret;
++    char cmd[64];
++
++    if (lookup_udc_controller(&udc_name)) {
++        D("udc not found\n");
++    }
+ 
+     D("%s: starting transport input thread, reading from fd %d\n",
+        t->serial, t->fd);
+@@ -331,6 +373,14 @@ static void *input_thread(void *_t)
+                 if(p->msg.arg1 == t->sync_token) {
+                     D("%s: transport SYNC online\n", t->serial);
+                     active = 1;
++                    if (udc_name) {
++                        sleep(5);
++                        sprintf(cmd, "echo %s > /sys/kernel/config/usb_gadget/g1/UDC", udc_name);
++                        ret = system(cmd);
++                        if (ret) {
++                            D("execute %s error:%d\n", ret);
++                        }
++                    }
+                 } else {
+                     D("%s: transport ignoring SYNC %d != %d\n",
+                       t->serial, p->msg.arg1, t->sync_token);
