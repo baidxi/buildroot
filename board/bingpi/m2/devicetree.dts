@@ -25,7 +25,25 @@
 		led-0 {
 			color = <LED_COLOR_ID_BLUE>;
 			function = LED_FUNCTION_STATUS;
-			gpios = <&pio 3 22 GPIO_ACTIVE_LOW>; /* PD22 */
+			gpios = <&pio 6 7 GPIO_ACTIVE_LOW>; /* PG07 */
+			linux,default-trigger = "heartbeat";
+		};
+	};
+
+	panel:panel {
+		compatible = "bananapi,s070wv20-ct16";
+		#address-cells = <1>;
+		#size-cells = <0>;
+
+		port@0 {
+			#address-cells = <1>;
+			#size-cells = <0>;
+			reg = <0>;
+
+			panel_input:endpoint@0 {
+				reg = <0>;
+				remote-endpoint = <&tcon_out_lcd0>;
+			};
 		};
 	};
 
@@ -155,5 +173,38 @@
 		spi-rx-bus-width = <0x01>;
 		spi-tx-bus-width = <0x01>;
 		status = "okay";
+	};
+};
+
+&de {
+	status = "okay";
+};
+
+&display_clocks {
+	status = "okay";
+};
+
+&mixer0 {
+	status = "okay";
+};
+
+&mixer1 {
+	status = "okay";
+};
+
+&tcon_top {
+	status = "okay";
+};
+
+&tcon_lcd0 {
+	status = "okay";
+	pinctrl-0 = <&lcd_rgb666_pins>;
+	pinctrl-names = "lcd0";
+};
+
+&tcon_lcd0_out {
+	tcon_out_lcd0:endpoint@0 {
+		reg = <0>;
+		remote-endpoint = <&panel_input>;
 	};
 };
