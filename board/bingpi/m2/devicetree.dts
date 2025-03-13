@@ -42,7 +42,7 @@
 
 			panel_input:endpoint@0 {
 				reg = <0>;
-				remote-endpoint = <&tcon_out_lcd0>;
+				remote-endpoint = <&tcon_lcd0_out_rgb>;
 			};
 		};
 	};
@@ -199,11 +199,15 @@
 &tcon_lcd0 {
 	status = "okay";
 	pinctrl-0 = <&lcd_rgb666_pins>;
-	pinctrl-names = "lcd0";
+	pinctrl-names = "default";
 };
 
 &tcon_lcd0_out {
-	tcon_out_lcd0:endpoint@0 {
+	reg = <1>;
+	#address-cells = <1>;
+	#size-cells = <0>;
+
+	tcon_lcd0_out_rgb: endpoint@0 {
 		reg = <0>;
 		remote-endpoint = <&panel_input>;
 	};
