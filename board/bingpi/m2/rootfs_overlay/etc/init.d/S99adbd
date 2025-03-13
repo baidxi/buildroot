@@ -48,10 +48,6 @@ case $1 in
 		mkdir /dev/usb-ffs/adb -m 0770 -p
 		mount -o uid=2000,gid=2000 -t functionfs adb /dev/usb-ffs/adb
 		start-stop-daemon --start --quiet --background --exec /usr/bin/adbd
-
-		sleep 1
-
-		echo $(ls /sys/class/udc) > /sys/kernel/config/usb_gadget/g1/UDC
 	;;
 	stop)
 		echo "none" > /sys/kernel/config/usb_gadget/g1/UDC
