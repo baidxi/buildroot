@@ -7,3 +7,4 @@ config BR2_PACKAGE_MOONLIGHT
     select BR2_PACKAGE_DBUS
     select BR2_PACKAGE_AVAHI
     select BR2_PACKAGE_FFMPEG
+    select BR2_PACKAGE_SDL2

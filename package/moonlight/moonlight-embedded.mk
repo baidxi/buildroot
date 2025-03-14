@@ -10,4 +10,6 @@ MOONLIGHT_SITE_METHOD = git
 MOONLIGHT_INSTALL_STAGING = YES
 MOONLIGHT_GIT_SUBMODULES = YES
 
+MOONLIGHT_DEPENDENCIES = sdl2 ffmpeg avahi dbus expat libcurl libevdev opus libopenssl
+
 $(eval $(cmake-package))
