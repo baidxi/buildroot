@@ -1,6 +1,7 @@
 #include <dt-bindings/interrupt-controller/irq.h>
 #include <dt-bindings/gpio/gpio.h>
 #include <dt-bindings/leds/common.h>
+#include <dt-bindings/thermal/thermal.h>
 
 /dts-v1/;
 
@@ -30,6 +31,41 @@
 		};
 	};
 
+	thermal-zones {
+		cpu_thermal_zone {
+			polling-delay-passive = <500>;
+			polling-delay = <1000>;
+			thermal-sensors = <&ths 0>;
+			sustainable-power = <589>;
+
+			cpu_trips:trips {
+				cpu_threshold: trip-point@0 {
+					temperature = <70000>;
+					type = "passive";
+					hysteresis = <0>;
+				};
+				cpu_target: trip-point@1 {
+					temperature = <90000>;
+					type = "passive";
+					hysteresis = <0>;
+				};
+				cpu_crit: cpu_crit@0 {
+					temperature = <110000>;
+					type = "critical";
+					hysteresis = <0>;
+				};
+			};
+
+			cooling-maps {
+				map0 {
+					trip = <&cpu_target>;
+					cooling-device = <&cpu0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
+					contributiion = <1024>;
+				};
+			};
+		};
+	};
+
 	panel:panel {
 		compatible = "bananapi,s070wv20-ct16";
 		#address-cells = <1>;
@@ -45,6 +81,26 @@
 				remote-endpoint = <&tcon_lcd0_out_rgb>;
 			};
 		};
+	};
+
+	tpadc:tpadc@2009c00 {
+		compatible = "allwinner,sun5i-a13-ts";
+		reg = <0x02009c00 0x24>;
+		clocks = <&ccu CLK_BUS_TPADC>;
+		resets = <&ccu RST_BUS_TPADC>;
+		interrupts = <SOC_PERIPHERAL_IRQ(62) IRQ_TYPE_LEVEL_HIGH>;
+	};
+
+	ths:thermal@2009400 {
+		compatible = "allwinner,sun4i-t113-ths";
+		reg = <0x02009400 0x400>;
+		clocks = <&ccu CLK_BUS_THS>;
+		clock-names = "bus";
+		resets = <&ccu RST_BUS_THS>;
+		interrupts = <SOC_PERIPHERAL_IRQ(58) IRQ_TYPE_LEVEL_HIGH>;
+		nvmem-cells = <&ths_calib>;
+		nvmem-cell-names = "calibration";
+		#thermal-sensor-cells = <1>;
 	};
 
 	/* board wide 5V supply directly from the USB-C socket */
@@ -210,5 +266,24 @@
 	tcon_lcd0_out_rgb: endpoint@0 {
 		reg = <0>;
 		remote-endpoint = <&panel_input>;
+	};
+};
+
+&i2s1 {
+	status = "okay";
+};
+
+&dmic {
+	status = "okay";
+};
+
+&tpadc {
+	status = "okay";
+	allwinner,ts-attached;
+};
+
+&sid {
+	ths_calib:calib@14 {
+		reg = <0x14 8>;
 	};
 };
