@@ -84,11 +84,13 @@
 	};
 
 	tpadc:tpadc@2009c00 {
-		compatible = "allwinner,sun5i-a13-ts";
-		reg = <0x02009c00 0x24>;
-		clocks = <&ccu CLK_BUS_TPADC>;
+		compatible = "allwinner,sun8i-ts";
+		reg = <0x02009c00 0x400>;
+		clocks = <&ccu CLK_BUS_TPADC>,<&ccu CLK_TPADC>;
+		clock-names = "bus","mod";
 		resets = <&ccu RST_BUS_TPADC>;
 		interrupts = <SOC_PERIPHERAL_IRQ(62) IRQ_TYPE_LEVEL_HIGH>;
+		status = "okay";
 	};
 
 	ths:thermal@2009400 {
@@ -275,11 +277,6 @@
 
 &dmic {
 	status = "okay";
-};
-
-&tpadc {
-	status = "okay";
-	allwinner,ts-attached;
 };
 
 &sid {
