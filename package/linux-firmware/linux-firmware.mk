@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-LINUX_FIRMWARE_VERSION = 20250211
+LINUX_FIRMWARE_VERSION = 20250311
 LINUX_FIRMWARE_SOURCE = linux-firmware-$(LINUX_FIRMWARE_VERSION).tar.xz
 LINUX_FIRMWARE_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/firmware
 LINUX_FIRMWARE_INSTALL_IMAGES = YES
@@ -930,6 +930,11 @@ endif
 
 ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_RP2),y)
 LINUX_FIRMWARE_FILES += rp2.fw
+endif
+
+ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_INTEL_NPU),y)
+LINUX_FIRMWARE_FILES += intel/vpu/vpu_*.bin
+LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENSE.intel_vpu
 endif
 
 ifneq ($(LINUX_FIRMWARE_FILES)$(LINUX_FIRMWARE_DIRS),)
