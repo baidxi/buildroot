@@ -1,0 +1,421 @@
+Index: b/plat/allwinner/common/include/platform_def.h
+===================================================================
+--- a/plat/allwinner/common/include/platform_def.h
++++ b/plat/allwinner/common/include/platform_def.h
+@@ -15,9 +15,13 @@
+ 
+ #ifdef SUNXI_BL31_IN_DRAM
+ 
++#ifdef SUNXI_ARCH_A133
++#define BL31_BASE			SUNXI_DRAM_BASE + 0x8000000
++#define BL31_LIMIT			(BL31_BASE + 0x40000)
++#else
+ #define BL31_BASE			SUNXI_DRAM_BASE
+ #define BL31_LIMIT			(SUNXI_DRAM_BASE + 0x40000)
+-
++#endif
+ #define MAX_XLAT_TABLES			4
+ #define PLAT_VIRT_ADDR_SPACE_SIZE	(1ULL << 32)
+ 
+Index: b/plat/allwinner/common/include/sunxi_def.h
+===================================================================
+--- a/plat/allwinner/common/include/sunxi_def.h
++++ b/plat/allwinner/common/include/sunxi_def.h
+@@ -19,6 +19,7 @@
+ #define SUNXI_SOC_H6			0x1728
+ #define SUNXI_SOC_H616			0x1823
+ #define SUNXI_SOC_R329			0x1851
++#define SUNXI_SOC_A133			0x1855
+ 
+ #define JEDEC_ALLWINNER_BKID		9U
+ #define JEDEC_ALLWINNER_MFID		0x9eU
+Index: b/plat/allwinner/common/sunxi_bl31_setup.c
+===================================================================
+--- a/plat/allwinner/common/sunxi_bl31_setup.c
++++ b/plat/allwinner/common/sunxi_bl31_setup.c
+@@ -130,6 +130,9 @@ void bl31_platform_setup(void)
+ 	case SUNXI_SOC_R329:
+ 		soc_name = "R329";
+ 		break;
++	case SUNXI_SOC_A133:
++		soc_name = "A133/R818";
++		break;
+ 	default:
+ 		soc_name = "unknown";
+ 		break;
+@@ -177,6 +180,9 @@ void bl31_platform_setup(void)
+ 	if (soc_id == SUNXI_SOC_A64 || soc_id == SUNXI_SOC_H5)
+ 		mmio_write_32(SUNXI_CCU_BASE + 0x5c, 0x1);
+ 
++	if (soc_id == SUNXI_SOC_A64)
++		mmio_write_32(SUNXI_CCU_BASE + 0x510, 0x03000002);
++
+ 	sunxi_pmic_setup(soc_id, fdt);
+ 
+ 	INFO("BL31: Platform setup done\n");
+Index: b/plat/allwinner/common/sunxi_common.c
+===================================================================
+--- a/plat/allwinner/common/sunxi_common.c
++++ b/plat/allwinner/common/sunxi_common.c
+@@ -16,9 +16,17 @@
+ #include <sunxi_mmap.h>
+ #include <sunxi_private.h>
+ 
+-static const mmap_region_t sunxi_mmap[MAX_STATIC_MMAP_REGIONS + 1] = {
++static const mmap_region_t sunxi_mmap[MAX_STATIC_MMAP_REGIONS + 1
++#ifdef SUNXI_SRAM_A2_BASE
+++1
++#endif
++] = {
+ 	MAP_REGION_FLAT(SUNXI_SRAM_BASE, SUNXI_SRAM_SIZE,
+ 			MT_DEVICE | MT_RW | MT_SECURE | MT_EXECUTE_NEVER),
++	#ifdef SUNXI_SRAM_A2_BASE
++	MAP_REGION_FLAT(SUNXI_SRAM_A2_BASE, SUNXI_SRAM_A2_SIZE,
++			MT_DEVICE | MT_RW | MT_SECURE | MT_EXECUTE_NEVER),
++	#endif
+ 	MAP_REGION_FLAT(SUNXI_DEV_BASE, SUNXI_DEV_SIZE,
+ 			MT_DEVICE | MT_RW | MT_SECURE | MT_EXECUTE_NEVER),
+ 	MAP_REGION(PRELOADED_BL33_BASE, SUNXI_BL33_VIRT_BASE,
+@@ -129,6 +137,11 @@ int sunxi_init_platform_r_twi(uint16_t s
+ 		pin_func = use_rsb ? 0x22 : 0x33;
+ 		device_bit = use_rsb ? BIT(3) : BIT(6);
+ 		break;
++	case SUNXI_SOC_A133:
++		pin_func = use_rsb ? 0x22 : 0x33;
++		device_bit = BIT(16);
++		reset_offset = use_rsb ? 0x1bc : 0x19c;
++		break;
+ 	default:
+ 		INFO("R_I2C/RSB on Allwinner 0x%x SoC not supported\n", socid);
+ 		return -ENODEV;
+Index: b/plat/allwinner/common/sunxi_cpu_ops.c
+===================================================================
+--- a/plat/allwinner/common/sunxi_cpu_ops.c
++++ b/plat/allwinner/common/sunxi_cpu_ops.c
+@@ -76,8 +76,13 @@ void sunxi_cpu_on(u_register_t mpidr)
+ 	/* Assert CPU power-on reset */
+ 	mmio_clrbits_32(SUNXI_POWERON_RST_REG(cluster), BIT(core));
+ 	/* Set CPU to start in AArch64 mode */
++	#ifdef SUNXI_ARCH_A133
++	mmio_setbits_32(SUNXI_AA64nAA32_REG,
++			BIT(SUNXI_AA64nAA32_OFFSET + core));
++	#else
+ 	mmio_setbits_32(SUNXI_AA64nAA32_REG(cluster),
+ 			BIT(SUNXI_AA64nAA32_OFFSET + core));
++	#endif
+ 	/* Apply power to the CPU */
+ 	sunxi_cpu_enable_power(cluster, core);
+ 	/* Release the core output clamps */
+Index: b/plat/allwinner/sun50i_a133/include/sunxi_ccu.h
+===================================================================
+--- /dev/null
++++ b/plat/allwinner/sun50i_a133/include/sunxi_ccu.h
+@@ -0,0 +1,14 @@
++/*
++ * Copyright (c) 2020, ARM Limited and Contributors. All rights reserved.
++ *
++ * SPDX-License-Identifier: BSD-3-Clause
++ */
++
++#ifndef SUNXI_CCU_H
++#define SUNXI_CCU_H
++
++#define SUNXI_CCU_SEC_SWITCH_REG	(SUNXI_CCU_BASE + 0x0f00)
++
++#define SUNXI_R_PRCM_SEC_SWITCH_REG	(SUNXI_R_PRCM_BASE + 0x0290)
++
++#endif /* SUNXI_CCU_H */
+Index: b/plat/allwinner/sun50i_a133/include/sunxi_cpucfg.h
+===================================================================
+--- /dev/null
++++ b/plat/allwinner/sun50i_a133/include/sunxi_cpucfg.h
+@@ -0,0 +1,35 @@
++/*
++ * Copyright (c) 2017-2020, ARM Limited. All rights reserved.
++ *
++ * SPDX-License-Identifier: BSD-3-Clause
++ */
++
++#ifndef SUNXI_CPUCFG_H
++#define SUNXI_CPUCFG_H
++
++#include <sunxi_mmap.h>
++
++/* c = cluster, n = core */
++#define SUNXI_CPUCFG_CLS_CTRL_REG0(c)	(SUNXI_CPUCFG_BASE + 0x0010 + (c) * 0x10)
++#define SUNXI_CPUCFG_CLS_CTRL_REG1(c)	(SUNXI_CPUCFG_BASE + 0x0014 + (c) * 0x10)
++#define SUNXI_CPUCFG_CACHE_CFG_REG		(SUNXI_CPUCFG_BASE + 0x0024)
++#define SUNXI_CPUCFG_DBG_REG0			(SUNXI_CPUCFG_BASE + 0x00c0)
++
++#define SUNXI_CPUCFG_RST_CTRL_REG(c)	(SUNXI_CPUCFG_BASE + 0x0000 + (c) * 4)
++#define SUNXI_CPUCFG_RVBAR_LO_REG(n)	(SUNXI_CPU_SUBSYS_CTRL + 0x0040 + (n) * 8)
++#define SUNXI_CPUCFG_RVBAR_HI_REG(n)	(SUNXI_CPU_SUBSYS_CTRL + 0x0044 + (n) * 8)
++
++#define SUNXI_POWERON_RST_REG(c)		(SUNXI_R_CPUCFG_BASE + 0x0040 + (c) * 4)
++#define SUNXI_POWEROFF_GATING_REG(c)	(SUNXI_R_CPUCFG_BASE + 0x0044 + (c) * 4)
++#define SUNXI_CPU_POWER_CLAMP_REG(c, n)	(SUNXI_R_CPUCFG_BASE + 0x0050 + \
++										(c) * 0x10 + (n) * 4)
++
++#define SUNXI_CPUIDLE_EN_REG			(SUNXI_R_CPUCFG_BASE + 0x0100)
++#define SUNXI_CORE_CLOSE_REG			(SUNXI_R_CPUCFG_BASE + 0x0104)
++#define SUNXI_PWR_SW_DELAY_REG			(SUNXI_R_CPUCFG_BASE + 0x0140)
++#define SUNXI_CONFIG_DELAY_REG			(SUNXI_R_CPUCFG_BASE + 0x0144)
++
++#define SUNXI_AA64nAA32_REG				SUNXI_CPU_SUBSYS_CTRL
++#define SUNXI_AA64nAA32_OFFSET			4
++
++#endif /* SUNXI_CPUCFG_H */
+Index: b/plat/allwinner/sun50i_a133/include/sunxi_mmap.h
+===================================================================
+--- /dev/null
++++ b/plat/allwinner/sun50i_a133/include/sunxi_mmap.h
+@@ -0,0 +1,54 @@
++/*
++ * Copyright (c) 2017-2019, ARM Limited and Contributors. All rights reserved.
++ *
++ * SPDX-License-Identifier: BSD-3-Clause
++ */
++
++#ifndef SUNXI_MMAP_H
++#define SUNXI_MMAP_H
++
++/* Memory regions */
++#define SUNXI_ROM_BASE			0x00000000
++#define SUNXI_ROM_SIZE			0x00010000
++#define SUNXI_SRAM_BASE			0x00020000
++#define SUNXI_SRAM_SIZE			0x00025000
++#define SUNXI_SRAM_A1_BASE		0x00020000
++#define SUNXI_SRAM_A1_SIZE		0x00004000
++#define SUNXI_SRAM_C_BASE		0x00024000
++#define SUNXI_SRAM_C_SIZE		0x00021000
++#define SUNXI_SRAM_A2_BASE		0x00100000
++#define SUNXI_SRAM_A2_SIZE		0x00014000
++#define SUNXI_DEV_BASE			0x01000000
++#define SUNXI_DEV_SIZE			0x09000000
++#define SUNXI_DRAM_BASE			0x40000000
++#define SUNXI_DRAM_VIRT_BASE	SUNXI_DRAM_BASE
++
++#define SUNXI_CPUS_VECTOR_TABLE		0x4000
++
++#define SUNXI_SCP_BASE          (SUNXI_SRAM_A2_BASE + SUNXI_CPUS_VECTOR_TABLE)
++
++/* Memory-mapped devices */
++#define SUNXI_SYSCON_BASE		0x03000000
++#define SUNXI_CCU_BASE			0x03001000
++#define SUNXI_DMA_BASE			0x03002000
++#define SUNXI_MSGBOX_BASE       0x03003000
++#define SUNXI_SID_BASE			0x03006000
++#define SUNXI_SPC_BASE			0x03008000
++#define SUNXI_WDOG_BASE			0x030090a0
++#define SUNXI_PIO_BASE			0x0300b000
++#define SUNXI_GICD_BASE			0x03021000
++#define SUNXI_GICC_BASE			0x03022000
++#define SUNXI_UART0_BASE		0x05000000
++#define SUNXI_SPI0_BASE			0x05010000
++#define SUNXI_RTC_BASE          0x07000100
++#define SUNXI_R_CPUCFG_BASE		0x07000400
++#define SUNXI_R_PRCM_BASE		0x07010000
++#define SUNXI_R_WDOG_BASE		0x07020400
++#define SUNXI_R_PIO_BASE		0x07022000
++#define SUNXI_R_UART_BASE		0x07080000
++#define SUNXI_R_I2C_BASE		0x07081400
++#define SUNXI_R_RSB_BASE		0x07083000
++#define SUNXI_CPU_SUBSYS_CTRL   0x08100000
++#define SUNXI_CPUCFG_BASE		0x09010000
++
++#endif /* SUNXI_MMAP_H */
+Index: b/plat/allwinner/sun50i_a133/include/sunxi_spc.h
+===================================================================
+--- /dev/null
++++ b/plat/allwinner/sun50i_a133/include/sunxi_spc.h
+@@ -0,0 +1,16 @@
++/*
++ * Copyright (c) 2020, ARM Limited and Contributors. All rights reserved.
++ *
++ * SPDX-License-Identifier: BSD-3-Clause
++ */
++
++#ifndef SUNXI_SPC_H
++#define SUNXI_SPC_H
++
++#define SUNXI_SPC_NUM_PORTS		14
++
++#define SUNXI_SPC_DECPORT_STA_REG(p)	(SUNXI_SPC_BASE + 0x0000 + 0x10 * (p))
++#define SUNXI_SPC_DECPORT_SET_REG(p)	(SUNXI_SPC_BASE + 0x0004 + 0x10 * (p))
++#define SUNXI_SPC_DECPORT_CLR_REG(p)	(SUNXI_SPC_BASE + 0x0008 + 0x10 * (p))
++
++#endif /* SUNXI_SPC_H */
+Index: b/plat/allwinner/sun50i_a133/platform.mk
+===================================================================
+--- /dev/null
++++ b/plat/allwinner/sun50i_a133/platform.mk
+@@ -0,0 +1,19 @@
++#
++# Copyright (c) 2017-2020, ARM Limited. All rights reserved.
++#
++# SPDX-License-Identifier: BSD-3-Clause
++#
++
++SUNXI_BL31_IN_DRAM	:=	1
++
++# Without a management processor there is no SCPI support.
++SUNXI_PSCI_USE_SCPI	:=	1
++SUNXI_PSCI_USE_NATIVE	:=	1
++
++# The differences between the platforms are covered by the include files.
++include plat/allwinner/common/allwinner-common.mk
++
++BL31_SOURCES		+=	drivers/allwinner/axp/axp805.c		\
++				drivers/allwinner/sunxi_rsb.c		\
++
++$(eval $(call add_define,SUNXI_ARCH_A133))
+\ No newline at end of file
+Index: b/plat/allwinner/sun50i_a133/sunxi_idle_states.c
+===================================================================
+--- /dev/null
++++ b/plat/allwinner/sun50i_a133/sunxi_idle_states.c
+@@ -0,0 +1,11 @@
++/*
++ * Copyright (c) 2022, ARM Limited and Contributors. All rights reserved.
++ *
++ * SPDX-License-Identifier: BSD-3-Clause
++ */
++
++#include <sunxi_private.h>
++
++const struct psci_cpu_idle_state sunxi_idle_states[] = {
++	{}
++};
+Index: b/plat/allwinner/sun50i_a133/sunxi_power.c
+===================================================================
+--- /dev/null
++++ b/plat/allwinner/sun50i_a133/sunxi_power.c
+@@ -0,0 +1,128 @@
++/*
++ * Copyright (c) 2017-2020, ARM Limited. All rights reserved.
++ * Copyright (c) 2018, Icenowy Zheng <icenowy@aosc.io>
++ *
++ * SPDX-License-Identifier: BSD-3-Clause
++ */
++
++#include <errno.h>
++#include <stdbool.h>
++#include <string.h>
++
++#include <arch_helpers.h>
++#include <common/debug.h>
++#include <drivers/allwinner/axp.h>
++#include <drivers/allwinner/sunxi_rsb.h>
++#include <lib/mmio.h>
++
++#include <sunxi_cpucfg.h>
++#include <sunxi_def.h>
++#include <sunxi_mmap.h>
++#include <sunxi_private.h>
++
++// #define AXP305_I2C_ADDR	0x36
++// #define AXP305_HW_ADDR	0x745
++// #define AXP305_RT_ADDR	0x3a
++
++#define AXP707_I2C_ADDR		0x68
++#define AXP707_HW_ADDR		0x1d1
++#define AXP707_RT_ADDR		0x1d
++
++// static enum pmic_type {
++// 	UNKNOWN,
++// 	AXP707,
++// 	AXP717,
++// } pmic;
++
++// int axp_read(uint8_t reg)
++// {
++// 	return rsb_read(AXP707_RT_ADDR, reg);
++// }
++
++// int axp_write(uint8_t reg, uint8_t val)
++// {
++// 	return rsb_write(AXP707_RT_ADDR, reg, val);
++// }
++
++// static int rsb_init(void)
++// {
++// 	int ret;
++
++// 	ret = rsb_init_controller();
++// 	if (ret)
++// 		return ret;
++
++// 	/* Switch to the recommended 3 MHz bus clock. */
++// 	ret = rsb_set_bus_speed(SUNXI_OSC24M_CLK_IN_HZ, 3000000);
++// 	if (ret)
++// 		return ret;
++
++// 	/* Initiate an I2C transaction to switch the PMIC to RSB mode. */
++// 	ret = rsb_set_device_mode(AXP20X_MODE_RSB << 16 | AXP20X_MODE_REG << 8);
++// 	if (ret)
++// 		return ret;
++
++// 	/* Associate the 8-bit runtime address with the 12-bit bus address. */
++// 	ret = rsb_assign_runtime_address(AXP707_HW_ADDR, AXP707_RT_ADDR);
++// 	if (ret)
++// 		return ret;
++
++// 	return axp_check_id();
++// }
++
++int sunxi_pmic_setup(uint16_t socid, const void *fdt)
++{
++	// int ret;
++
++	// INFO("PMIC: Probing AXP707 on RSB\n");
++
++	// ret = sunxi_init_platform_r_twi(socid, false);
++	// if (ret) {
++	// 	INFO("Could not init platform bus: %d\n", ret);
++	// 	return ret;
++	// }
++
++	// ret = rsb_init();
++	// if (ret) {
++	// 	INFO("Could not init RSB: %d\n", ret);
++	// 	return ret;
++	// }
++
++	// pmic = AXP707;
++	// axp_setup_regulators(fdt);
++
++	// /* Switch the PMIC back to I2C mode. */
++	// ret = axp_write(AXP20X_MODE_REG, AXP20X_MODE_I2C);
++	// if (ret)
++	// 	return ret;
++
++	return 0;
++}
++
++void sunxi_power_down(void)
++{
++	// switch (pmic) {
++	// case AXP717:
++	// case AXP707:
++	// 	/* Re-initialise after rich OS might have used it. */
++	// 	sunxi_init_platform_r_twi(SUNXI_SOC_A133, false);
++	// 	rsb_init();
++	// 	axp_power_off();
++	// 	break;
++	// default:
++	// 	break;
++	// }
++}
++
++void sunxi_cpu_power_off_self(void)
++{
++	// u_register_t mpidr = read_mpidr();
++	// unsigned int core  = MPIDR_AFFLVL0_VAL(mpidr);
++
++	// /* Enable the CPUIDLE hardware (only really needs to be done once). */
++	// mmio_write_32(SUNXI_CPUIDLE_EN_REG, 0x16aa0000);
++	// mmio_write_32(SUNXI_CPUIDLE_EN_REG, 0xaa160001);
++
++	// /* Trigger power off for this core. */
++	// mmio_write_32(SUNXI_CORE_CLOSE_REG, BIT_32(core));
++}

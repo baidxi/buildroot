@@ -900,7 +900,7 @@ Index: b/arch/arm/dts/sun50i-a133-rfb.dts
 +	mmc-hs200-1_8v;
 +	no-sdio;
 +	no-mmc;
-+	status = "disabled";
++	status = "okay";
 +};
 +
 +&mmc1 {
