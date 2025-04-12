@@ -1,0 +1,86 @@
+Index: b/drivers/regulator/axp20x-regulator.c
+===================================================================
+--- a/drivers/regulator/axp20x-regulator.c
++++ b/drivers/regulator/axp20x-regulator.c
+@@ -456,73 +456,6 @@ static const int axp209_dcdc2_ldo3_slew_
+ 	 800,
+ };
+ 
+-static int axp20x_set_ramp_delay(struct regulator_dev *rdev, int ramp)
+-{
+-	struct axp20x_dev *axp20x = rdev_get_drvdata(rdev);
+-	int id = rdev_get_id(rdev);
+-	u8 reg, mask, enable, cfg = 0xff;
+-	const int *slew_rates;
+-	int rate_count = 0;
+-
+-	switch (axp20x->variant) {
+-	case AXP209_ID:
+-		if (id == AXP20X_DCDC2) {
+-			slew_rates = axp209_dcdc2_ldo3_slew_rates;
+-			rate_count = ARRAY_SIZE(axp209_dcdc2_ldo3_slew_rates);
+-			reg = AXP20X_DCDC2_LDO3_V_RAMP;
+-			mask = AXP20X_DCDC2_LDO3_V_RAMP_DCDC2_RATE_MASK |
+-			       AXP20X_DCDC2_LDO3_V_RAMP_DCDC2_EN_MASK;
+-			enable = (ramp > 0) ?
+-				 AXP20X_DCDC2_LDO3_V_RAMP_DCDC2_EN : 0;
+-			break;
+-		}
+-
+-		if (id == AXP20X_LDO3) {
+-			slew_rates = axp209_dcdc2_ldo3_slew_rates;
+-			rate_count = ARRAY_SIZE(axp209_dcdc2_ldo3_slew_rates);
+-			reg = AXP20X_DCDC2_LDO3_V_RAMP;
+-			mask = AXP20X_DCDC2_LDO3_V_RAMP_LDO3_RATE_MASK |
+-			       AXP20X_DCDC2_LDO3_V_RAMP_LDO3_EN_MASK;
+-			enable = (ramp > 0) ?
+-				 AXP20X_DCDC2_LDO3_V_RAMP_LDO3_EN : 0;
+-			break;
+-		}
+-
+-		if (rate_count > 0)
+-			break;
+-
+-		fallthrough;
+-	default:
+-		/* Not supported for this regulator */
+-		return -ENOTSUPP;
+-	}
+-
+-	if (ramp == 0) {
+-		cfg = enable;
+-	} else {
+-		int i;
+-
+-		for (i = 0; i < rate_count; i++) {
+-			if (ramp > slew_rates[i])
+-				break;
+-
+-			if (id == AXP20X_DCDC2)
+-				cfg = AXP20X_DCDC2_LDO3_V_RAMP_DCDC2_RATE(i);
+-			else
+-				cfg = AXP20X_DCDC2_LDO3_V_RAMP_LDO3_RATE(i);
+-		}
+-
+-		if (cfg == 0xff) {
+-			dev_err(axp20x->dev, "unsupported ramp value %d", ramp);
+-			return -EINVAL;
+-		}
+-
+-		cfg |= enable;
+-	}
+-
+-	return regmap_update_bits(axp20x->regmap, reg, mask, cfg);
+-}
+-
+ static int axp20x_regulator_enable_regmap(struct regulator_dev *rdev)
+ {
+ 	struct axp20x_dev *axp20x = rdev_get_drvdata(rdev);
+@@ -593,7 +526,6 @@ static const struct regulator_ops axp20x
+ 	.enable			= axp20x_regulator_enable_regmap,
+ 	.disable		= regulator_disable_regmap,
+ 	.is_enabled		= regulator_is_enabled_regmap,
+-	.set_ramp_delay		= axp20x_set_ramp_delay,
+ };
+ 
+ static const struct regulator_ops axp20x_ops_sw = {

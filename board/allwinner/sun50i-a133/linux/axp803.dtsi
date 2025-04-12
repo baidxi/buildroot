@@ -35,7 +35,7 @@
 
 	regulators {
 		/* Default work frequency for buck regulators */
-		x-powers,dcdc-freq = <3000>;
+		// x-powers,dcdc-freq = <3000>;
 
 		reg_aldo1: aldo1 {
 			regulator-name = "aldo1";
