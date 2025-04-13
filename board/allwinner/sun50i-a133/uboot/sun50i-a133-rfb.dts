@@ -99,7 +99,7 @@
 	mmc-hs200-1_8v;
 	no-sdio;
 	no-mmc;
-    status = "disabled";
+    status = "okay";
 };
 
 &mmc1 {
@@ -111,8 +111,7 @@
 	sd-uhs-sdr104;
 	mmc-hs400-1_8v;
 	mmc-hs200-1_8v;
-	no-sdio;
-	// no-mmc;
+	no-mmc;
 	status = "okay";
 };
 
@@ -126,6 +125,7 @@
 	sd-uhs-sdr104;
 	mmc-hs400-1_8v;
 	mmc-hs200-1_8v;
+	no-sd;
 	no-sdio;
 	status = "okay";
 };

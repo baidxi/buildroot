@@ -158,6 +158,9 @@ config BR2_LINUX_KERNEL_PATCH
 	  path, or a directory. In the case of a directory, all files
 	  matching *.patch in the directory will be applied.
 
+config BR2_LINUX_KERNEL_APPENDED_FILES
+	string "Custom kernel append files"
+
 #
 # Configuration selection
 #
