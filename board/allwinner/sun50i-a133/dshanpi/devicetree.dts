@@ -1,0 +1,139 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/*
+ * Copyright (c) 2020 Yangtao Li <frank@allwinnertech.com>
+ */
+
+/dts-v1/;
+
+#include <dt-bindings/gpio/gpio.h>
+
+#include "allwinner/sun50i-a100.dtsi"
+#include "sun50i-a100-opp-table.dtsi"
+
+/{
+	model = "Allwinner Dshanpi";
+	compatible = "allwinner,a100-perf1", "allwinner,sun50i-a100";
+
+	aliases {
+		serial0 = &uart0;
+	};
+
+	chosen {
+		bootargs = "console=ttyS0,115200n8 earlycon";
+		linux,stdout-path = &uart0;
+	};
+
+	reserved-memory {
+		#address-cells = <2>;
+		#size-cells = <2>;
+		ranges;
+
+		secmon@0x48000000 {
+			reg = <0x0 0x48000000 0x0 0x200000>;
+			no-map;
+		};
+	};
+};
+
+&pio {
+	vcc-pb-supply = <&reg_cldo3>;
+	vcc-pc-supply = <&reg_eldo1>;
+	vcc-pd-supply = <&reg_dcdc1>;
+	vcc-pe-supply = <&reg_dldo2>;
+	vcc-pf-supply = <&reg_cldo3>;
+	vcc-pg-supply = <&reg_dldo1>;
+	vcc-ph-supply = <&reg_cldo3>;
+};
+
+&r_pio {
+	/*
+	 * FIXME: We can't add that supply for now since it would
+	 * create a circular dependency between pinctrl, the regulator
+	 * and the RSB Bus.
+	 *
+	 * vcc-pl-supply = <&reg_aldo3>;
+	 */
+};
+
+&r_i2c0 {
+	status = "okay";
+	clock-frequency = <200000>;
+	axp717: pmic@34 {
+		compatible = "x-powers,axp717";
+		reg = <0x34>;
+		interrupt-parent = <&r_intc>;
+		interrupts = <0 IRQ_TYPE_LEVEL_LOW>;
+		x-powers,drive-vbus-en; /* set N_VBUSEN as output pin */
+	};
+};
+
+#include "power_supply.dtsi"
+
+&pio {
+	vcc-pb-supply = <&reg_cldo3>;
+	vcc-pc-supply = <&reg_cldo1>;
+	vcc-pd-supply = <&reg_cldo3>;
+	vcc-pe-supply = <&reg_aldo2>;
+	vcc-pf-supply = <&reg_cldo3>;
+	vcc-pg-supply = <&reg_bldo1>;
+	// vcc-ph-supply = <&reg_cldo3>;
+};
+
+&uart0 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&uart0_pb_pins>;
+	uart-supply = <&reg_cldo3>;
+	status = "okay";
+};
+
+&mmc0 {
+	cd-gpios = <&pio 5 6 GPIO_ACTIVE_HIGH>;	/* PF6 */
+	bus-width = <4>;
+	cd-used-24M;
+	cap-sd-highspeed;
+	sd-uhs-sdr50;
+	sd-uhs-ddr50;
+	sd-uhs-sdr104;
+	no-sdio;
+	no-mmc;
+	// vmmc-supply = <&reg_cldo3>;
+	// vqmmc2-supply = <&reg_eldo1>;
+	// vdmmc33sw-supply = <&reg_dcdc1>;
+	// vqmmc-supply = <&reg_eldo1>;
+	// vdmmc18sw-supply = <&reg_eldo1>;
+	max-frequency = <150000000>;
+	status = "okay";
+};
+
+&mmc1 {
+	bus-width = <4>;
+	no-mmc;
+	no-sd;
+	cap-sd-highspeed;
+	cap-sdio-irq;
+	keep-power-in-suspend;
+	ignore-pm-notify;
+	max-frequency = <50000000>;
+	ctl-spec-caps = <0x8>;
+	// vmmc-supply = <&reg_dcdc1>;
+	status = "okay";
+};
+
+&mmc2 {
+	non-removable;
+	bus-width = <8>;
+	mmc-ddr-1_8v;
+	mmc-hs200-1_8v;
+	mmc-hs400-1_8v;
+	no-sdio;
+	no-sd;
+	ctl-spec-caps = <0x308>;
+	cap-mmc-highspeed;
+	max-frequency = <100000000>;
+	vmmc-supply = <&reg_cldo3>;
+	/*emmc io vol 3.3v*/
+	/*vqmmc-supply = <&reg_aldo1>;*/
+	/*emmc io vol 1.8v*/
+	// vqmmc-supply = <&reg_eldo1>;
+	status = "okay";
+};

@@ -1,0 +1,17 @@
+#!/bin/sh
+
+export XDG_RUNTIME_DIR=/tmp
+
+case $1 in
+	start)
+	if [ -f /usr/bin/weston -a -x /usr/bin/weston ]; then
+		start-stop-daemon --start --quiet --background --exec /usr/bin/weston -- --continue-without-input
+	fi
+	;;
+	stop)
+	if [ $(pidof weston) -gt 0 ]; then
+		start-stop-daemon -K -x weston
+	fi
+	;;
+esac
+

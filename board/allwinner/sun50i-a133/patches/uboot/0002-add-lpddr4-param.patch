@@ -1,0 +1,94 @@
+Index: b/arch/arm/mach-sunxi/Kconfig
+===================================================================
+--- a/arch/arm/mach-sunxi/Kconfig
++++ b/arch/arm/mach-sunxi/Kconfig
+@@ -622,6 +622,7 @@ config DRAM_ZQ
+ config DRAM_ODT_EN
+ 	bool "sunxi dram odt enable"
+ 	depends on !MACH_SUN50I_H616
++	depends on !MACH_SUN50I_A133
+ 	default y if MACH_SUN8I_A23
+ 	default y if MACH_SUNXI_H3_H5
+ 	default y if MACH_SUN8I_R40
+@@ -854,6 +855,20 @@ config R_I2C_ENABLE
+ 	Set this to y to enable the I2C controller which is part of the PRCM.
+ endif
+ 
++
++choice
++	prompt "DRAM TYPE"
++	depends on MACH_SUN50I_A133
++	default  SUNXI_DRAM_LPDDR3
++
++	config SUNXI_DRAM_LPDDR3
++	bool "LPDDR3"
++	config SUNXI_DRAM_LPDDR4
++	bool "LPDDR4"
++
++endchoice
++
++
+ config AXP_GPIO
+ 	bool "Enable support for gpio-s on axp PMICs"
+ 	depends on AXP_PMIC_BUS
+Index: b/arch/arm/mach-sunxi/dram_sun50i_a100.c
+===================================================================
+--- a/arch/arm/mach-sunxi/dram_sun50i_a100.c
++++ b/arch/arm/mach-sunxi/dram_sun50i_a100.c
+@@ -62,6 +62,41 @@
+      .tpr13 = 0x60,
+      .tpr14 = 0x211e1e22,
+  };
++
++ struct dram_para lpddr4_para = {
++    .clk       = CONFIG_DRAM_CLK,
++    .type      = SUNXI_DRAM_TYPE_LPDDR4,
++    .dx_odt    = 0x07070707,
++    .dx_dri    = 0x0d0d0d0d,
++    .ca_dri    = 0x0e0e,
++    .para0     = 0x0d0a050c,
++    .para1     = 0x30ea,
++    .para2     = 0x1000,
++    .mr0       = 0x0,
++    .mr1       = 0x34,
++    .mr2       = 0x1b,
++    .mr3       = 0x33,
++    .mr4       = 0x3,
++    .mr5       = 0x0,
++    .mr6       = 0x0,
++    .mr11      = 0x04,
++    .mr12      = 0x72,
++    .mr13      = 0x0,
++    .mr14      = 0x7,
++    .mr16      = 0x0,
++    .mr17      = 0x0,
++    .mr22      = 0x26,
++    .tpr0      = 0x06060606,
++    .tpr1      = 0x04040404,
++    .tpr2      = 0x0,
++    .tpr3      = 0x0,
++    .tpr6      = 0x48000000,
++    .tpr10     = 0x00273333,
++    .tpr11     = 0x241f1923,
++    .tpr12     = 0x14151313,
++    .tpr13     = 0x81d20,
++    .tpr14     = 0x2023211f,
++ };
+  
+  static struct dram_timing channel_timing __section(".data") = {
+      .trtp = 3,
+@@ -2196,7 +2231,13 @@
+  
+  unsigned long sunxi_dram_init(void)
+  {
+-     return init_DRAM(&lpddr3_para) * 1024 * 1024;
++#ifdef CONFIG_SUNXI_DRAM_LPDDR4
++    return init_DRAM(&lpddr4_para) * 1024 * 1024;
++#elif CONFIG_SUNXI_DRAM_LPDDR3
++    return init_DRAM(&lpddr3_para) * 1024 * 1024;
++#else
++    return 0;
++#endif
+  };
+  
+  

@@ -1,0 +1,245 @@
+
+#include "axp717.dtsi"
+
+&usb_power_supply {
+    pmu_usbpc_vol = <4600>;
+    pmu_usbpc_cur = <500>;
+    pmu_usbad_vol = <4000>;
+    pmu_usbad_cur = <2500>;
+
+    pmu_boost_vol = <5126>;
+    pmu_bc12_en;
+    pmu_cc_logic_en = <1>;
+    /* pmu_boost_en; */
+
+    pmu_usb_typec_used = <1>;
+    wakeup_usb_in;
+    wakeup_usb_out;
+
+    status = "okay";
+};
+
+&axp_gpio {
+    wakeup_gpio;
+};
+
+&battery_power_supply {
+    status = "okay";
+
+    pmu_chg_ic_temp = <1>;
+
+    pmu_battery_rdc= <147>;
+    pmu_battery_cap = <1771>;
+    pmu_runtime_chgcur = <1000>;
+    pmu_suspend_chgcur = <1500>;
+    pmu_shutdown_chgcur = <1500>;
+    pmu_terminal_chgcur = <128>;
+    pmu_init_chgvol = <4200>;
+    pmu_battery_warning_level1 = <15>;
+    pmu_battery_warning_level2 = <0>;
+    pmu_chgled_func = <0>;
+    pmu_chgled_type = <0>;
+    pmu_bat_para1 = <0>;
+    pmu_bat_para2 = <0>;
+    pmu_bat_para3 = <0>;
+    pmu_bat_para4 = <0>;
+    pmu_bat_para5 = <0>;
+    pmu_bat_para6 = <0>;
+    pmu_bat_para7 = <2>;
+    pmu_bat_para8 = <3>;
+    pmu_bat_para9 = <4>;
+    pmu_bat_para10 = <6>;
+    pmu_bat_para11 = <9>;
+    pmu_bat_para12 = <14>;
+    pmu_bat_para13 = <26>;
+    pmu_bat_para14 = <38>;
+    pmu_bat_para15 = <49>;
+    pmu_bat_para16 = <52>;
+    pmu_bat_para17 = <56>;
+    pmu_bat_para18 = <60>;
+    pmu_bat_para19 = <64>;
+    pmu_bat_para20 = <70>;
+    pmu_bat_para21 = <77>;
+    pmu_bat_para22 = <83>;
+    pmu_bat_para23 = <87>;
+    pmu_bat_para24 = <90>;
+    pmu_bat_para25 = <95>;
+    pmu_bat_para26 = <99>;
+    pmu_bat_para27 = <99>;
+    pmu_bat_para28 = <100>;
+    pmu_bat_para29 = <100>;
+    pmu_bat_para30 = <100>;
+    pmu_bat_para31 = <100>;
+    pmu_bat_para32 = <100>;
+
+    pmu_bat_temp_enable = <0>;
+    pmu_jetia_en        = <0>;
+    pmu_bat_charge_ltf = <1105>;
+    pmu_bat_charge_htf = <121>;
+    pmu_bat_shutdown_ltf = <1381>;
+    pmu_bat_shutdown_htf = <89>;
+    pmu_jetia_cool = <722>;
+    pmu_jetia_warm = <196>;
+    pmu_jcool_ifall = <1>;
+    pmu_jwarm_ifall = <1>;
+    pmu_bat_temp_para1 = <2814>;
+    pmu_bat_temp_para2 = <2202>;
+    pmu_bat_temp_para3 = <1737>;
+    pmu_bat_temp_para4 = <1381>;
+    pmu_bat_temp_para5 = <1105>;
+    pmu_bat_temp_para6 = <890>;
+    pmu_bat_temp_para7 = <722>;
+    pmu_bat_temp_para8 = <484>;
+    pmu_bat_temp_para9 = <332>;
+    pmu_bat_temp_para10 = <233>;
+    pmu_bat_temp_para11 = <196>;
+    pmu_bat_temp_para12 = <166>;
+    pmu_bat_temp_para13 = <141>;
+    pmu_bat_temp_para14 = <121>;
+    pmu_bat_temp_para15 = <89>;
+    pmu_bat_temp_para16 = <66>;
+
+    wakeup_bat_out;
+};
+
+&powerkey0 {
+    pmu_powkey_off_time = <6000>;
+    pmu_powkey_off_func = <0>;
+    pmu_powkey_off_en = <1>;
+    pmu_powkey_long_time = <1500>;
+    pmu_powkey_on_time = <512>;
+    wakeup_rising;
+    wakeup_falling;
+    status = "okay";
+};
+
+&reg_dcdc1 {
+    regulator-min-microvolt = <500000>;
+    regulator-max-microvolt = <1540000>;
+    regulator-ramp-delay = <250>;
+    regulator-enable-ramp-delay = <1000>;
+    regulator-boot-on;
+    regulator-always-on;
+};
+
+&reg_dcdc2 {
+    regulator-min-microvolt = <500000>;
+    regulator-max-microvolt = <3400000>;
+    regulator-ramp-delay = <250>;
+    regulator-enable-ramp-delay = <1000>;
+    regulator-boot-on;
+    regulator-always-on;    
+};
+
+&reg_dcdc3 {
+    regulator-min-microvolt = <500000>;
+    regulator-max-microvolt = <1840000>;
+    regulator-ramp-delay = <250>;
+    regulator-enable-ramp-delay = <1000>;
+    regulator-always-on;
+};
+
+&reg_dcdc4 {
+    regulator-min-microvolt = <1000000>;
+    regulator-max-microvolt = <3700000>;
+    regulator-ramp-delay = <250>;
+    regulator-enable-ramp-delay = <1000>;
+};
+
+&reg_rtc_ldo {
+    regulator-min-microvolt = <1800000>;
+    regulator-max-microvolt = <1800000>;
+    regulator-boot-on;
+    regulator-always-on;
+};
+
+&reg_aldo1 {
+    regulator-min-microvolt = <500000>;
+    regulator-max-microvolt = <3500000>;
+    regulator-enable-ramp-delay = <1000>;
+};
+
+&reg_aldo2 {
+    regulator-min-microvolt = <500000>;
+    regulator-max-microvolt = <3500000>;
+    regulator-enable-ramp-delay = <1000>;
+};
+
+&reg_aldo3 {
+    regulator-min-microvolt = <500000>;
+    regulator-max-microvolt = <3500000>;
+    regulator-enable-ramp-delay = <1000>;
+    regulator-always-on;
+    regulator-boot-on;
+};
+
+&reg_aldo4 {
+    regulator-min-microvolt = <500000>;
+    regulator-max-microvolt = <3500000>;
+    regulator-enable-ramp-delay = <1000>;
+    regulator-always-on;
+    regulator-boot-on;    
+};
+
+&reg_bldo1 {
+    regulator-min-microvolt = <500000>;
+    regulator-max-microvolt = <3500000>;
+    regulator-enable-ramp-delay = <1000>;    
+};
+
+&reg_bldo2 {
+    regulator-min-microvolt = <500000>;
+    regulator-max-microvolt = <3500000>;
+    regulator-enable-ramp-delay = <1000>;
+    regulator-boot-on;
+    regulator-always-on;
+};
+
+&reg_bldo3 {
+    regulator-min-microvolt = <500000>;
+    regulator-max-microvolt = <3500000>;
+    regulator-enable-ramp-delay = <1000>;
+};
+
+&reg_bldo4 {
+    regulator-min-microvolt = <500000>;
+    regulator-max-microvolt = <3500000>;
+    regulator-enable-ramp-delay = <1000>;    
+};
+
+&reg_cldo1 {
+    regulator-min-microvolt = <500000>;
+    regulator-max-microvolt = <3500000>;
+    regulator-enable-ramp-delay = <1000>;    
+};
+
+&reg_cldo2 {
+    regulator-min-microvolt = <500000>;
+    regulator-max-microvolt = <3500000>;
+    regulator-enable-ramp-delay = <1000>;
+};
+
+&reg_cldo3 {
+    regulator-min-microvolt = <500000>;
+    regulator-max-microvolt = <3500000>;
+    regulator-ramp-delay = <250>;
+    regulator-enable-ramp-delay = <1000>;
+    regulator-boot-on;    
+};
+
+&reg_cldo4 {
+    regulator-min-microvolt = <500000>;
+    regulator-max-microvolt = <3500000>;
+    regulator-enable-ramp-delay = <1000>;    
+};
+
+&reg_cpusldo {
+    regulator-min-microvolt = <500000>;
+    regulator-max-microvolt = <1400000>;
+    regulator-boot-on;
+    regulator-always-on; 
+};
+
+&reg_drivevbus {
+    regulator-enable-ramp-delay = <1000>;
+};

@@ -1,0 +1,118 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+// Copyright 2017 Icenowy Zheng <icenowy@aosc.xyz>
+
+&axp717 {
+	interrupt-controller;
+	#interrupt-cells = <1>;
+
+    ac_power_supply: ac-power {
+		compatible = "x-powers,axp717-ac-power-supply";
+		status = "disabled";
+    };
+
+    axp_adc: adc {
+		compatible = "x-powers,axp717-adc";
+		#io-channel-cells = <1>;
+    };
+
+    axp_gpio: gpio {
+		compatible = "x-powers,axp717-gpio";
+		gpio-controller;
+		#gpio-cells = <2>;
+    };
+
+	battery_power_supply: battery-power {
+		compatible = "x-powers,axp717-battery-power-supply";
+		status = "disabled";
+	};
+
+    powerkey0:powerkey@0 {
+        compatible = "x-powers,axp717-pek";
+        status = "disabled";
+    };
+
+    usb_power_supply: usb-power {
+        compatible = "x-powers,axp717-usb-power-supply";
+        status = "disabled";
+    };
+
+    regulators {
+
+        reg_dcdc1:dcdc1 {
+            regulator-name = "dcdc1";
+        };
+
+        reg_dcdc2:dcdc2 {
+            regulator-name = "dcdc2";
+        };
+        
+        reg_dcdc3:dcdc3 {
+            regulator-name = "dcdc3";
+        };
+
+        reg_dcdc4:dcdc4 {
+            regulator-name = "dcdc4";
+        };
+        
+        reg_rtc_ldo:rtc_ldc {
+            regulator-name = "rtc_ldo";
+        };
+
+        reg_aldo1:aldo1 {
+            regulator-name = "aldo1";
+        };
+
+        reg_aldo2:aldo2 {
+            regulator-name = "aldo2";
+        };
+
+        reg_aldo3:aldo3 {
+            regulator-name = "aldo3";
+        };
+
+        reg_aldo4:aldo4 {
+            regulator-name = "aldo4";
+        };
+
+        reg_bldo1:bldo1 {
+            regulator-name = "bldo1";
+        };
+
+        reg_bldo2:bldo2 {
+            regulator-name = "bldo2";
+        };
+
+        reg_bldo3:bldo3 {
+            regulator-name = "bldo3";
+        };
+
+        reg_bldo4:bldo4 {
+            regulator-name = "bldo4";
+        };
+
+        reg_cldo1:cldo1 {
+            regulator-name = "cldo1";
+        };
+
+        reg_cldo2:cldo2 {
+            regulator-name = "cldo2";
+        };
+
+        reg_cldo3:cldo3 {
+            regulator-name = "cldo3";
+        };
+
+        reg_cldo4:cldo4 {
+            regulator-name = "cldo4";
+        };
+
+        reg_cpusldo:cpusldo {
+            regulator-name = "cpusldo";
+        };
+
+		reg_drivevbus: drivevbus {
+			regulator-name = "drivevbus";
+			status = "disabled";
+		};
+    };
+};
