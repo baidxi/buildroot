@@ -1,0 +1,89 @@
+Index: b/drivers/usb/musb-new/musb_uboot.c
+===================================================================
+--- a/drivers/usb/musb-new/musb_uboot.c
++++ b/drivers/usb/musb-new/musb_uboot.c
+@@ -428,6 +428,8 @@ struct musb *musb_register(struct musb_h
+ 			   void *ctl_regs)
+ {
+ 	struct musb **musbp;
++	struct musb *musb;
++	int ret;
+ 
+ 	switch (plat->mode) {
+ #if defined(CONFIG_USB_MUSB_HOST) && !CONFIG_IS_ENABLED(DM_USB)
+@@ -441,7 +443,17 @@ struct musb *musb_register(struct musb_h
+ 		break;
+ #endif
+ 	default:
+-		return ERR_PTR(-EINVAL);
++		musb = musb_init_controller(plat, (struct device *)bdata, ctl_regs);
++		if (IS_ERR(musb)) {
++			return musb;
++		}
++
++		ret = usb_add_gadget_udc((struct device *)bdata, &musb->g);
++		if (ret) {
++			return ERR_PTR(ret);
++		}
++
++		return musb;
+ 	}
+ 
+ 	*musbp = musb_init_controller(plat, (struct device *)bdata, ctl_regs);
+Index: b/drivers/usb/musb-new/sunxi.c
+===================================================================
+--- a/drivers/usb/musb-new/sunxi.c
++++ b/drivers/usb/musb-new/sunxi.c
+@@ -428,6 +428,22 @@ static struct musb_hdrc_config musb_conf
+ 	.ram_bits	= SUNXI_MUSB_RAM_BITS,
+ };
+ 
++#if CONFIG_IS_ENABLED(DM_USB_GADGET)
++
++static int sunxi_gadget_isr(struct udevice *dev)
++{
++	struct sunxi_glue *glue = dev_get_priv(dev);
++	struct musb_host_data *host = &glue->mdata;
++
++	return sunxi_musb_interrupt(0, host->host);
++}
++
++static const struct usb_gadget_generic_ops sunxi_gadget_ops = {
++	.handle_interrupts = sunxi_gadget_isr,
++};
++
++#endif
++
+ static int musb_usb_probe(struct udevice *dev)
+ {
+ 	struct sunxi_glue *glue = dev_get_priv(dev);
+@@ -560,4 +576,7 @@ U_BOOT_DRIVER(usb_musb) = {
+ #endif
+ 	.plat_auto	= sizeof(struct usb_plat),
+ 	.priv_auto	= sizeof(struct sunxi_glue),
++#if CONFIG_IS_ENABLED(DM_USB_GADGET)
++	.ops		= &sunxi_gadget_ops,
++#endif
+ };
+Index: b/board/sunxi/board.c
+===================================================================
+--- a/board/sunxi/board.c
++++ b/board/sunxi/board.c
+@@ -459,6 +459,17 @@ static void mmc_pinmux_setup(int sdc)
+                         sunxi_gpio_set_pull(pin, SUNXI_GPIO_PULL_UP);
+                         sunxi_gpio_set_drv(pin, 2);
+                 }
++#elif defined(CONFIG_MACH_SUN50I_A133)
++		{
++			uint8_t pins[] = {
++				0, 1, 5, 6, 8, 9, 10, 11, 13, 14, 15, 16
++			};
++			for (int i = 0; i < ARRAY_SIZE(pins); i++) {
++				sunxi_gpio_set_cfgpin(SUNXI_GPC(pins[i]), SUNXI_GPC_SDC2);
++				sunxi_gpio_set_pull(SUNXI_GPC(pins[i]), SUNXI_GPIO_PULL_UP);
++				sunxi_gpio_set_drv(SUNXI_GPC(pins[i]), 2);
++			}
++		}
+ #else
+ 		puts("ERROR: No pinmux setup defined for MMC2!\n");
+ #endif

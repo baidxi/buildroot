@@ -7,7 +7,7 @@
 
 #include <dt-bindings/gpio/gpio.h>
 
-#include "allwinner/sun50i-a100.dtsi"
+#include "sun50i-a100.dtsi"
 #include "sun50i-a100-opp-table.dtsi"
 
 /{
@@ -32,6 +32,30 @@
 			reg = <0x0 0x48000000 0x0 0x200000>;
 			no-map;
 		};
+	};
+
+	reg_vcc5v: regulator-5v {
+		compatible = "regulator-fixed";
+		regulator-name = "vcc-5v";
+		regulator-min-microvolt = <5000000>;
+		regulator-max-microvolt = <5000000>;
+		regulator-always-on;
+	};
+
+	reg_vcc3v3: regulator-3v3 {
+		compatible = "regulator-fixed";
+		regulator-name = "vcc-3v3";
+		regulator-min-microvolt = <3300000>;
+		regulator-max-microvolt = <3300000>;
+		regulator-always-on;
+	};
+
+	reg_vcc1v8: regulator-1v8 {
+		compatible = "regulator-fixed";
+		regulator-name = "vcc-1v8";
+		regulator-min-microvolt = <1800000>;
+		regulator-max-microvolt = <1800000>;
+		regulator-always-on;
 	};
 };
 
@@ -96,11 +120,9 @@
 	sd-uhs-sdr104;
 	no-sdio;
 	no-mmc;
-	// vmmc-supply = <&reg_cldo3>;
-	// vqmmc2-supply = <&reg_eldo1>;
-	// vdmmc33sw-supply = <&reg_dcdc1>;
-	// vqmmc-supply = <&reg_eldo1>;
-	// vdmmc18sw-supply = <&reg_eldo1>;
+	vmmc-supply = <&reg_vcc3v3>;
+	vqmmc-supply = <&reg_vcc1v8>;
+	// vqmmc2-supply = <&reg_vcc1v8>;
 	max-frequency = <150000000>;
 	status = "okay";
 };
@@ -130,10 +152,21 @@
 	ctl-spec-caps = <0x308>;
 	cap-mmc-highspeed;
 	max-frequency = <100000000>;
-	vmmc-supply = <&reg_cldo3>;
+	vmmc-supply = <&reg_vcc3v3>;
+	vqmmc-supply = <&reg_vcc1v8>;
 	/*emmc io vol 3.3v*/
 	/*vqmmc-supply = <&reg_aldo1>;*/
 	/*emmc io vol 1.8v*/
 	// vqmmc-supply = <&reg_eldo1>;
+	status = "okay";
+};
+
+&usb_otg {
+	dr_mode = "peripheral";
+	status = "okay";
+};
+
+&usbphy {
+	usb1_vbus-supply = <&reg_vcc5v>;
 	status = "okay";
 };

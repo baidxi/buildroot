@@ -1,5 +1,6 @@
 #!/bin/sh
 
+errno=0
 /bin/mount -t devtmpfs devtmpfs /dev
 
 if (exec 0</dev/console) 2>/dev/null; then
@@ -13,13 +14,17 @@ fi
 rootdev=$(/bin/cat /proc/cmdline | cut -d ' ' -f3 | cut -d '=' -f2)
 
 /sbin/fsck ${rootdev}
+errno=$?
 
-if [ $? -ne 0 ]; then
+if [ $errno -eq 8 ]; then
+	/bin/umount ${rootdev}
+	/sbin/fsck ${rootdev}
+fi
+
+if [ $errno -ne 0 && $errno != 8 ]; then
 	/bin/sh
 fi
 
-/bin/mkdir /rootfs
+/bin/mount ${rootdev} /mnt
 
-/bin/mount ${rootdev} /rootfs
-
-exec /rootfs/sbin/switch_root /rootfs /linuxrc
+exec /mnt/sbin/switch_root /mnt /sbin/init

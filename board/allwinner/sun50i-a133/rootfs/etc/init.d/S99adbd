@@ -1,0 +1,60 @@
+#!/bin/sh
+
+SN=$(cat /proc/cpuinfo |grep Serial|cut -d ':' -f2|tr -d ' ')
+
+gadget_init() {
+	if [ ! -d /sys/kernel/config/usb_gadget/g1 ]; then
+		mount -t configfs none /sys/kernel/config
+		mkdir /sys/kernel/config/usb_gadget/g1 -m 0770
+	fi
+}
+
+function_init() {
+	if [ ! -d /sys/kernel/config/usb_gadget/g1/functions/ffs.adb ]; then
+		mkdir /sys/kernel/config/usb_gadget/g1/functions/ffs.adb -m 0770
+	fi
+}
+
+configfs_init() {
+	if [ ! -f /sys/kernel/config/usb_gadget/g1/strings/0x409 ]; then
+		mkdir /sys/kernel/config/usb_gadget/g1/strings/0x409 -m 0770
+	fi
+	echo 0x1f3a > /sys/kernel/config/usb_gadget/g1/idVendor
+	echo 0xefe9 > /sys/kernel/config/usb_gadget/g1/idProduct
+	echo 0x0200 > /sys/kernel/config/usb_gadget/g1/bcdUSB
+	echo $SN > /sys/kernel/config/usb_gadget/g1/strings/0x409/serialnumber
+	echo "allwinner" > /sys/kernel/config/usb_gadget/g1/strings/0x409/manufacturer
+	echo "t113-s3" > /sys/kernel/config/usb_gadget/g1/strings/0x409/product
+	echo 0x1 > /sys/kernel/config/usb_gadget/g1/os_desc/b_vendor_code
+	echo "MSFT100" > /sys/kernel/config/usb_gadget/g1/os_desc/qw_sign
+}
+
+program_kill()
+{
+    P_PID=`ps | grep $1 | grep -v grep | awk '{print $1}'`
+    test -z ${P_PID} || kill -9 ${P_PID}
+}
+
+case $1 in
+	start)
+		gadget_init
+		function_init
+		configfs_init
+
+		mkdir /sys/kernel/config/usb_gadget/g1/configs/c.1
+		echo 500 > /sys/kernel/config/usb_gadget/g1/configs/c.1/MaxPower
+		ln -s /sys/kernel/config/usb_gadget/g1/functions/ffs.adb /sys/kernel/config/usb_gadget/g1/configs/c.1/
+
+		mkdir /dev/usb-ffs/adb -m 0770 -p
+		mount -o uid=2000,gid=2000 -t functionfs adb /dev/usb-ffs/adb
+		start-stop-daemon --start --quiet --background --exec /usr/bin/adbd
+	;;
+	stop)
+		echo "none" > /sys/kernel/config/usb_gadget/g1/UDC
+		program_kill adbd
+	;;
+	restart)
+		echo "none" > /sys/kernel/config/usb_gadget/g1/UDC
+		echo $(ls /sys/class/udc) > /sys/kernel/config/usb_gadget/g1/UDC
+	;;
+esac
