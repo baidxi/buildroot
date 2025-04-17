@@ -1,8 +1,8 @@
 / {
     cpu_opp_table: opp-table-cpu {
         compatible = "allwinner,sun50i-a100-operating-points";
-//        nvmem-cells = <&speedbin_efuse>,<&cpubin_efuse>;
- //       nvmem-cell-names = "speed","bin";
+		nvmem-cells = <&speedbin_efuse>,<&cpubin_efuse>;
+		nvmem-cell-names = "speed","bin";
         opp-shared;
 
         opp@408000000 {

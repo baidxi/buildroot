@@ -7,7 +7,7 @@
 
 #include <dt-bindings/gpio/gpio.h>
 
-#include "allwinner/sun50i-a100.dtsi"
+#include "sun50i-a100.dtsi"
 #include "sun50i-a100-opp-table.dtsi"
 
 /{

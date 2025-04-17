@@ -1,0 +1,14 @@
+Index: b/init/main.c
+===================================================================
+--- a/init/main.c
++++ b/init/main.c
+@@ -1519,7 +1519,8 @@ static int __ref kernel_init(void *unuse
+ 			return 0;
+ 	}
+ 
+-	if (!try_to_run_init_process("/sbin/init") ||
++	if (!try_to_run_init_process("/etc/preinit") ||
++		!try_to_run_init_process("/sbin/init") ||
+ 	    !try_to_run_init_process("/etc/init") ||
+ 	    !try_to_run_init_process("/bin/init") ||
+ 	    !try_to_run_init_process("/bin/sh"))
