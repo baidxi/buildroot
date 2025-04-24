@@ -207,6 +207,15 @@
 				pins = "PB9", "PB10";
 				function = "uart0";
 			};
+
+			gmac_pins:gmac@0 {
+				pins = "PH0", "PH1", "PH2", "PH3",
+						"PH4", "PH5", "PH6", "PH7",
+						"PH9", "PH10", "PH13", "PH14",
+						"PH15", "PH16", "PH17", "PH18";
+				function = "gmac0";
+				drive-strength = <30>;
+			};
 		};
 
 		mmc0: mmc@4020000 {
@@ -367,6 +376,19 @@
 			status = "disabled";
 			#address-cells = <1>;
 			#size-cells = <0>;
+		};
+
+		gmac0: eth@05020000 {
+			compatible = "allwinner,sunxi-gmac";
+			reg = <0x05020000 0x10000>,
+				  <0x03000030 0x4>;
+			interrupts = <GIC_SPI 16 IRQ_TYPE_LEVEL_HIGH>;
+			clocks = <&ccu CLK_BUS_EMAC>, <&ccu CLK_EMAC_25M>;
+			clock-names = "gmac", "ephy";
+			resets = <&ccu RST_BUS_EMAC>;
+			pinctrl-0 = <&gmac_pins>;
+			pinctrl-names = "default";
+			status = "disable";
 		};
 
 		ths: thermal-sensor@5070400 {

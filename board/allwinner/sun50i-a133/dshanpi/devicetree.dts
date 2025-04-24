@@ -170,3 +170,11 @@
 	usb1_vbus-supply = <&reg_vcc5v>;
 	status = "okay";
 };
+
+&ehci1 {
+	status = "okay";
+};
+
+&ohci1 {
+	status = "okay";
+};
