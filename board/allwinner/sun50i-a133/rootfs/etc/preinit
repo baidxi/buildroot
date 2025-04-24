@@ -1,7 +1,7 @@
 #!/bin/sh
 
-errno=0
-/bin/mount -t devtmpfs devtmpfs /dev
+# errno=0
+# /bin/mount -t devtmpfs devtmpfs /dev
 
 if (exec 0</dev/console) 2>/dev/null; then
     exec 0</dev/console
@@ -9,21 +9,14 @@ if (exec 0</dev/console) 2>/dev/null; then
     exec 2>/dev/console
 fi
 
-/bin/mount -t proc proc /proc
+mount -t proc proc /proc
+mount -t sysfs sysfs /sys
 
-rootdev=$(/bin/cat /proc/cmdline | cut -d ' ' -f3 | cut -d '=' -f2)
+rootdev=$(mount | awk '$3 == "/" {print $1}')
 
-/sbin/fsck ${rootdev}
-errno=$?
+umount ${rootdev}
 
-if [ $errno -eq 8 ]; then
-	/bin/umount ${rootdev}
-	/sbin/fsck ${rootdev}
-fi
-
-if [ $errno -ne 0 && $errno != 8 ]; then
-	/bin/sh
-fi
+fsck ${rootdev} 2>/dev/null
 
 /bin/mount ${rootdev} /mnt
 
