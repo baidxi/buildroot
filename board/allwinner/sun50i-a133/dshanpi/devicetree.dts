@@ -57,6 +57,13 @@
 		regulator-max-microvolt = <1800000>;
 		regulator-always-on;
 	};
+	reg_ephy:regulator-emac {
+		compatible = "regulator-fixed";
+		regulator-name = "vcc-ephy";
+		regulator-min-microvolt = <3300000>;
+		regulator-max-microvolt = <3300000>;
+		regulator-always-on;
+	};
 };
 
 &pio {
@@ -177,4 +184,23 @@
 
 &ohci1 {
 	status = "okay";
+};
+
+&gmac0 {
+	phy-handle = <&ext_rgmii_phy>;
+	phy-mode = "rgmii";
+	phy-supply = <&reg_ephy>;
+	allwinner,rx-delay-ps = <3000>;
+	allwinner,tx-delay-ps = <600>;
+	snps,reset-gpio = <&pio 7 19 GPIO_ACTIVE_LOW>;
+	snps,reset-delays-us = <100>;
+	status = "okay";
+};
+
+&mdio0 {
+	ext_rgmii_phy: ethernet-phy@1 {
+		compatible = "ethernet-phy-ieee802.3-c22";
+		reg = <1>;
+		status = "okay";
+	};
 };

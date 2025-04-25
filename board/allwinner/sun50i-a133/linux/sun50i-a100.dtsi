@@ -101,6 +101,22 @@
 		#size-cells = <1>;
 		ranges = <0 0 0 0x3fffffff>;
 
+		syscon:syscon@3000000 {
+			compatible = "allwinner,sun50i-h616-system-control","syscon";
+			reg = <0x03000000 0x1000>;
+			#address-cells = <1>;
+			#size-cells = <1>;
+			ranges;
+
+			sram_c: sram@28000 {
+				compatible = "mmio-sram";
+				reg = <0x00028000 0x30000>;
+				#address-cells = <1>;
+				#size-cells = <1>;
+				ranges = <0 0x00028000 0x30000>;
+			};
+		};
+
 		ccu: clock@3001000 {
 			compatible = "allwinner,sun50i-a100-ccu";
 			reg = <0x03001000 0x1000>;
@@ -208,13 +224,13 @@
 				function = "uart0";
 			};
 
-			gmac_pins:gmac@0 {
-				pins = "PH0", "PH1", "PH2", "PH3",
-						"PH4", "PH5", "PH6", "PH7",
-						"PH9", "PH10", "PH13", "PH14",
-						"PH15", "PH16", "PH17", "PH18";
-				function = "gmac0";
-				drive-strength = <30>;
+			ext_rgmii_pins: rgmii-pins {
+				pins = "PH0","PH1","PH2","PH3","PH4",
+					   "PH5","PH6","PH7","PH9","PH10",
+					   "PH13","PH14","PH15","PH16","PH17",
+					   "PH18";
+				function = "emac0";
+				drive-strength = <40>;
 			};
 		};
 
@@ -379,16 +395,22 @@
 		};
 
 		gmac0: eth@05020000 {
-			compatible = "allwinner,sunxi-gmac";
-			reg = <0x05020000 0x10000>,
-				  <0x03000030 0x4>;
+			compatible = "allwinner,sun50i-a100-emac";
+			syscon = <&syscon>;
+			reg = <0x05020000 0x10000>;
 			interrupts = <GIC_SPI 16 IRQ_TYPE_LEVEL_HIGH>;
-			clocks = <&ccu CLK_BUS_EMAC>, <&ccu CLK_EMAC_25M>;
-			clock-names = "gmac", "ephy";
+			interrupt-names = "macirq";
 			resets = <&ccu RST_BUS_EMAC>;
-			pinctrl-0 = <&gmac_pins>;
-			pinctrl-names = "default";
-			status = "disable";
+			reset-names = "stmmaceth";
+			clocks = <&ccu CLK_BUS_EMAC>;
+			clock-names = "stmmaceth";
+			status = "disabled";
+
+			mdio0: mdio {
+				compatible = "snps,dwmac-mdio";
+				#address-cells = <1>;
+				#size-cells = <0>;
+			};
 		};
 
 		ths: thermal-sensor@5070400 {

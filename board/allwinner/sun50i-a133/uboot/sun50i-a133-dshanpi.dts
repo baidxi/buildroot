@@ -262,7 +262,8 @@
 	pinctrl-0 = <&ext_rgmii_pins>;
 	pinctrl-names = "default";
 	phy-handle = <&ext_rgmii_phy>;
-	snps,reset-gpio = <&pio 7 19 GPIO_ACTIVE_HIGH>;
+	snps,reset-gpio = <&pio 7 19 GPIO_ACTIVE_LOW>;
+	snps,reset-active-low;
 	status = "okay";
 };
 
