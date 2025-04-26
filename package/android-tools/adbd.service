@@ -1,0 +1,10 @@
+[Unit]
+Description=Android Debug bridge
+After=network.target
+
+[Service]
+ExecStartPre=/usr/bin/usbconfig adb
+ExecStart=/usr/bin/adbd
+
+[Install]
+WantedBy=multi-user.target

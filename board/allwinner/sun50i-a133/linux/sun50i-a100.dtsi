@@ -516,6 +516,58 @@
 			status = "disabled";
 		};
 
+		dphy: phy@06505000 {
+			compatible = "allwinner,sun50i-a100-mipi-dphy";
+			reg = <0x06505000 0x114>;
+			interrupts = <GIC_SPI 68 IRQ_TYPE_LEVEL_HIGH>;
+			clocks = <&ccu CLK_BUS_MIPI_DSI>,
+					 <&ccu CLK_MIPI_DSI>;
+			clock-names = "bus","mod";
+			resets = <&ccu RST_BUS_MIPI_DSI>;
+			#phy-cells = <0>;
+			status = "disabled";
+		};
+
+		tcon_top:tcon-top@06510000 {
+			compatible = "allwinner,sun20i-d1-tcon-top";
+			reg = <0x06510000 0x1000>;
+			clocks = <&ccu CLK_BUS_DPSS_TOP0>,
+					 <&ccu CLK_BUS_DPSS_TOP1>,
+					 <&ccu CLK_TCON_LCD>;
+			clock-names = "bus0","bus1","dsi";
+			clock-output-names = "tcon-pixel-clock";
+			resets = <&ccu RST_BUS_DPSS_TOP0>,
+					 <&ccu RST_BUS_DPSS_TOP1>;
+			#clock-cells = <1>; 
+			status = "disabled";
+		};
+
+		tcon_lcd0:lcd-controller@06511000 {
+			compatible = "allwinner,sun20i-d1-tcon-top-lcd";
+			reg = <0x06511000 0x1000>;
+			interrupts = <GIC_SPI 70 IRQ_TYPE_LEVEL_HIGH>;
+			clocks = <&ccu CLK_BUS_TCON_LCD>,
+					 <&ccu CLK_TCON_LCD>;
+			clock-names = "bus","dsi";
+			clock-output-names = "tcon-pixel-clock";
+			resets = <&ccu RST_BUS_TCON_LCD>,
+					 <&ccu RST_BUS_LVDS>;
+			reset-names = "lcd","lvds";
+			#clock-cells = <0>;
+			status = "disabled";
+		};
+
+		dsi0:dsi@06504000 {
+			compatible = "allwinner,sun50i-a100-mipi-dsi";
+			reg = <0x06504000 0x1000>;
+			interrupts = <GIC_SPI 69 IRQ_TYPE_LEVEL_HIGH>;
+			clocks = <&ccu CLK_BUS_MIPI_DSI>;
+			resets = <&ccu RST_BUS_MIPI_DSI>;
+			phys = <&dphy>;
+			phy-names = "dphy";
+			status = "disabled";
+		};
+
 		r_ccu: clock@7010000 {
 			compatible = "allwinner,sun50i-a100-r-ccu";
 			reg = <0x07010000 0x300>;

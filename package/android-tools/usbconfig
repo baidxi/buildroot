@@ -1,0 +1,60 @@
+#!/bin/sh
+
+MACHINE=$(cat /sys/devices/soc0/machine | cut -d ' ' -f2)
+SOC=$(cat /sys/devices/soc0/machine | cut -d ' ' -f1)
+global_setup()
+{
+	if [ ! -d /sys/kernel/config/usb_gadget/g1 ]; then
+		mkdir /sys/kernel/config/usb_gadget/g1 -m 0770
+        mkdir /sys/kernel/config/usb_gadget/g1/configs/c.1
+		echo 500 > /sys/kernel/config/usb_gadget/g1/configs/c.1/MaxPower
+	fi
+}
+
+configfs_init() 
+{
+	if [ ! -f /sys/kernel/config/usb_gadget/g1/strings/0x409 ]; then
+		mkdir /sys/kernel/config/usb_gadget/g1/strings/0x409 -m 0770
+	fi
+	echo 0x1f3a > /sys/kernel/config/usb_gadget/g1/idVendor
+	echo 0xefe9 > /sys/kernel/config/usb_gadget/g1/idProduct
+	echo 0x0200 > /sys/kernel/config/usb_gadget/g1/bcdUSB
+	echo 20250427 > /sys/kernel/config/usb_gadget/g1/strings/0x409/serialnumber
+	echo $SOC > /sys/kernel/config/usb_gadget/g1/strings/0x409/manufacturer
+	echo $MACHINE > /sys/kernel/config/usb_gadget/g1/strings/0x409/product
+	echo 0x1 > /sys/kernel/config/usb_gadget/g1/os_desc/b_vendor_code
+	echo "MSFT100" > /sys/kernel/config/usb_gadget/g1/os_desc/qw_sign
+}
+
+adb_init()
+{
+    if [ ! -d /sys/kernel/config/usb_gadget/g1/functions/ffs.adb ]; then
+		mkdir /sys/kernel/config/usb_gadget/g1/functions/ffs.adb -m 0770
+        ln -s /sys/kernel/config/usb_gadget/g1/functions/ffs.adb /sys/kernel/config/usb_gadget/g1/configs/c.1/
+        mkdir /dev/usb-ffs/adb -m 0770 -p
+        mount -o uid=2000,gid=2000 -t functionfs adb /dev/usb-ffs/adb
+	fi
+}
+
+setup()
+{
+    if [ ! -f /tmp/.adb_init_done ]; then
+        global_setup
+        configfs_init
+        touch /tmp/.adb_init_done
+    fi
+}
+
+setup
+
+for func in $@
+do
+    case $func in
+        adb)
+            adb_init
+            /usr/bin/adbd &
+            sleep 1
+            /usr/bin/killall adbd
+        ;;
+    esac
+done
