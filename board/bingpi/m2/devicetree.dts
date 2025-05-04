@@ -169,6 +169,7 @@
 
 &pio {
 	vcc-pb-supply = <&reg_3v3>;
+	vcc-pc-supply = <&reg_3v3>;
 	vcc-pd-supply = <&reg_3v3>;
 	vcc-pe-supply = <&reg_avdd2v8>;
 	vcc-pf-supply = <&reg_3v3>;

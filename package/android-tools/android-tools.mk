@@ -93,10 +93,10 @@ endef
 define ANDROID_TOOLS_INSTALL_TARGET_CMDS
 	$(foreach t,$(ANDROID_TOOLS_TARGETS),\
 		$(INSTALL) -D -m 0755 $(@D)/build-$(t)/$(t) $(TARGET_DIR)/usr/bin/$(t)$(sep))
-	[ x"$(BR2_INIT_SYSTEMD)" == x"y" ] && { \
+	([ "x$(BR2_INIT_SYSTEMD)" == "xy" ] && { \
 		$(INSTALL) -D -m 0755 package/android-tools/usbconfig $(TARGET_DIR)/usr/bin/;	\
 		$(INSTALL) -D -m 0644 package/android-tools/adbd.service $(TARGET_DIR)/lib/systemd/system/;	\
-	 }	
+	 })	
 endef
 
 $(eval $(generic-package))

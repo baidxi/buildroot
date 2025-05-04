@@ -2,6 +2,8 @@
 
 MACHINE=$(cat /sys/devices/soc0/machine | cut -d ' ' -f2)
 SOC=$(cat /sys/devices/soc0/machine | cut -d ' ' -f1)
+SN=$(cat /proc/cpuinfo |grep Serial|cut -d ':' -f2|tr -d ' ')
+
 global_setup()
 {
 	if [ ! -d /sys/kernel/config/usb_gadget/g1 ]; then
@@ -19,7 +21,11 @@ configfs_init()
 	echo 0x1f3a > /sys/kernel/config/usb_gadget/g1/idVendor
 	echo 0xefe9 > /sys/kernel/config/usb_gadget/g1/idProduct
 	echo 0x0200 > /sys/kernel/config/usb_gadget/g1/bcdUSB
-	echo 20250427 > /sys/kernel/config/usb_gadget/g1/strings/0x409/serialnumber
+    if [ -z $SN ]; then
+	    echo 20250427 > /sys/kernel/config/usb_gadget/g1/strings/0x409/serialnumber
+    else
+        echo $SN > /sys/kernel/config/usb_gadget/g1/strings/0x409/serialnumber
+    fi
 	echo $SOC > /sys/kernel/config/usb_gadget/g1/strings/0x409/manufacturer
 	echo $MACHINE > /sys/kernel/config/usb_gadget/g1/strings/0x409/product
 	echo 0x1 > /sys/kernel/config/usb_gadget/g1/os_desc/b_vendor_code
