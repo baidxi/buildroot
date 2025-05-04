@@ -1,0 +1,54 @@
+Index: b/makefile
+===================================================================
+--- a/makefile
++++ b/makefile
+@@ -149,48 +149,7 @@ UNAME := $(shell uname -mps)
+ UNAME_M := $(shell uname -m)
+ UNAME_P := $(shell uname -p)
+ GENIEOS := linux
+-PLATFORM := unknown
+-ifneq ($(filter x86_64,$(UNAME_P)),)
+-PLATFORM := x86
+-endif
+-ifneq ($(filter %86,$(UNAME_P)),)
+-PLATFORM := x86
+-endif
+-ifneq ($(filter alpha,$(UNAME_M)),)
+-PLATFORM := alpha
+-endif
+-ifneq ($(filter alpha,$(UNAME_P)),)
+-PLATFORM := alpha
+-endif
+-ifneq ($(filter arm%,$(UNAME_M)),)
+-PLATFORM := arm
+-endif
+-ifneq ($(filter arm%,$(UNAME_P)),)
+-PLATFORM := arm
+-endif
+-ifneq ($(filter aarch64%,$(UNAME_M)),)
+-PLATFORM := arm64
+-endif
+-ifneq ($(filter arm64%,$(UNAME_M)),)
+-PLATFORM := arm64
+-endif
+-ifneq ($(filter aarch64%,$(UNAME_P)),)
+-PLATFORM := arm64
+-endif
+-ifneq ($(filter powerpc,$(UNAME_P)),)
+-PLATFORM := powerpc
+-endif
+-ifneq ($(filter riscv64%,$(UNAME_M)),)
+-PLATFORM := riscv64
+-endif
+-ifneq ($(filter riscv64%,$(UNAME_P)),)
+-PLATFORM := riscv64
+-endif
+-ifneq ($(filter mips64%,$(UNAME_M)),)
+-ifeq ($(shell getconf LONG_BIT),64)
+-PLATFORM := mips64
+-endif
+-endif
++PLATFORM := $(TARGET_ARCH)
+ ifeq ($(firstword $(filter Linux,$(UNAME))),Linux)
+ OS := linux
+ endif

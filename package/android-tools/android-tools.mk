@@ -94,6 +94,8 @@ define ANDROID_TOOLS_INSTALL_TARGET_CMDS
 	$(foreach t,$(ANDROID_TOOLS_TARGETS),\
 		$(INSTALL) -D -m 0755 $(@D)/build-$(t)/$(t) $(TARGET_DIR)/usr/bin/$(t)$(sep))
 	([ "x$(BR2_INIT_SYSTEMD)" == "xy" ] && { \
+		mkdir -p $(TARGET_DIR)/usr/bin;	\
+		mkdir -p $(TARGET_DIR)/lib/systemd/system;	\
 		$(INSTALL) -D -m 0755 package/android-tools/usbconfig $(TARGET_DIR)/usr/bin/;	\
 		$(INSTALL) -D -m 0644 package/android-tools/adbd.service $(TARGET_DIR)/lib/systemd/system/;	\
 	 })	

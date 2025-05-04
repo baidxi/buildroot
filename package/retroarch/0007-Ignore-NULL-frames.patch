@@ -1,0 +1,25 @@
+From fa002a1807c33ed8febc7250639ce338308a1da2 Mon Sep 17 00:00:00 2001
+From: Black-Seraph <admin@black-seraph.com>
+Date: Wed, 25 Sep 2024 14:42:51 +0200
+Subject: [PATCH 07/10] Ignore NULL frames
+
+---
+ gfx/drivers/sdl_gfx.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/gfx/drivers/sdl_gfx.c b/gfx/drivers/sdl_gfx.c
+index 4c0398fd53..f17c39cad5 100644
+--- a/gfx/drivers/sdl_gfx.c
++++ b/gfx/drivers/sdl_gfx.c
+@@ -509,7 +509,7 @@ static bool sdl_gfx_frame(void *data, const void *frame, unsigned width,
+    bool menu_is_alive = (video_info->menu_st_flags & MENU_ST_FLAG_ALIVE) ? true : false;
+ #endif
+ 
+-   if (!vid)
++   if (!vid || !frame)
+       return true;
+ 
+    sdl_refresh_viewport(vid, width, height, pitch);
+-- 
+2.34.1
+

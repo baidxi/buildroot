@@ -1,0 +1,28 @@
+From c66f7fab864a299349d38e02d452936b38de6f8f Mon Sep 17 00:00:00 2001
+From: Black-Seraph <admin@black-seraph.com>
+Date: Fri, 21 Jul 2023 19:27:10 +0200
+Subject: [PATCH 08/10] Write auto savestate thumbnails synchronously
+
+---
+ tasks/task_screenshot.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/tasks/task_screenshot.c b/tasks/task_screenshot.c
+index 8297d5c3d3..2c9b438e35 100644
+--- a/tasks/task_screenshot.c
++++ b/tasks/task_screenshot.c
+@@ -398,7 +398,10 @@ static bool screenshot_dump(
+    state->out_buffer     = buf;
+ #endif
+ 
+-   if (use_thread)
++   const char * auto_suffix = ".auto";
++   bool is_auto_state = strlen(name_base) >= strlen(auto_suffix) && strcmp(name_base + strlen(name_base) - strlen(auto_suffix), auto_suffix) == 0;
++
++   if (use_thread && !is_auto_state)
+    {
+       retro_task_t *task = task_init();
+ 
+-- 
+2.34.1
+

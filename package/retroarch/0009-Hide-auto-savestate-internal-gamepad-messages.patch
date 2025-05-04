@@ -1,0 +1,60 @@
+From fb0dba5670fb8aa979e287807ba54bc6a11a7fe6 Mon Sep 17 00:00:00 2001
+From: Black-Seraph <admin@black-seraph.com>
+Date: Wed, 25 Sep 2024 14:48:38 +0200
+Subject: [PATCH 09/10] Hide auto-savestate & internal gamepad messages
+
+---
+ tasks/task_autodetect.c |  2 +-
+ tasks/task_save.c       | 14 +++++---------
+ 2 files changed, 6 insertions(+), 10 deletions(-)
+
+diff --git a/tasks/task_autodetect.c b/tasks/task_autodetect.c
+index b029166e2c..f38d857638 100644
+--- a/tasks/task_autodetect.c
++++ b/tasks/task_autodetect.c
+@@ -727,7 +727,7 @@ static void input_autoconfigure_connect_handler(retro_task_t *task)
+       if (match_found)
+       {
+          /* A valid autoconfig was applied */
+-         if (!(autoconfig_handle->flags & AUTOCONF_FLAG_SUPPRESS_NOTIFICATIONS))
++         if (!(autoconfig_handle->flags & AUTOCONF_FLAG_SUPPRESS_NOTIFICATIONS) && strcmp(device_display_name, "Internal Gamepad") != 0)
+             snprintf(task_title, sizeof(task_title),
+                   msg_hash_to_str(MSG_DEVICE_CONFIGURED_IN_PORT_NR),
+                   device_display_name,
+diff --git a/tasks/task_save.c b/tasks/task_save.c
+index 27fc6c3b94..a820d4eba8 100644
+--- a/tasks/task_save.c
++++ b/tasks/task_save.c
+@@ -792,14 +792,10 @@ static void task_load_handler(retro_task_t *task)
+ 
+       if (!((flg & RETRO_TASK_FLG_MUTE) > 0))
+       {
+-         char msg[128];
+-
+-         if (state->flags & SAVE_TASK_FLAG_AUTOLOAD)
+-            snprintf(msg, sizeof(msg),
+-                  msg_hash_to_str(MSG_AUTOLOADING_SAVESTATE_SUCCEEDED),
+-                  path_basename(state->path));
+-         else
++         if ((state->flags & SAVE_TASK_FLAG_AUTOLOAD) == 0)
+          {
++            char msg[128];
++
+             if (state->state_slot < 0)
+                strlcpy(msg,
+                      msg_hash_to_str(MSG_LOADED_STATE_FROM_SLOT_AUTO),
+@@ -808,9 +804,9 @@ static void task_load_handler(retro_task_t *task)
+                snprintf(msg, sizeof(msg),
+                      msg_hash_to_str(MSG_LOADED_STATE_FROM_SLOT),
+                      state->state_slot);
+-         }
+ 
+-         task_set_title(task, strdup(msg));
++            task_set_title(task, strdup(msg));
++         }
+       }
+ 
+       goto end;
+-- 
+2.34.1
+

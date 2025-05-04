@@ -1,0 +1,5 @@
+menuconfig BR2_PACKAGE_MAME
+	bool "mame"
+	depends on BR2_PACKAGE_RETROARCH
+	help
+	  libretro implementation of mame
