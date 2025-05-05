@@ -38,7 +38,6 @@
             arch = "arm";
             os = "linux";
             compression = "none";
-            load = <0x43400000>;
             hash-1 {
                 algo = "crc32";
             };
@@ -51,16 +50,10 @@
             description = "Kernel, DeviceTree";
             kernel = "kernel@0";
             fdt = "fdt@0";
-
+            ramdisk = "ramdisk@0";
             hash@0 {
                 algo = "crc32";
             };
-        };
-
-        ramdisk {
-            description = "Boot Linux kernel with FDT blob and ramdisk";
-            kernel = "kernel@0";
-            ramdisk = "ramdisk@0";
         };
     };
 };
