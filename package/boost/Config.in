@@ -16,6 +16,23 @@ config BR2_PACKAGE_BOOST
 
 if BR2_PACKAGE_BOOST
 
+choice
+	prompt "Boost Version"
+	default BR2_PACKAGE_BOOST_VERSION_1_83
+
+config BR2_PACKAGE_BOOST_VERSION_1_83
+	bool "1.83.0"
+
+config BR2_PACKAGE_BOOST_VERSION_1_87
+	bool "1.87.0"
+
+endchoice
+
+config BR2_PACKAGE_BOOST_VERSION	
+	string
+	default "1_83_0" if BR2_PACKAGE_BOOST_VERSION_1_83
+	default "1_87_0" if BR2_PACKAGE_BOOST_VERSION_1_87
+
 config BR2_PACKAGE_BOOST_ATOMIC
 	bool "boost-atomic"
 	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS

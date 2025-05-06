@@ -2758,6 +2758,7 @@ endif
 	source "package/stunnel/Config.in"
 	source "package/suricata/Config.in"
 	source "package/system-config-printer/Config.in"
+	source "package/sunshine/Config.in"
 	source "package/tailscale/Config.in"
 	source "package/tcpdump/Config.in"
 	source "package/tcping/Config.in"
@@ -2807,7 +2808,6 @@ endif
 	source "package/zabbix/Config.in"
 	source "package/zeek/Config.in"
 	source "package/znc/Config.in"
-
 endmenu
 
 menu "Package managers"

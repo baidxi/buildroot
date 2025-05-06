@@ -4,9 +4,8 @@
 #
 ################################################################################
 
-BOOST_VERSION = 1.83.0
-BOOST_SOURCE = boost_$(subst .,_,$(BOOST_VERSION)).tar.bz2
-BOOST_SITE = https://archives.boost.io/release/$(BOOST_VERSION)/source
+BOOST_SOURCE = boost_$(strip $(subst ",,$(BR2_PACKAGE_BOOST_VERSION))).tar.bz2
+BOOST_SITE = https://archives.boost.io/release/$(subst _,.,$(strip $(subst ",,$(BR2_PACKAGE_BOOST_VERSION))))/source
 BOOST_INSTALL_STAGING = YES
 BOOST_LICENSE = BSL-1.0
 BOOST_LICENSE_FILES = LICENSE_1_0.txt

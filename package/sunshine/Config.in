@@ -1,0 +1,52 @@
+menuconfig BR2_PACKAGE_SUNSHINE
+    bool "sunshine"
+    select BR2_PACKAGE_BOOST
+    select BR2_PACKAGE_BOOST_ATOMIC
+    select BR2_PACKAGE_BOOST_CONTEXT
+    select BR2_PACKAGE_BOOST_DATE_TIME
+    select BR2_PACKAGE_BOOST_FILESYSTEM
+    select BR2_PACKAGE_LIBCURL
+    select BR2_PACKAGE_LIBMINIUPNPC
+    select BR2_PACKAGE_FFMPEG
+    select BR2_PACKAGE_WAYLAND
+    select BR2_PACKAGE_WAYLAND_PROTOCOLS
+
+if BR2_PACKAGE_SUNSHINE
+
+config BR2_PACKAGE_SUNSHINE_USE_STATIC_BOOST
+    bool "Use static Boost"
+    default n
+
+config BR2_PACKAGE_SUNSHINE_BUILD_APPIMAGE
+    bool "Build App Image"
+    default n
+
+config BR2_PACKAGE_SUNSHINE_BUILD_FLATPAK
+    bool "Build Flat PAK"
+    default n
+
+config BR2_PACKAGE_SUNSHINE_CONFIGURE_PKGBUILD
+    bool "Configure files required for AUR."
+    default n
+
+config BR2_PACKAGE_SUNSHINE_ENABLE_CUDA
+    bool "Enable cuda specific code"
+    default n
+
+config BR2_PACKAGE_SUNSHINE_ENABLE_DRM
+    bool "Enable KMS grab if available"
+    default y
+
+config BR2_PACKAGE_SUNSHINE_ENABLE_VAAPI
+    bool "Enable building vaapi specific code"
+    default n
+
+config BR2_PACKAGE_SUNSHINE_ENABLE_WAYLAND
+    bool "Enable building wayland specific code"
+    default y
+
+config BR2_PACKAGE_SUNSHINE_ENABLE_X11
+    bool "Enable X11 grab if available"
+    default y
+    
+endif
