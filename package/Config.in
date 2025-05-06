@@ -2337,6 +2337,7 @@ menu "Other"
 	source "package/libloki/Config.in"
 	source "package/libnpth/Config.in"
 	source "package/libnspr/Config.in"
+	source "package/libnotify/Config.in"
 	source "package/libosmium/Config.in"
 	source "package/libpeas/Config.in"
 	source "package/libpfm4/Config.in"
@@ -2414,7 +2415,6 @@ endif
 	source "package/volk/Config.in"
 	source "package/xapian/Config.in"
 	source "package/xnnpack/Config.in"
-	source "package/libnotify/Config.in"
 endmenu
 
 menu "Security"

@@ -21,6 +21,10 @@ FONTCONFIG_CONF_OPTS = \
 	-Dtests=disabled \
 	-Ddoc=disabled
 
+HOST_FONTCONFIG_CONF_OPTS = \
+	-Ddoc=disabled	\
+	-Dtests=disabled
+
 FONTCONFIG_CFLAGS = $(TARGET_CFLAGS)
 
 # See: https://gitlab.freedesktop.org/fontconfig/fontconfig/-/issues/436

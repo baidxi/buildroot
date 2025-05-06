@@ -27,4 +27,8 @@ config BR2_PACKAGE_CAIRO_ZLIB
 	bool "zlib support (script, ps, pdf, and xml surfaces)"
 	select BR2_PACKAGE_ZLIB
 
+config BR2_PACKAGE_CAIRO_UTIL
+	bool "util"
+	depends on BR2_PACKAGE_LIBGTK2
+
 endif
