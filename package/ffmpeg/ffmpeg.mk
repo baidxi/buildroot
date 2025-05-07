@@ -583,6 +583,18 @@ else ifneq ($(GCC_TARGET_ARCH),)
 FFMPEG_CONF_OPTS += --cpu="$(GCC_TARGET_ARCH)"
 endif
 
+ifeq ($(BR2_PACKAGE_FFMPEG_X264),y)
+FFMPEG_CONF_OPTS += --enable-libx264
+endif
+
+ifeq ($(BR2_PACKAGE_FFMPEG_X265),y)
+FFMPEG_CONF_OPTS += --enable-libx265
+endif
+
+ifeq ($(BR2_PACKAGE_FFMPEG_SVTAV1),y)
+FFMPEG_CONF_OPTS += --enable-libsvtav1
+endif
+
 FFMPEG_CFLAGS = $(TARGET_CFLAGS)
 
 ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
