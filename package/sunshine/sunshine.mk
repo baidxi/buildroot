@@ -10,7 +10,7 @@ SUNSHINE_GIT_SUBMODULES = YES
 SUNSHINE_SITE = https://github.com/baidxi/Sunshine
 SUNSHINE_LICENSE = GPL-3.0
 SUNSHINE_LICENSE_FILES = LICENSE.txt
-SUNSHINE_DEPENDENCIES = boost wayland wayland-protocols libcurl libminiupnpc ffmpeg
+SUNSHINE_DEPENDENCIES = boost wayland wayland-protocols libcurl libminiupnpc x264 x265 svt-av1 ffmpeg
 
 SUNSHINE_CONF_OPTS += \
 	-DSUNSHINE_ENABLE_DRM:BOOL=ON	\

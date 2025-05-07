@@ -116,10 +116,10 @@ else
 CAIRO_CONF_OPTS += -Dzlib=disabled
 endif
 
-ifeq ($(BR2_PACKAGE_CAIRO_UTIL),y)
-CAIRO_CONF_OPTS += -Dgtk2-utils=enabled
-CAIRO_DEPENDENCIES += libgtk2
-endif
+# ifeq ($(BR2_PACKAGE_CAIRO_UTIL),y)
+# CAIRO_CONF_OPTS += -Dgtk2-utils=enabled
+# CAIRO_DEPENDENCIES += libgtk2
+# endif
 
 $(eval $(meson-package))
 $(eval $(host-meson-package))

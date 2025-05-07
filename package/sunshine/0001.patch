@@ -1,0 +1,85 @@
+Index: b/cmake/compile_definitions/linux.cmake
+===================================================================
+--- a/cmake/compile_definitions/linux.cmake
++++ b/cmake/compile_definitions/linux.cmake
+@@ -188,16 +188,16 @@ if(${SUNSHINE_ENABLE_TRAY})
+         endif ()
+     endif()
+     pkg_check_modules(LIBNOTIFY libnotify)
+-    if(NOT APPINDICATOR_FOUND OR NOT LIBNOTIFY_FOUND)
+-        message(STATUS "APPINDICATOR_FOUND: ${APPINDICATOR_FOUND}")
+-        message(STATUS "LIBNOTIFY_FOUND: ${LIBNOTIFY_FOUND}")
+-        message(FATAL_ERROR "Couldn't find either appindicator or libnotify")
+-    else()
++    if(APPINDICATOR_FOUND OR LIBNOTIFY_FOUND)
+         include_directories(SYSTEM ${APPINDICATOR_INCLUDE_DIRS} ${LIBNOTIFY_INCLUDE_DIRS})
+         link_directories(${APPINDICATOR_LIBRARY_DIRS} ${LIBNOTIFY_LIBRARY_DIRS})
+ 
+         list(APPEND PLATFORM_TARGET_FILES "${CMAKE_SOURCE_DIR}/third-party/tray/src/tray_linux.c")
+         list(APPEND SUNSHINE_EXTERNAL_LIBRARIES ${APPINDICATOR_LIBRARIES} ${LIBNOTIFY_LIBRARIES})
++    else()
++        message(STATUS "APPINDICATOR_FOUND: ${APPINDICATOR_FOUND}")
++        message(STATUS "LIBNOTIFY_FOUND: ${LIBNOTIFY_FOUND}")
++        message(FATAL_ERROR "Couldn't find either appindicator or libnotify")
+     endif()
+ 
+     # flatpak icons must be prefixed with the app id or they will not be included in the flatpak
+Index: b/cmake/dependencies/common.cmake
+===================================================================
+--- a/cmake/dependencies/common.cmake
++++ b/cmake/dependencies/common.cmake
+@@ -36,29 +36,33 @@ if(NOT DEFINED FFMPEG_PREPARED_BINARIES)
+     set(FFMPEG_PREPARED_BINARIES
+             "${CMAKE_SOURCE_DIR}/third-party/build-deps/dist/${CMAKE_SYSTEM_NAME}-${CMAKE_SYSTEM_PROCESSOR}")
+ 
+-    # check if the directory exists
+-    if(NOT EXISTS "${FFMPEG_PREPARED_BINARIES}")
+-        message(FATAL_ERROR
+-                "FFmpeg pre-compiled binaries not found at ${FFMPEG_PREPARED_BINARIES}. \
+-                Please consider contributing to the LizardByte/build-deps repository. \
+-                Optionally, you can use the FFMPEG_PREPARED_BINARIES option to specify the path to the \
+-                system-installed FFmpeg libraries")
+-    endif()
++    if(NOT DEFINED USE_FFMPEG_PREBUILD)
++        pkg_check_modules(FFMPEG REQUIRED libavcodec libavutil SvtAv1Enc libswscale x264 x265)
++    else()
++        # check if the directory exists
++        if(NOT EXISTS "${FFMPEG_PREPARED_BINARIES}")
++            message(FATAL_ERROR
++                    "FFmpeg pre-compiled binaries not found at ${FFMPEG_PREPARED_BINARIES}. \
++                    Please consider contributing to the LizardByte/build-deps repository. \
++                    Optionally, you can use the FFMPEG_PREPARED_BINARIES option to specify the path to the \
++                    system-installed FFmpeg libraries")
++        endif()
+ 
+-    if(EXISTS "${FFMPEG_PREPARED_BINARIES}/lib/libhdr10plus.a")
+-        set(HDR10_PLUS_LIBRARY
+-                "${FFMPEG_PREPARED_BINARIES}/lib/libhdr10plus.a")
++        if(EXISTS "${FFMPEG_PREPARED_BINARIES}/lib/libhdr10plus.a")
++            set(HDR10_PLUS_LIBRARY
++                    "${FFMPEG_PREPARED_BINARIES}/lib/libhdr10plus.a")
++        endif()
++        set(FFMPEG_LIBRARIES`
++                "${FFMPEG_PREPARED_BINARIES}/lib/libavcodec.a"
++                "${FFMPEG_PREPARED_BINARIES}/lib/libavutil.a"
++                "${FFMPEG_PREPARED_BINARIES}/lib/libcbs.a"
++                "${FFMPEG_PREPARED_BINARIES}/lib/libSvtAv1Enc.a"
++                "${FFMPEG_PREPARED_BINARIES}/lib/libswscale.a"
++                "${FFMPEG_PREPARED_BINARIES}/lib/libx264.a"
++                "${FFMPEG_PREPARED_BINARIES}/lib/libx265.a"
++                ${HDR10_PLUS_LIBRARY}
++                ${FFMPEG_PLATFORM_LIBRARIES})
+     endif()
+-    set(FFMPEG_LIBRARIES
+-            "${FFMPEG_PREPARED_BINARIES}/lib/libavcodec.a"
+-            "${FFMPEG_PREPARED_BINARIES}/lib/libavutil.a"
+-            "${FFMPEG_PREPARED_BINARIES}/lib/libcbs.a"
+-            "${FFMPEG_PREPARED_BINARIES}/lib/libSvtAv1Enc.a"
+-            "${FFMPEG_PREPARED_BINARIES}/lib/libswscale.a"
+-            "${FFMPEG_PREPARED_BINARIES}/lib/libx264.a"
+-            "${FFMPEG_PREPARED_BINARIES}/lib/libx265.a"
+-            ${HDR10_PLUS_LIBRARY}
+-            ${FFMPEG_PLATFORM_LIBRARIES})
+ else()
+     set(FFMPEG_LIBRARIES
+         "${FFMPEG_PREPARED_BINARIES}/lib/libavcodec.a"

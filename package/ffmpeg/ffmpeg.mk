@@ -449,6 +449,11 @@ else
 FFMPEG_CONF_OPTS += --disable-libx265
 endif
 
+ifeq ($(BR2_PACKAGE_SVT_AV1),y)
+FFMPEG_CONF_OPTS += --enable-libsvtav1
+FFMPEG_DEPENDENCIES += svt-av1
+endif
+
 ifeq ($(BR2_PACKAGE_DAV1D),y)
 FFMPEG_CONF_OPTS += --enable-libdav1d
 FFMPEG_DEPENDENCIES += dav1d
@@ -581,18 +586,6 @@ else ifneq ($(GCC_TARGET_CPU),)
 FFMPEG_CONF_OPTS += --cpu="$(GCC_TARGET_CPU)"
 else ifneq ($(GCC_TARGET_ARCH),)
 FFMPEG_CONF_OPTS += --cpu="$(GCC_TARGET_ARCH)"
-endif
-
-ifeq ($(BR2_PACKAGE_FFMPEG_X264),y)
-FFMPEG_CONF_OPTS += --enable-libx264
-endif
-
-ifeq ($(BR2_PACKAGE_FFMPEG_X265),y)
-FFMPEG_CONF_OPTS += --enable-libx265
-endif
-
-ifeq ($(BR2_PACKAGE_FFMPEG_SVTAV1),y)
-FFMPEG_CONF_OPTS += --enable-libsvtav1
 endif
 
 FFMPEG_CFLAGS = $(TARGET_CFLAGS)
