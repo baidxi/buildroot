@@ -1,0 +1,2 @@
+config BR2_PACKAGE_SVTAV1
+    bool "svt-av1"
