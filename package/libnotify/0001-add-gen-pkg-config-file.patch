@@ -1,0 +1,28 @@
+Index: b/libnotify/meson.build
+===================================================================
+--- a/libnotify/meson.build
++++ b/libnotify/meson.build
+@@ -89,3 +89,12 @@ if g_ir_scanner.found() and not introspe
+ endif
+ 
+ install_headers(headers, subdir: libnotify_includesubdir)
++
++pkg = import('pkgconfig')
++pkg.generate(libnotify_lib,
++  name : 'libnotify',
++  filebase : 'libnotify',
++  description : 'The libnotify library',
++  subdirs: 'libnotify',
++  version : meson.project_version(),
++)
+Index: b/meson.build
+===================================================================
+--- a/meson.build
++++ b/meson.build
+@@ -82,4 +82,4 @@ subdir('docs')
+ 
+ if get_option('tests')
+   subdir('tests')
+-endif
++endif
+\ No newline at end of file
