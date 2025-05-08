@@ -1,4 +1,4 @@
-config BR2_PACKAGE_MOONLIGHT
+menuconfig BR2_PACKAGE_MOONLIGHT
     bool "moonlight"
     select BR2_PACKAGE_OPUS
     select BR2_PACKAGE_LIBEVDEV
@@ -6,12 +6,40 @@ config BR2_PACKAGE_MOONLIGHT
     select BR2_PACKAGE_EXPAT
     select BR2_PACKAGE_DBUS
     select BR2_PACKAGE_AVAHI
-    select BR2_PACKAGE_FFMPEG
+    select BR2_PACKAGE_SPIRV_HEADERS
+    select BR2_PACKAGE_VULKAN_HEADERS
+
+if BR2_PACKAGE_MOONLIGHT
+config BR2_PACKAGE_MOONLIGHT_SDL
+    bool "Enable SDL Support"
+    default y
     select BR2_PACKAGE_SDL2
     select BR2_PACKAGE_SDL2_GFX
     select BR2_PACKAGE_SDL2_IMAGE
     select BR2_PACKAGE_SDL2_MIXER
     select BR2_PACKAGE_SDL2_NET
     select BR2_PACKAGE_SDL2_TTF
-    select BR2_PACKAGE_SPIRV_HEADERS
-    select BR2_PACKAGE_VULKAN_HEADERS
+
+config BR2_PACKAGE_MOONLIGHT_FFMPEG
+    bool "Enable ffmpeg Support"
+    default y
+    select BR2_PACKAGE_FFMPEG
+
+config BR2_PACKAGE_MOONLIGHT_X11
+    bool "Enable X11 Support"
+    default y
+    select BR2_PACKAGE_XORG7
+    select BR2_PACKAGE_XLIB_LIBX11
+    select BR2_PACKAGE_XLIB_LIBXEXT
+
+config BR2_PACKAGE_MOONLIGHT_PULSE
+    bool "Enable PulseAudio Support"
+    default y
+    select BR2_PACKAGE_PULSEAUDIO
+
+config BR2_PACKAGE_MOONLIGHT_CEC
+    bool "Enable CEC Support"
+    default y 
+    select BR2_PACKAGE_LIBCEC
+
+endif
