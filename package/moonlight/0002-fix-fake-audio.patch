@@ -1,0 +1,25 @@
+Index: b/src/main.c
+===================================================================
+--- a/src/main.c
++++ b/src/main.c
+@@ -143,7 +143,7 @@ static void stream(PSERVER_DATA server,
+     loop_init();
+ 
+   platform_start(system);
+-  LiStartConnection(&server->serverInfo, &config->stream, &connection_callbacks, platform_get_video(system), platform_get_audio(system, config->audio_device), NULL, drFlags, config->audio_device, 0);
++  LiStartConnection(&server->serverInfo, &config->stream, &connection_callbacks, platform_get_video(system), config->audio_device ? platform_get_audio(system, config->audio_device) : NULL, NULL, drFlags, config->audio_device, 0);
+ 
+   if (IS_EMBEDDED(system)) {
+     if (!config->viewonly)
+Index: b/third_party/moonlight-common-c/src/FakeCallbacks.c
+===================================================================
+--- a/third_party/moonlight-common-c/src/FakeCallbacks.c
++++ b/third_party/moonlight-common-c/src/FakeCallbacks.c
+@@ -81,6 +81,7 @@ void fixupMissingCallbacks(PDECODER_REND
+     }
+ 
+     if (*arCallbacks == NULL) {
++        Limelog("Used fakeAudio\n");
+         *arCallbacks = &fakeArCallbacks;
+     }
+     else {
