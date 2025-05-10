@@ -131,10 +131,6 @@ F:	package/openpgm/
 N:	Aleksandr Makarov <aleksandr.o.makarov@gmail.com>
 F:	package/libest/
 
-N:	Alexander Mukhin <alexander.i.mukhin@gmail.com>
-F:	package/tinyproxy/
-F:	package/zfs/
-
 N:	Alexander Sverdlin <alexander.sverdlin@gmail.com>
 F:	package/mini-snmpd/
 
@@ -732,6 +728,10 @@ N:	Daniel Crowe <daniel.crowe@maxmine.com.au>
 F:	package/python-aniso8601/
 F:	package/python-cachelib/
 F:	package/python-flask-caching/
+F:	package/python-flask-restx/
+F:	package/python-pyproj/
+F:	support/testing/tests/package/sample_python_pyproj.py
+F:	support/testing/tests/package/test_python_pyproj.py
 
 N:	Daniel J. Leach <dleach@belcan.com>
 F:	package/dacapo/
