@@ -1,0 +1,5 @@
+/dts-v1/;
+/ {
+    model = "lckfb tspi V10 Board";
+	compatible = "lckfb,tspi-v10", "rockchip,rk3566";
+};
