@@ -1,0 +1,12 @@
+Index: b/drivers/gpio/gpio-pca953x.c
+===================================================================
+--- a/drivers/gpio/gpio-pca953x.c
++++ b/drivers/gpio/gpio-pca953x.c
+@@ -1341,6 +1341,7 @@ static const struct of_device_id pca953x
+ 	{ .compatible = "onnn,pca9655", .data = OF_953X(16, PCA_INT), },
+ 
+ 	{ .compatible = "exar,xra1202", .data = OF_953X( 8, 0), },
++	{ .compatible = "analogtek,at9555", .data = OF_953X(16, PCA_INT)},
+ 	{ }
+ };
+ 
