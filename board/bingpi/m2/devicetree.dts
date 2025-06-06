@@ -174,6 +174,11 @@
 	vcc-pe-supply = <&reg_avdd2v8>;
 	vcc-pf-supply = <&reg_3v3>;
 	vcc-pg-supply = <&reg_3v3>;
+
+	i2c3_pins:i2c3-pins {
+		pins = "PE7","PE6";
+		function = "i2c3";
+	};
 };
 
 &uart3 {
@@ -185,16 +190,6 @@
 /* The USB-C socket has its CC pins pulled to GND, so is hardwired as a UFP. */
 &usb_otg {
 	dr_mode = "peripheral";
-	dmas =  <&dma 30>,<&dma 30>,
-			<&dma 31>,<&dma 31>,
-			<&dma 32>,<&dma 32>,
-			<&dma 33>,<&dma 33>,
-			<&dma 34>,<&dma 34>;
-	dma-names = "ep1_tx","ep1_rx",
-				"ep2_tx","ep2_rx",
-				"ep3_tx","ep3_rx",
-				"ep4_tx","ep4_rx",
-				"ep5_tx","ep5_rx";
 	status = "okay";
 };
 
@@ -283,5 +278,15 @@
 &sid {
 	ths_calib:calib@14 {
 		reg = <0x14 8>;
+	};
+};
+
+&i2c3 {
+	status = "okay";
+	pinctrl-0 = <&i2c3_pins>;
+	pinctrl-names = "default";
+	sh1106@3c {
+		compatible = "sino wealth,sh1106";
+		reg = <0x3c>;
 	};
 };
