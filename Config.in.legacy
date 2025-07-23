@@ -144,7 +144,69 @@ endif
 
 ###############################################################################
 
+comment "Legacy options removed in 2025.08"
+
+config BR2_PACKAGE_LIBOLM
+	bool "libolm has been removed"
+	select BR2_LEGACY
+	help
+	  libolm is deprecated and has been removed from Buildroot.
+	  https://gitlab.matrix.org/matrix-org/olm#important-libolm-is-now-deprecated
+
+config BR2_PACKAGE_LIBWEBSOCK
+	bool "libwebsock has been removed"
+	select BR2_LEGACY
+	help
+	  The upstream Github repository payden/libwebsock is no
+	  longer available, and has been removed from Buildroot.
+
+config BR2_TARGET_EDK2_PLATFORM_SOCIONEXT_DEVELOPERBOX
+	bool "EDK2 Socionext DeveloperBox support has been removed"
+	select BR2_LEGACY
+	help
+	  The Socionext DeveloperBox support has been removed upstream
+	  in EDK2 version edk2-stable202505.
+
+config BR2_PACKAGE_LIBEBUR128
+	bool "libebur128 has been removed"
+	select BR2_LEGACY
+	help
+	  The libebur128 package has been removed from Buildroot.
+
+config BR2_KERNEL_HEADERS_6_14
+	bool "kernel headers version 6.14.x are no longer supported"
+	select BR2_LEGACY
+	help
+	  Version 6.14.x of the Linux kernel headers are no longer
+	  maintained upstream and are now removed.
+
+config BR2_PACKAGE_GPSD_OCEANSERVER
+	bool "gpsd OceanServer removed upstream"
+	select BR2_LEGACY
+	help
+	  Support for OceanServer has been removed upstream in gpsd
+	  v3.26.
+
+config BR2_PACKAGE_MESA3D_OSMESA_GALLIUM
+	bool "mesa3d OSMesa (Gallium) library support removed"
+	select BR2_LEGACY
+	help
+	  Mesa3d removed the OSMesa (Off-Screen) interface library.
+
+config BR2_PACKAGE_ALSA_LIB_ALISP
+	bool "alsa-lib alisp support removed"
+	select BR2_LEGACY
+	help
+	  Support for alisp was removed from alsa-lib v1.12.14.
+
 comment "Legacy options removed in 2025.05"
+
+config BR2_GCC_VERSION_12_X
+	bool "gcc 12.x support removed"
+	select BR2_LEGACY
+	help
+	  Support for building a toolchain based on GCC 12.x has been
+	  removed, chose a newer GCC version instead.
 
 config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST
 	bool "mesa Gallium swrast driver was replaced by softpipe"

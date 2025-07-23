@@ -412,7 +412,6 @@ F:	package/libdvbcsa/
 F:	package/libdvdcss/
 F:	package/libdvdnav/
 F:	package/libdvdread/
-F:	package/libebur128/
 F:	package/libfreeglut/
 F:	package/libfribidi/
 F:	package/libg7221/
@@ -811,6 +810,7 @@ F:	package/armadillo/
 F:	package/babeld/
 F:	package/iana-assignments/
 F:	package/inih/
+F:	package/pocketpy/
 F:	package/sscep/
 F:	package/tinyinit/
 F:	package/ufs-utils/
@@ -910,6 +910,11 @@ F:	configs/acmesystems_acqua_a5_512mb_defconfig
 
 N:	Eero Aaltonen <eero.aaltonen@vaisala.com>
 F:	package/docopt-cpp/
+
+N:	El Mehdi YOUNES <elmehdi.younes@smile.fr>
+F:	package/opencl-headers/
+F:	package/opencl-icd-loader/
+F:	support/testing/tests/package/test_mesa3d.py
 
 N:	Eloi Bail <eloi.bail@savoirfairelinux.com>
 F:	package/bayer2rgb-neon/
@@ -1115,8 +1120,6 @@ N:	Fiona Klute <fiona.klute@gmx.de>
 F:	package/*/S*
 F:	package/panel-mipi-dbi-firmware/
 F:	package/python-aiomqtt/
-F:	package/python-dunamai/
-F:	package/python-poetry-dynamic-versioning/
 F:	package/python-pyasynchat/
 F:	package/python-pyasyncore/
 F:	support/testing/tests/package/sample_python_networkmanager_goi.py
@@ -1265,7 +1268,6 @@ F:	package/httping/
 F:	package/iozone/
 F:	package/leptonica/
 F:	package/libeXosip2/
-F:	package/libolm/
 F:	package/libosip2/
 F:	package/ocrad/
 F:	package/opencl-clhpp/
@@ -1301,6 +1303,7 @@ F:	package/gcc/
 F:	package/harfbuzz/
 F:	package/libblockdev/
 F:	package/libfuse3/
+F:	package/liblo/
 F:	package/libnspr/
 F:	package/libnss/
 F:	package/libnvme/
@@ -1343,7 +1346,6 @@ F:	package/gengetopt/
 F:	package/janus-gateway/
 F:	package/libnice/
 F:	package/libsrtp/
-F:	package/libwebsock/
 F:	package/sofia-sip/
 
 N:	Grzegorz Blach <grzegorz@blach.pl>
@@ -1641,6 +1643,13 @@ N:	Jianhui Zhao <zhaojh329@gmail.com>
 F:	package/libuhttpd/
 F:	package/libuwsc/
 F:	package/rtty/
+
+N:	Jiaxun Yang <jiaxun.yang@flygoat.com>
+F:	arch/Config.in.loongarch
+F:	board/loongarch64-efi
+F:	board/qemu/loongarch64-virt-efi
+F:	configs/loongarch64_efi_defconfig
+F:	configs/qemu_loongarch64_virt_efi_defconfig
 
 N:	Joachim Wiberg <troglobit@gmail.com>
 F:	configs/globalscale_espressobin_defconfig
@@ -2031,6 +2040,7 @@ F:	support/testing/tests/package/test_tesseract_ocr.py
 F:	support/testing/tests/package/test_thttpd.py
 F:	support/testing/tests/package/test_trace_cmd.py
 F:	support/testing/tests/package/test_trace_cmd/
+F:	support/testing/tests/package/test_tree.py
 F:	support/testing/tests/package/test_unbound.py
 F:	support/testing/tests/package/test_unbound/
 F:	support/testing/tests/package/test_usbip.py
@@ -2278,28 +2288,38 @@ N:	Marcus Hoffmann <bubu@bubu1.eu>
 F:	package/nethogs/
 F:	package/pico-sdk/
 F:	package/picotool/
+F:	package/python-apscheduler/
+F:	package/python-crc/
 F:	package/python-django/
 F:	package/python-immutabledict/
 F:	package/python-jc/
+F:	package/python-log-rate-limit/
 F:	package/python-pydantic/
 F:	package/python-pydantic-core/
 F:	package/python-pydantic-settings/
 F:	package/python-ruamel-yaml-clib/
 F:	package/python-typing-inspection/
 F:	package/python-tzlocal/
+F:	package/python-sdbus-modemmanager/
 F:	package/python-waitress/
+F:	support/testing/tests/package/test_python_apscheduler.py
+F:	support/testing/tests/package/test_python_crc.py
 F:	support/testing/tests/package/test_python_django.py
 F:	support/testing/tests/package/test_python_fastapi.py
 F:	support/testing/tests/package/test_python_pydantic.py
 F:	support/testing/tests/package/test_python_pydantic_settings.py
 F:	support/testing/tests/package/test_python_ruamel_yaml.py
+F:	support/testing/tests/package/test_python_sdbus_modemmanager.py
 F:	support/testing/tests/package/test_python_tzlocal.py
 F:	support/testing/tests/package/test_python_waitress.py
+F:	support/testing/tests/package/sample_python_apscheduler.py
+F:	support/testing/tests/package/sample_python_crc.py
 F:	support/testing/tests/package/sample_python_django.py
 F:	support/testing/tests/package/sample_python_fastapi.py
 F:	support/testing/tests/package/sample_python_pydantic.py
 F:	support/testing/tests/package/sample_python_pydantic_settings.py
 F:	support/testing/tests/package/sample_python_ruamel_yaml.py
+F:	support/testing/tests/package/sample_python_sdbus_modemmanager.py
 
 N:	Marek Belisko <marek.belisko@open-nandra.com>
 F:	package/libatasmart/
@@ -2843,6 +2863,8 @@ F:	support/testing/tests/package/sample_python_s3transfer.py
 F:	support/testing/tests/package/sample_python_sdbus.py
 F:	support/testing/tests/package/sample_python_sdbus_networkmanager.py
 F:	support/testing/tests/package/sample_python_urllib3.py
+F:	support/testing/tests/package/test_nginx_modsecurity/
+F:	support/testing/tests/package/test_nginx_modsecurity.py
 F:	support/testing/tests/package/test_python_jmespath.py
 F:	support/testing/tests/package/test_python_pymupdf.py
 F:	support/testing/tests/package/test_python_rsa.py
@@ -2908,11 +2930,13 @@ F:	package/vnstat/
 
 N:	Romain Naour <romain.naour@gmail.com>
 F:	board/beagleboard/beagleboneai64/
+F:	board/beagleboard/beagley-ai/
 F:	board/qemu/
 F:	board/ti/am574x-idk/
 F:	configs/qemu_*
 F:	configs/am574x_idk_defconfig
 F:	configs/beagleboneai64_defconfig
+F:	configs/beagley_ai_defconfig
 F:	package/alure/
 F:	package/aubio/
 F:	package/bcc/

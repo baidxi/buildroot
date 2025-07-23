@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-CNI_PLUGINS_VERSION = 1.3.0
+CNI_PLUGINS_VERSION = 1.7.1
 CNI_PLUGINS_SITE = $(call github,containernetworking,plugins,v$(CNI_PLUGINS_VERSION))
 CNI_PLUGINS_LICENSE = Apache-2.0
 CNI_PLUGINS_LICENSE_FILES = LICENSE
@@ -25,6 +25,7 @@ CNI_PLUGINS_BUILD_TARGETS = \
 	plugins/meta/bandwidth \
 	plugins/meta/firewall \
 	plugins/meta/portmap \
+	plugins/meta/sbr \
 	plugins/meta/tuning \
 	plugins/meta/vrf
 CNI_PLUGINS_INSTALL_BINS = $(CNI_PLUGINS_BUILD_TARGETS)
