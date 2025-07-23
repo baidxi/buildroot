@@ -7,13 +7,13 @@
     images {
         kernel@0 {
             description = "Linux kernel";
-            data = /incbin/("Image");
+            data = /incbin/("Image.gz");
             type = "kernel";
             arch = "arm";
             os = "linux";
-            compression = "none";
-            load = <0x42000000>;
-            entry = <0x42000000>;
+            compression = "gzip";
+            load = <0x03000000>;
+            entry = <0x03000000>;
             hash@0 {
                 algo = "crc32";
             };
@@ -25,7 +25,6 @@
             type = "flat_dt";
             arch = "arm";
             compression = "none";
-            load = <0x43000000>;
             hash@0 {
                 algo = "crc32";
             };
