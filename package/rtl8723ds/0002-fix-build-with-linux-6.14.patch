@@ -1,0 +1,12 @@
+Index: b/os_dep/linux/ioctl_cfg80211.c
+===================================================================
+--- a/os_dep/linux/ioctl_cfg80211.c
++++ b/os_dep/linux/ioctl_cfg80211.c
+@@ -3363,6 +3363,7 @@ static int cfg80211_rtw_get_txpower(stru
+ #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 8, 0))
+ 	struct wireless_dev *wdev,
+ #endif
++	unsigned int link_id,
+ 	int *dbm)
+ {
+ 	RTW_INFO("%s\n", __func__);
