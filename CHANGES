@@ -1,74 +1,143 @@
-2025.02.4, released June 23th, 2025
+2025.08-rc1, released August 11th, 2025
 
-    Important / security related fixes:
+	Fixes all over the tree and new features.
 
-    - assimp: CVE-2025-3015, CVE-2025-3016
-    - binutils: CVE-2025-3198
-    - connman: CVE-2025-32366, CVE-2025-32743
-    - go: CVE-2025-0913, CVE-2025-4673, CVE-2025-22874
-    - iputils: CVE-2025-47268, CVE-2025-48964
-    - jq: CVE-2024-23337, CVE-2025-48060, CVE-2024-53427
-    - libcurl: CVE-2025-4947, CVE-2025-5025, CVE-2025-5399
-    - net-tools: CVE-2025-46836
-    - nodejs: CVE-2025-23165, CVE-2025-23166
-    - openvmtools: CVE-2025-22247
-    - python-django: CVE-2025-48432
-    - python-requests: CVE-2024-47081
-    - python-tornado: CVE-2025-47287
-    - redis: CVE-2025-21605, CVE-2025-27151
-    - samba4: CVE-2025-0620
-    - sox: CVE-2021-23159, CVE-2021-23172, CVE-2021-23210, CVE-2021-3643,
-        CVE-2021-40426, CVE-2022-31650, CVE-2022-31651, CVE-2023-26590,
-        CVE-2023-32627, CVE-2023-34318
-    - webkitgtk: CVE-2025-24223, CVE-2025-31204, CVE-2025-31205,
-        CVE-2025-31206, CVE-2025-31215, CVE-2025-31257
+	Arch: Add LoongArch64 architecture support
 
-    Updated / fixed packages: alsa-utils, atkmm, atmm2_28, audit,
-    bluez5_utils, busybox, catch2, connman, dbus-glib, dlib, dovecot,
-    esp-hosted, execline, firmware-ele-imx, flex, fluent-bit, freescale-imx,
-    ghostscript, gmrender-resurrect, grub2, gst1-plugins-bad, gtkmm3, iputils,
-    kmsxx, libcamera, libcurl, libglade, libical, libuv, llvm-project,
-    lm-sensors, m4, mesa3d, mongoose, openvmtools, php, protobuf-c,
-    python-django, python-fastapi, python-flit-core, python-jc,
-    python-requests, python-uvicorn, qt5 (declarative, webengine,
-    webengine-chromium), qt6 (base, multimedia, tools), rpm, samba4, spdlog,
-    systemd, uacme, uboot-tools, yasm
+	Toolchains:
+	- ARC toolchain updated to 2024.12
+	- Bootlin external toolchains updated to 2025.08-1
+	- GCC 15.1.0 added, 12.x dropped, 14.x is now default
+	- GCC 13.x updated to 13.4.0, 14.x updated to 14.3.0
+	- Default to Linux 6.16.x kernel headers
 
-    Removed package: libebur128
+	Misc:
+	- Various tweaks to utils/generate-cyclonedx for better SBOM
+	  compatibility and project name/version customization
 
-    Infrastructure updates / fixes:
+	New defconfigs: BeagleY-AI, CoolPI 4B, Freescale i.MX91
+	Freedom, LoongArch64 EFI, QEMU LoongArch64 Virt, Raspberrypi
+	Compute Module 5 IO
 
-    - pkg-cmake now forces CMake>=3.5
-    - pkg-meson now uses a dedicated buildroot build directory
-      see https://gitlab.com/buildroot.org/buildroot/-/issues/64
-    - include defconfigs in sub-directories in make list-defconfigs
-    - new manual section about private repositories
-    - pkg-autotools: handle libtool 2.5.x
-    - pkg-cmake: force check_language(CXX) to be false when building w/o C++
-    - pkg-stats: add support for reporting stale CVE entries
-    - add basic support for package file download over smb
-    - toolchain/wrapper: check unsafe paths earlier
-    - test_flutter: drop unneeded vga/vnc stanzas from QEMU invocation
+	New packages: containers-image-config, distribution-registry,
+	llvm-runtimes, lua-lrexlib-pcre2, msgpack-c, opencl-headers,
+	opencl-icd-loader, pocketpy, python-apscheduler, python-crc,
+	python-log-rate-limit, python-sdbus-modemmanager, soapy-sdr,
+	vulkan-sdk
 
-    Test improvements
+	Removed packages: libebur128, libolm, libwebsock,
+	python-dunamai, python-poetry-dynamic-versioning
 
-    - new python-pydantic runtime tests
-    - new dieharder runtime test
-    - test_xen: fix runtime test
-    - test_timezone: fix test by setting a fixed time
-    - new tree runtime test
+2025.05.1, released August 11th, 2025
 
-    Boards fixes
+	Important / security related fixes:
+	- samba4: support Windows security hardening
+	- apache: CVE-2025-53020, CVE-2025-49812, CVE-2025-49630, CVE-2025-23048,
+	    CVE-2024-47252, CVE-2024-43394, CVE-2024-43204, CVE-2024-42516,
+	    CVE-2025-54090
+	- assimp: CVE-2025-2750, CVE-2025-2751, CVE-2025-2757, CVE-2025-3158
+	- clamav: CVE-2025-20260
+	- edk2: CVE-2024-38805
+	- git: CVE-2025-27613, CVE-2025-27614, CVE-2025-46835, CVE-2025-48384,
+	    CVE-2025-48385, CVE-2025-48386
+	- jose: CVE-2023-50967
+	- libarchive: CVE-2025-5914, CVE-2025-5915, CVE-2025-5916, CVE-2025-5917,
+	    CVE-2025-5918
+	- libavif: CVE-2025-48174, CVE-2025-48175
+	- libblockdev: CVE-2025-6019
+	- libbpf: CVE-2025-29481
+	- libglib2: CVE-2025-6052
+	- libheif: CVE-2025-43966, CVE-2025-43967
+	- libhtp: CVE-2024-45797
+	- libopenssl: CVE-2025-4575
+	- libsoup: CVE-2024-52530, CVE-2024-52531, CVE-2024-52532, CVE-2025-2784,
+	    CVE-2025-4476, CVE-2025-4948, CVE-2025-4969, CVE-2025-32050,
+	    CVE-2025-32052, CVE-2025-32053, CVE-2025-32906, CVE-2025-32910,
+	    CVE-2025-32911, CVE-2025-32912, CVE-2025-32913, CVE-2025-32914,
+	    CVE-2025-46420, CVE-2025-46421
+	- libxml2: CVE-2025-6021, CVE-2025-49794, CVE-2025-49796, CVE-2025-49795,
+	    CVE-2025-6170
+	- mbedtls: CVE-2025-47917, CVE-2025-48965, CVE-2025-49087, CVE-2025-49600,
+	    CVE-2025-49601, CVE-2025-52496, CVE-2025-52497
+	- micropython: CVE-2024-8947
+	- modsecurity2: 2025-47947, CVE-2025-48866
+	- orc: CVE-2024-40897
+	- php: CVE-2025-1735, CVE-2025-6491, CVE-2025-1220
+	- podman: CVE-2025-6032
+	- python-aiohttp: CVE-2025-53643
+	- python-django: CVE-2025-48432
+	- python-requests: CVE-2024-47081
+	- python-starlette: CVE-2025-54121
+	- python-urllib3: CVE-2025-50181, CVE-2025-50182
+	- python3: 2024-12718, CVE 2025-4138, CVE 2025-4330, CVE 2025-4435,
+	    2025-4517
+	- redis: CVE-2025-32023, CVE-2025-48367
+	- rust-bindgen: CVE-2024-43806, RUSTSEC-2024-0006
+	- samba4: CVE-2025-0620
+	- shim: CVE-2024-2312
+	- sngrep: CVE-2024-3119, CVE-2024-3120
+	- sudo: CVE-2025-32462, CVE-2025-32463
+	- tcpreplay: CVE-2023-4256, CVE-2023-43279, CVE-2024-22654
+	- tinyxml: CVE-2023-34194
+	- wpewebkit: CVE-2024-27856, CVE-2024-40866, CVE-2024-44185,
+	    CVE-2024-44187, CVE-2024-44192, CVE-2024-44244, CVE-2024-44296,
+	    CVE-2024-44308, CVE-2024-44309, CVE-2024-54467, CVE-2024-54479,
+	    CVE-2024-54502, CVE-2024-54505, CVE-2024-54508, CVE-2024-54534,
+	    CVE-2024-54543, CVE-2024-54551, CVE-2024-54658, CVE-2025-24143,
+	    CVE-2025-24150, CVE-2025-24158, CVE-2025-24162, CVE-2025-24201,
+	    CVE-2025-24208, CVE-2025-24209, CVE-2025-24213, CVE-2025-24216,
+	    CVE-2025-24223, CVE-2025-24264, CVE-2025-30427, CVE-2025-31204,
+	    CVE-2025-31205, CVE-2025-31206, CVE-2025-31215, CVE-2025-31257
+	- xorg-server / xwayland: CVE-2025-49175, CVE-2025-49176, CVE-2025-49177,
+	    CVE-2025-49178, CVE-2025-49179, CVE-2025-49180
 
-    - imx6ulz-bsh-smm-m2: fix missing U-Boot
-    - freescale: fix cpu name in i.MX9 boards
-    - imx8mn-bsh-smm-s2: erase the entire NAND chip
-    - freescale_t1040d4rdb: fix kernel build
+	Updated / fixed packages: amazon-ecr-credential-helper, at91bootstrap3,
+	avrdude, bcg729, berkeleydb, binutils, bmx7, boot/syslinux, ca-certificates,
+	chartjs, cifs-utils, cpp-httplib, cpulimit, daq, dht,
+	docker-credential-acr-env, docker-credential-gcr, elfutils, eudev, fwupd,
+	gcc, gnuplot, gstreamer1-editing-services, gumbo-parser, gvfs, hddtemp,
+	kvmtool, libargtable2, libcddb, libconfuse, libcrossguid, libcurl, libdex,
+	libesmtp, libgcrypt, libiec61850, libmanette, libmicrohttpd, libmpeg2,
+	libndp, libp11, libplatform, libspdm, libssh2, libuhttpd, libva, linux,
+	linux-tools (rtla), lpac, lrzsz, ltp-testsuite, lua, mjpg-streamer,
+	modem-manager, modsecurity2, mosquitto, mpv, mupdf, ncmpc, ncurses,
+	net-tools, network-manager, nginx-modsecurity, ntp, oniguruma, openblas,
+	parted, passt, php, python-asgiref, python-cython, python-dbus-fast,
+	python-dotenv, python-fastapi, python-future, python-glslang,
+	python-msgpack, python-multipart, python-remi, python-setuptools,
+	python-typing-extensions, qpid-proton, rapidjson, rauc-hawkbit-updater,
+	rtl8188eu, rtl8723bu, rtl8723ds, rtl8821au, rust, sdl2, shadowsocks-libev,
+	shairport-sync, sox, sqlite, squashfs, sudo, systemd, systemd, tailscale,
+	tor, uclibc, ustream-ssl, watchdog, webkitgtk, wpebackend-fdo, xen
 
-    In addition, thanks to the new stale CVE reporting, reported
-    vulnerabilities have been fixed for the following packages:
-    busybox, dnsmasq, dovecot, exim, exim, freeradius-server, grub2,
-    libopenh264, libssh, netsnmp, ninja, qt5base, ripgrep, sox, tinyxml
+	Removed package: libebur128, libolm, libwebsock
+
+	Infrastructure updates / fixes:
+	- python-glslang is now a host package only
+	- Makefile unexports are now fixed and sorted
+	- hide gcc version for unsupported CPUs
+	- check-package: handle missing files
+	- test-pkg: stop on sigint
+	- toolchain/toolchain-wrapper.c:
+	    - correct CCACHE_BASEDIR comment
+	    - slightly simplify cmdline copying
+	    - get rid of EXCLUSIVE_ARGS
+	- erofs: reword "all-fragments" Kconfig text
+	- utils/update-rust: fix MIT hash
+
+	Test improvements:
+	- add new test for nginx-modsecurity
+	- new runtime test for gumbo-parser
+	- add a crun-based runtime test for docker-compose
+	- test_xen: add a base class
+	- test_xen: test on 32-bit Arm v7
+	- test_xen: rename TestXen to TestXenAarch64
+
+	Boards updated / fixed:
+	- globalscale_espressobin: update linux
+	- freescale/mxs: fix Linux booting
+	- ti_am62x_sk: bump Linux version
+	- beaglebone: bump Linux to 6.12.23-ti-arm32-r11
 
 2025.05, released June 9th, 2025
 
@@ -160,7 +229,181 @@
 	- netsnmp: unexpected header length in /proc/net/snmp...
 	  https://gitlab.com/buildroot.org/buildroot/-/issues/110
 
+2025.02.5, released August 11, 2025
+
+    Important / security related fixes:
+    - Bump mbedtls to version 3.6.4, this affect many packages depending on it.
+        Also fixes CVE-2025-47917, CVE-2025-48965, CVE-2025-49087,
+        CVE-2025-49600, CVE-2025-49601, CVE-2025-52496, CVE-2025-52497
+    - samba4: support Windows security hardening
+    - apache: CVE-2025-53020, CVE-2025-49812, CVE-2025-49630, CVE-2025-23048,
+        CVE-2024-47252, CVE-2024-43394, CVE-2024-43204, CVE-2024-42516,
+        CVE-2025-54090
+    - assimp: CVE-2025-2750, CVE-2025-2751, CVE-2025-2757, CVE-2025-3158
+    - clamav: CVE-2025-20260
+    - edk2: CVE-2024-38805
+    - git: CVE-2025-27613, CVE-2025-27614, CVE-2025-46835, CVE-2025-48384,
+        CVE-2025-48385, CVE-2025-48386
+    - jose: CVE-2023-50967
+    - libarchive: CVE-2025-5914, CVE-2025-5915, CVE-2025-5916, CVE-2025-5917,
+        CVE-2025-5918
+    - libavif: CVE-2025-48174, CVE-2025-48175
+    - libblockdev: CVE-2025-6019
+    - libbpf: CVE-2025-29481
+    - libheif: CVE-2025-43966, CVE-2025-43967
+    - libhtp: CVE-2024-45797
+    - libsoup: CVE-2024-52530, CVE-2024-52531, CVE-2024-52532, CVE-2025-2784,
+        CVE-2025-4476, CVE-2025-4948, CVE-2025-4969, CVE-2025-32050,
+        CVE-2025-32052, CVE-2025-32053, CVE-2025-32906, CVE-2025-32910,
+        CVE-2025-32911, CVE-2025-32912, CVE-2025-32913, CVE-2025-32914,
+        CVE-2025-46420, CVE-2025-46421
+    - libxml2: CVE-2025-6021, CVE-2025-6170, CVE-2025-49794, CVE-2025-49796,
+        CVE-2025-49795
+    - micropython: CVE-2024-8947
+    - modsecurity2: CVE-2025-47947, CVE-2025-48866
+    - orc: CVE-2024-40897
+    - php: CVE-2025-1735, CVE-2025-6491, CVE-2025-1220
+    - python-aiohttp: CVE-2025-53643
+    - python-starlette: CVE-2025-54121
+    - python-urllib3: CVE-2025-50181, CVE-2025-50182
+    - python3: CVE-2024-12718, CVE-2025-4138, CVE-2025-4330, CVE-2025-4435,
+        CVE-2025-4517
+    - redis: CVE-2025-32023, CVE-2025-48367
+    - shim: CVE-2024-2312
+    - sngrep: CVE-2024-3119, CVE-2024-3120
+    - sudo: CVE-2025-32462, CVE-2025-32463
+    - tcpreplay: CVE-2023-4256, CVE-2023-43279, CVE-2024-22654
+    - tinyxml: CVE-2023-34194
+    - wpewebkit: CVE-2024-27856, CVE-2024-40866, CVE-2024-44185,
+        CVE-2024-44187, CVE-2024-44192, CVE-2024-44244, CVE-2024-44296,
+        CVE-2024-44308, CVE-2024-44309, CVE-2024-54467, CVE-2024-54479,
+        CVE-2024-54502, CVE-2024-54505, CVE-2024-54508, CVE-2024-54534,
+        CVE-2024-54543, CVE-2024-54551, CVE-2024-54658, CVE-2025-24143,
+        CVE-2025-24150, CVE-2025-24158, CVE-2025-24162, CVE-2025-24201,
+        CVE-2025-24208, CVE-2025-24209, CVE-2025-24213, CVE-2025-24216,
+        CVE-2025-24223, CVE-2025-24264, CVE-2025-30427, CVE-2025-31204,
+        CVE-2025-31205, CVE-2025-31206, CVE-2025-31215, CVE-2025-31257
+    - xorg-server / xwayland: CVE-2025-49175, CVE-2025-49176, CVE-2025-49177,
+        CVE-2025-49178, CVE-2025-49179, CVE-2025-49180
+
+    Updated / fixed packages: avrdude, berkeleydb, binutils, bmx7, boot/shim,
+    boot/syslinux, ca-certificates, chartjs, cifs-utils, cpp-httplib, cpulimit,
+    daq, elfutils, eudev, fwupd, gcc, gnuplot, gstreamer1-editing-services,
+    gumbo-parser, gvfs, haproxy, hddtemp, kvmtool, libargtable, libcddb,
+    libconfuse, libcrossguid, libcurl, libesmtp, libgcrypt, libiec61850,
+    libmanette, libmicrohttpd, libmpeg2, libndp, libopenssl, libp11, libssh2,
+    libuhttpd, libva, linux, linux-tools (rtla), lrzsz, ltp-testsuite, lua,
+    modem-manager, modsecurity2, mosquitto, mpv, mupdf, ncmpc, net-tools,
+    network-manager, nginx-modsecurity, ntp, oniguruma, openblas, orc, parted,
+    python-asgiref, python-cython, python-dbus-fast, python-fastapi,
+    python-future, python-msgpack, python-multipart, python-remi,
+    python-setuptools, qpid-proton, rauc-hawkbit-updater, rtl8188eu, rtl8723bu,
+    rtl8723ds, rtl8821au, rust, shadowsock-libev, shairport-sync, sox, sqlite,
+    squashfs, systemd, tailscale, tor, uclibc, ustream-ssl, watchdog,
+    webkitgtk, xen
+
+    Removed package: libolm, libwebsock
+
+    Infrastructure updates / fixes:
+    - python-glslang is now a host package only
+    - Makefile unexports are now fixed and sorted
+    - Hide GCC versions for unsupported CPUs
+    - check-package: handle missing files
+    - test-pkg: stop on sigint
+    - check-host-cmake.mk: set host-cmake max version
+    - toolchain/toolchain-wrapper.c:
+        - correct CCACHE_BASEDIR comment
+        - slightly simplify cmdline copying
+        - get rid of EXCLUSIVE_ARGS
+
+    Test improvements:
+    - nginx-modsecurity: new test
+    - gumbo-parser: new runtime test
+    - add a crun-based runtime test for docker-compose
+    - test_xen: add a base class
+    - test_xen: test on 32-bit Arm v7
+    - test_xen: rename TestXen to TestXenAarch64
+
+    Boards updated / fixed:
+    - globalscale_espressobin: update linux
+    - freescale/mxs: fix linux booting
+    - ti_am62x_sk: bump Linux version
+    - raspberrypi5: fix failing build because of missing in-kernel dts
+
+2025.02.4, released June 23th, 2025
+
+	Important / security related fixes:
+
+	- assimp: CVE-2025-3015, CVE-2025-3016
+	- binutils: CVE-2025-3198
+	- connman: CVE-2025-32366, CVE-2025-32743
+	- go: CVE-2025-0913, CVE-2025-4673, CVE-2025-22874
+	- iputils: CVE-2025-47268, CVE-2025-48964
+	- jq: CVE-2024-23337, CVE-2025-48060, CVE-2024-53427
+	- libcurl: CVE-2025-4947, CVE-2025-5025, CVE-2025-5399
+	- net-tools: CVE-2025-46836
+	- nodejs: CVE-2025-23165, CVE-2025-23166
+	- openvmtools: CVE-2025-22247
+	- python-django: CVE-2025-48432
+	- python-requests: CVE-2024-47081
+	- python-tornado: CVE-2025-47287
+	- redis: CVE-2025-21605, CVE-2025-27151
+	- samba4: CVE-2025-0620
+	- sox: CVE-2021-23159, CVE-2021-23172, CVE-2021-23210, CVE-2021-3643,
+	  CVE-2021-40426, CVE-2022-31650, CVE-2022-31651, CVE-2023-26590,
+	  CVE-2023-32627, CVE-2023-34318
+	- webkitgtk: CVE-2025-24223, CVE-2025-31204, CVE-2025-31205,
+	  CVE-2025-31206, CVE-2025-31215, CVE-2025-31257
+
+	Updated / fixed packages: alsa-utils, atkmm, atmm2_28, audit,
+	bluez5_utils, busybox, catch2, connman, dbus-glib, dlib, dovecot,
+	esp-hosted, execline, firmware-ele-imx, flex, fluent-bit, freescale-imx,
+	ghostscript, gmrender-resurrect, grub2, gst1-plugins-bad, gtkmm3, iputils,
+	kmsxx, libcamera, libcurl, libglade, libical, libuv, llvm-project,
+	lm-sensors, m4, mesa3d, mongoose, openvmtools, php, protobuf-c,
+	python-django, python-fastapi, python-flit-core, python-jc,
+	python-requests, python-uvicorn, qt5 (declarative, webengine,
+	webengine-chromium), qt6 (base, multimedia, tools), rpm, samba4, spdlog,
+	systemd, uacme, uboot-tools, yasm
+
+	Removed package: libebur128
+
+	Infrastructure updates / fixes:
+
+	- pkg-cmake now forces CMake>=3.5
+	- pkg-meson now uses a dedicated buildroot build directory
+	  see https://gitlab.com/buildroot.org/buildroot/-/issues/64
+	- include defconfigs in sub-directories in make list-defconfigs
+	- new manual section about private repositories
+	- pkg-autotools: handle libtool 2.5.x
+	- pkg-cmake: force check_language(CXX) to be false when building w/o C++
+	- pkg-stats: add support for reporting stale CVE entries
+	- add basic support for package file download over smb
+	- toolchain/wrapper: check unsafe paths earlier
+	- test_flutter: drop unneeded vga/vnc stanzas from QEMU invocation
+
+	Test improvements
+
+	- new python-pydantic runtime tests
+	- new dieharder runtime test
+	- test_xen: fix runtime test
+	- test_timezone: fix test by setting a fixed time
+	- new tree runtime test
+
+	Boards fixes
+
+	- imx6ulz-bsh-smm-m2: fix missing U-Boot
+	- freescale: fix cpu name in i.MX9 boards
+	- imx8mn-bsh-smm-s2: erase the entire NAND chip
+	- freescale_t1040d4rdb: fix kernel build
+
+	In addition, thanks to the new stale CVE reporting, reported
+	vulnerabilities have been fixed for the following packages:
+	busybox, dnsmasq, dovecot, exim, exim, freeradius-server, grub2,
+	libopenh264, libssh, netsnmp, ninja, qt5base, ripgrep, sox, tinyxml
+
 2025.02.3, released May 19th, 2025
+
 	Build issues and other problems solved for packages:
 
         libcap
