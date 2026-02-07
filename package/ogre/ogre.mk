@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-OGRE_VERSION = v1.12.12
+OGRE_VERSION = v14.4.1
 OGRE_SITE = https://github.com/OGRECave/ogre
 OGRE_SITE_METHOD = git
 OGRE_LICENSE = MIT (main library, DeferredShadingMedia samples), Public Domain (samples and plugins)
@@ -16,7 +16,6 @@ OGRE_GIT_SUBMODULES = YES
 
 OGRE_DEPENDENCIES = host-pkgconf \
 	freetype \
-	libfreeimage \
 	libgl \
 	pugixml \
 	sdl2 \

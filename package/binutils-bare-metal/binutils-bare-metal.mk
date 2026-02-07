@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-BINUTILS_BARE_METAL_VERSION = 2.44
+BINUTILS_BARE_METAL_VERSION = 2.45.1
 BINUTILS_BARE_METAL_SITE = $(BR2_GNU_MIRROR)/binutils
 BINUTILS_BARE_METAL_SOURCE = binutils-$(BINUTILS_BARE_METAL_VERSION).tar.xz
 
@@ -21,6 +21,12 @@ HOST_BINUTILS_BARE_METAL_CONF_ENV += MAKEINFO=true
 HOST_BINUTILS_BARE_METAL_MAKE_OPTS += MAKEINFO=true
 HOST_BINUTILS_BARE_METAL_INSTALL_OPTS += MAKEINFO=true install
 
+ifeq ($(BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_MULTILIB),y)
+HOST_BINUTILS_BARE_METAL_MULTILIB = "--enable-multilib"
+else
+HOST_BINUTILS_BARE_METAL_MULTILIB = "--disable-multilib"
+endif
+
 HOST_BINUTILS_BARE_METAL_CONF_OPTS = \
 	--prefix=$(HOST_DIR) \
 	--sysconfdir=$(HOST_DIR)/etc \
@@ -31,7 +37,7 @@ HOST_BINUTILS_BARE_METAL_CONF_OPTS = \
 	--disable-shared \
 	--enable-lto \
 	--disable-initfini-array \
-	--disable-multilib \
+	$(HOST_BINUTILS_BARE_METAL_MULTILIB) \
 	--disable-werror
 
 define HOST_BINUTILS_BARE_METAL_CONFIGURE_CMDS

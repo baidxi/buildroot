@@ -36,6 +36,7 @@ arches = {
     'arcle-750d': {
         'conditions': ['BR2_arcle', 'BR2_arc750d'],
         'prefix': 'arc',
+        'gdbserver': False,
     },
     'arcle-hs38': {
         'conditions': ['BR2_arcle', 'BR2_archs38'],
@@ -362,7 +363,7 @@ class Toolchain:
                 selects.append("BR2_ENABLE_LOCALE")
 
             # thread support
-            if frag.startswith("BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS"):
+            if frag.startswith("BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS="):
                 selects.append("BR2_TOOLCHAIN_HAS_THREADS")
 
             if frag.startswith("BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG"):

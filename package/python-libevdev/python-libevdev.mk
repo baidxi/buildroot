@@ -4,10 +4,10 @@
 #
 ################################################################################
 
-PYTHON_LIBEVDEV_VERSION = 0.11
+PYTHON_LIBEVDEV_VERSION = 0.13.1
 PYTHON_LIBEVDEV_SOURCE = libevdev-$(PYTHON_LIBEVDEV_VERSION).tar.gz
-PYTHON_LIBEVDEV_SITE = https://files.pythonhosted.org/packages/b0/49/2fe589ce1fa6ca0f05ae0b1717923650f2cc6eec6307c71fbc7789738902
-PYTHON_LIBEVDEV_SETUP_TYPE = setuptools
+PYTHON_LIBEVDEV_SITE = https://files.pythonhosted.org/packages/86/ff/4f8ab38330965168be742b772bcd151a7a052ea17b2481c43a607875d4ed
+PYTHON_LIBEVDEV_SETUP_TYPE = hatch
 PYTHON_LIBEVDEV_LICENSE = MIT
 PYTHON_LIBEVDEV_LICENSE_FILES = COPYING
 

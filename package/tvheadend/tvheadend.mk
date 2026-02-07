@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-TVHEADEND_VERSION = 0af87f13f786046df7bb610f8a6b291c26af1b14
+TVHEADEND_VERSION = 5abbcda4d8c82d2d4889452a7056a7bfcd728fc6
 TVHEADEND_SITE = $(call github,tvheadend,tvheadend,$(TVHEADEND_VERSION))
 TVHEADEND_LICENSE = GPL-3.0+
 TVHEADEND_LICENSE_FILES = LICENSE.md
@@ -14,6 +14,8 @@ TVHEADEND_DEPENDENCIES = \
 	host-pngquant \
 	host-python3 \
 	openssl
+TVHEADEND_CONF_OPTS = \
+	--disable-omx
 
 ifeq ($(BR2_PACKAGE_AVAHI),y)
 TVHEADEND_DEPENDENCIES += avahi
@@ -41,12 +43,6 @@ TVHEADEND_DEPENDENCIES += opus
 else
 TVHEADEND_CONF_OPTS += --disable-libopus
 endif
-ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
-TVHEADEND_CONF_OPTS += --enable-omx
-TVHEADEND_DEPENDENCIES += rpi-userland
-else
-TVHEADEND_CONF_OPTS += --disable-omx
-endif
 ifeq ($(BR2_PACKAGE_LIBVPX)$(BR2_INSTALL_LIBSTDCPP),yy)
 TVHEADEND_CONF_OPTS += --enable-libvpx
 TVHEADEND_DEPENDENCIES += libvpx
@@ -63,7 +59,6 @@ else
 TVHEADEND_CONF_OPTS += \
 	--disable-libav \
 	--disable-libopus \
-	--disable-omx \
 	--disable-vaapi \
 	--disable-libvpx \
 	--disable-libx264 \

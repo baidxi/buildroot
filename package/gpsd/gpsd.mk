@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-GPSD_VERSION = 3.26.1
+GPSD_VERSION = 3.27.2
 GPSD_SITE = http://download-mirror.savannah.gnu.org/releases/gpsd
 GPSD_LICENSE = BSD-2-Clause
 GPSD_LICENSE_FILES = COPYING
@@ -13,6 +13,12 @@ GPSD_SELINUX_MODULES = gpsd
 GPSD_INSTALL_STAGING = YES
 
 GPSD_DEPENDENCIES = host-scons host-pkgconf
+
+# 0005-drivers-driver_nmea2000.c-Fix-issue-356-skyview-buff.patch
+GPSD_IGNORE_CVES += CVE-2025-67268
+
+# 0006-gpsd-packet.c-Fix-integer-underflow-is-malicious-Nav.patch
+GPSD_IGNORE_CVES += CVE-2025-67269
 
 GPSD_LDFLAGS = $(TARGET_LDFLAGS)
 GPSD_CFLAGS = $(TARGET_CFLAGS)
@@ -37,7 +43,6 @@ endif
 # Build libgpsmm if we've got C++
 ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
 GPSD_LDFLAGS += -lstdc++
-GPSD_CFLAGS += -std=gnu++98
 GPSD_CXXFLAGS += -std=gnu++98
 GPSD_SCONS_OPTS += libgpsmm=yes
 else

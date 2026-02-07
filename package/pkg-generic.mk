@@ -400,7 +400,7 @@ $(BUILD_DIR)/%/.stamp_dircleaned:
 # argument 3 is the lower-case name of the provider
 #
 # example:
-#   $(call virt-provides-single,libegl,LIBEGL,rpi-userland)
+#   $(call virt-provides-single,libegl,LIBEGL,imx-gpu-viv)
 ################################################################################
 define virt-provides-single
 ifneq ($$(call qstrip,$$(BR2_PACKAGE_PROVIDES_$(2))),$(3))
@@ -728,7 +728,7 @@ ifeq ($$($(2)_CPE_ID_VALID),YES)
   ifdef $(3)_CPE_ID_UPDATE
    $(2)_CPE_ID_UPDATE = $$($(3)_CPE_ID_UPDATE)
   else
-   $(2)_CPE_ID_UPDATE = *
+   $(2)_CPE_ID_UPDATE = -
   endif
  endif
 

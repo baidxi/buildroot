@@ -6,7 +6,7 @@
 
 # When updating the version, check whether the list of supported targets
 # needs to be updated.
-QEMU_VERSION = 10.0.0
+QEMU_VERSION = 10.2.0
 QEMU_SOURCE = qemu-$(QEMU_VERSION).tar.xz
 QEMU_SITE = https://download.qemu.org
 QEMU_SELINUX_MODULES = qemu virt
@@ -48,6 +48,19 @@ QEMU_VARS = LIBTOOL=$(HOST_DIR)/bin/libtool
 ifeq ($(BR2_PACKAGE_QEMU_SYSTEM),y)
 QEMU_DEPENDENCIES += pixman
 QEMU_OPTS += --enable-system
+
+ifeq ($(BR2_PACKAGE_QEMU_SYSTEM_KVM), y)
+QEMU_OPTS += --enable-kvm
+else
+QEMU_OPTS += --disable-kvm
+endif
+
+ifeq ($(BR2_PACKAGE_QEMU_SYSTEM_TCG), y)
+QEMU_OPTS += --enable-tcg
+else
+QEMU_OPTS += --disable-tcg
+endif
+
 QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_AARCH64) += aarch64-softmmu
 QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_ALPHA) += alpha-softmmu
 QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_ARM) += arm-softmmu
@@ -271,6 +284,13 @@ else
 QEMU_OPTS += --disable-install-blobs
 endif
 
+ifeq ($(BR2_PACKAGE_ZSTD),y)
+QEMU_OPTS += --enable-zstd
+QEMU_DEPENDENCIES += zstd
+else
+QEMU_OPTS += --disable-zstd
+endif
+
 # Override CPP, as it expects to be able to call it like it'd
 # call the compiler.
 define QEMU_CONFIGURE_CMDS
@@ -326,7 +346,6 @@ define QEMU_CONFIGURE_CMDS
 			--disable-whpx \
 			--disable-xen \
 			--enable-attr \
-			--enable-kvm \
 			--enable-vhost-net \
 			--disable-download \
 			--disable-hexagon-idef-parser \
@@ -362,6 +381,7 @@ HOST_QEMU_DEPENDENCIES = \
 #       -------         ----
 #       arm             arm
 #       armeb           armeb
+#       hppa            hppa
 #       i486            i386
 #       i586            i386
 #       i686            i386
@@ -458,6 +478,13 @@ HOST_QEMU_OPTS += --enable-libusb
 HOST_QEMU_DEPENDENCIES += host-libusb
 else
 HOST_QEMU_OPTS += --disable-libusb
+endif
+
+ifeq ($(BR2_PACKAGE_HOST_ZSTD),y)
+HOST_QEMU_OPTS += --enable-zstd
+HOST_QEMU_DEPENDENCIES += host-zstd
+else
+HOST_QEMU_OPTS += --disable-zstd
 endif
 
 # Override CPP, as it expects to be able to call it like it'd

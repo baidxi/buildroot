@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-HOST_MENDER_ARTIFACT_VERSION = 4.1.0
+HOST_MENDER_ARTIFACT_VERSION = 4.2.0
 HOST_MENDER_ARTIFACT_SITE = $(call github,mendersoftware,mender-artifact,$(HOST_MENDER_ARTIFACT_VERSION))
 HOST_MENDER_ARTIFACT_LICENSE = Apache2.0, BSD-2-Clause, BSD-3-Clause, ISC, MIT, MPL-2.0
 # Vendor license paths generated with:
@@ -114,8 +114,5 @@ HOST_MENDER_ARTIFACT_GO_ENV += \
 	PKG_CONFIG_SYSROOT_DIR="/"
 
 HOST_MENDER_ARTIFACT_LDFLAGS = -X github.com/mendersoftware/mender-artifact/cli.Version=$(HOST_MENDER_ARTIFACT_VERSION)
-
-HOST_MENDER_ARTIFACT_BIN_NAME = mender-artifact
-HOST_MENDER_ARTIFACT_INSTALL_BINS = $(HOST_MENDER_ARTIFACT_BIN_NAME)
 
 $(eval $(host-golang-package))

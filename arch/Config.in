@@ -29,14 +29,6 @@ config BR2_arcle
 	  32-bit CPUs that can be used from deeply embedded to high
 	  performance host applications. Little endian.
 
-config BR2_arceb
-	bool "ARC (big endian)"
-	select BR2_USE_MMU
-	help
-	  Synopsys' DesignWare ARC Processor Cores are a family of
-	  32-bit CPUs that can be used from deeply embedded to high
-	  performance host applications. Big endian.
-
 config BR2_arm
 	bool "ARM (little endian)"
 	# MMU support is set by the subarchitecture file, arch/Config.in.arm
@@ -72,6 +64,14 @@ config BR2_aarch64_be
 	  Aarch64 is a 64-bit architecture developed by ARM Holdings.
 	  http://www.arm.com/products/processors/instruction-set-architectures/armv8-architecture.php
 	  http://en.wikipedia.org/wiki/ARM
+
+config BR2_hppa
+	bool "HPPA"
+	select BR2_USE_MMU
+	help
+	  Precision Architecture (a.k.a. PA-RISC) is a 32-bit
+	  (big endian) architecture developed by Hewlett Packard.
+	  https://en.wikipedia.org/wiki/PA-RISC
 
 config BR2_i386
 	bool "i386"
@@ -385,12 +385,16 @@ config BR2_BINFMT_SUPPORTS_SHARED
 config BR2_READELF_ARCH_NAME
 	string
 
-if BR2_arcle || BR2_arceb
+if BR2_arcle
 source "arch/Config.in.arc"
 endif
 
 if BR2_arm || BR2_armeb || BR2_aarch64 || BR2_aarch64_be
 source "arch/Config.in.arm"
+endif
+
+if BR2_hppa
+source "arch/Config.in.hppa"
 endif
 
 if BR2_loongarch64

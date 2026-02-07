@@ -1,6 +1,8 @@
 #!/bin/sh
-BOARD_DIR="$(dirname $0)"
+set -eu
 
-cp $BOARD_DIR/uEnv.txt $BINARIES_DIR/uEnv.txt
+BOARD_DIR="$(dirname "$0")"
 
-install -m 0644 -D $BOARD_DIR/extlinux.conf $BINARIES_DIR/extlinux/extlinux.conf
+cp "${BOARD_DIR}/uEnv.txt" "${BINARIES_DIR}/uEnv.txt"
+
+install -m 0644 -D "${BOARD_DIR}/extlinux.conf" "${BINARIES_DIR}/extlinux/extlinux.conf"

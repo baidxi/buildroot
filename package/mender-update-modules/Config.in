@@ -79,8 +79,9 @@ config BR2_PACKAGE_MENDER_UPDATE_MODULES_DOCKER
 	depends on BR2_TOOLCHAIN_HAS_THREADS # docker-engine, docker-cli
 	depends on !BR2_TOOLCHAIN_USES_UCLIBC # containerd -> runc
 	depends on BR2_USE_MMU # containerd
+	depends on !BR2_PACKAGE_CGROUPFS_MOUNT # docker-engine
 	depends on BR2_PACKAGE_LIBSECCOMP_ARCH_SUPPORTS # libseccomp
-	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 # libseccom
+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_2 # docker-engine
 	select BR2_PACKAGE_DOCKER_ENGINE
 	select BR2_PACKAGE_DOCKER_CLI
 	select BR2_PACKAGE_JQ # runtime
@@ -97,13 +98,13 @@ config BR2_PACKAGE_MENDER_UPDATE_MODULES_DOCKER
 
 	  https://github.com/mendersoftware/mender-update-modules/tree/master/docker
 
-comment "docker support needs a glibc or musl toolchain w/ threads, headers >= 3.17"
+comment "docker support needs a glibc or musl toolchain w/ threads, headers >= 5.2"
 	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
 	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
 	depends on BR2_PACKAGE_LIBSECCOMP_ARCH_SUPPORTS
 	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
 		BR2_TOOLCHAIN_USES_UCLIBC || \
-		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
+		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_2
 	depends on BR2_USE_MMU
 
 config BR2_PACKAGE_MENDER_UPDATE_MODULES_IPK
@@ -131,7 +132,7 @@ config BR2_PACKAGE_MENDER_UPDATE_MODULES_PODMAN
 	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS  # podman
 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS  # podman
 	depends on BR2_PACKAGE_LIBSECCOMP_ARCH_SUPPORTS  # podman
-	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17  # podman
+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_14  # podman
 	depends on BR2_TOOLCHAIN_HAS_THREADS  # podman
 	depends on BR2_USE_WCHAR  # podman
 	select BR2_PACKAGE_JQ # runtime
@@ -149,13 +150,13 @@ config BR2_PACKAGE_MENDER_UPDATE_MODULES_PODMAN
 
 	  https://github.com/mendersoftware/mender-update-modules/tree/master/podman
 
-comment "podman support needs a toolchain w/ headers >= 3.17, threads, wchar"
+comment "podman support needs a toolchain w/ headers >= 4.14, threads, wchar"
 	depends on BR2_USE_MMU
 	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
 	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS
 	depends on BR2_PACKAGE_LIBSECCOMP_ARCH_SUPPORTS
-	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 \
+	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_14 \
 		|| !BR2_TOOLCHAIN_HAS_THREADS \
 		|| !BR2_USE_WCHAR
 
@@ -172,6 +173,8 @@ config BR2_PACKAGE_MENDER_UPDATE_MODULES_REBOOT
 
 config BR2_PACKAGE_MENDER_UPDATE_MODULES_ROOTFS_VERSION_CHECK
 	bool "rootfs version check"
+	depends on BR2_USE_WCHAR # python3
+	depends on BR2_USE_MMU # python3
 	depends on BR2_TOOLCHAIN_HAS_THREADS # python3
 	depends on !BR2_STATIC_LIBS # python3
 	select BR2_PACKAGE_PYTHON3 # runtime
@@ -194,8 +197,10 @@ config BR2_PACKAGE_MENDER_UPDATE_MODULES_ROOTFS_VERSION_CHECK
 
 	  https://github.com/mendersoftware/mender-update-modules/tree/master/rootfs-version-check
 
-comment "rootfs version check needs a toolchain w/ threads"
-	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+comment "rootfs version check needs a toolchain w/ threads, dynamic library, wchar"
+	depends on BR2_USE_MMU
+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || \
+		!BR2_USE_WCHAR
 
 config BR2_PACKAGE_MENDER_UPDATE_MODULES_RPM
 	bool "rpm"

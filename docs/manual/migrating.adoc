@@ -222,3 +222,28 @@ from +-cargo2+ to +-cargo4+.
 In 2025.08, starting with systemd version 257, systemd-networkd requires kernel
 5.4 or later. If you are still using a kernel older than 5.4, please update
 your kernel or use an alternative network manager.
+
+[[migrating-golang-packages]]
+=== Migrating to 2025.11
+In 2025.11, the +FOO_INSTALL_BINS+ variable for golang packages is no longer
+supported; the list of binaries to install is automatically derived from
+the +FOO_BUILD_TARGETS+ variable.
+
+[[migrating-js-libs]]
+=== Migration to 2026.02
+
+Starting 2025.08, JavaScript libraries that were just copied to `/var/www` on
+the target filesystem are not part of the Buildroot packages.
+If you want to provide such libraries either:
+
+- Use a CDN to target the library version of your choice.
+- Serve it by adding the package to your external and installing the content to
+  the destination of your choice
+- Serve it by adding the library to your overlay.
+- Install the libraries from your project with NPM and bundle with a JavaScript
+  bundler.
+
+In 2026.02, the network-manager package stopped selecting the gnutls package as
+a cryptography backend automatically. Manually enable the gnutls or libnss
+package if you require features that depend on a cryptography backend, such as
+certificate-based authentication.

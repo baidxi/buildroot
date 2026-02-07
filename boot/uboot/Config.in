@@ -41,7 +41,7 @@ choice
 	  Select the specific U-Boot version you want to use
 
 config BR2_TARGET_UBOOT_LATEST_VERSION
-	bool "2025.07"
+	bool "2026.01"
 
 config BR2_TARGET_UBOOT_CUSTOM_VERSION
 	bool "Custom version"
@@ -85,12 +85,20 @@ endif
 
 config BR2_TARGET_UBOOT_VERSION
 	string
-	default "2025.07"	if BR2_TARGET_UBOOT_LATEST_VERSION
+	default "2026.01"	if BR2_TARGET_UBOOT_LATEST_VERSION
 	default BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE \
 		if BR2_TARGET_UBOOT_CUSTOM_VERSION
 	default "custom"	if BR2_TARGET_UBOOT_CUSTOM_TARBALL
 	default BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION \
 		if BR2_TARGET_UBOOT_CUSTOM_GIT || BR2_TARGET_UBOOT_CUSTOM_HG || BR2_TARGET_UBOOT_CUSTOM_SVN
+
+config BR2_TARGET_UBOOT_LICENSE_FILES
+	string "U-boot license files" if BR2_TARGET_UBOOT_CUSTOM_GIT || BR2_TARGET_UBOOT_CUSTOM_HG || \
+		BR2_TARGET_UBOOT_CUSTOM_SVN || BR2_TARGET_UBOOT_CUSTOM_TARBALL
+	default "Licenses/gpl-2.0.txt"
+	help
+	  A space-separated list of license files related to U-Boot
+	  package.
 
 config BR2_TARGET_UBOOT_PATCH
 	string "Custom U-Boot patches"
@@ -340,7 +348,7 @@ config BR2_TARGET_UBOOT_USE_BINMAN
 	help
 	  Use binman tool for generation and signing of boot images.
 
-	  https://docs.u-boot.org/en/v2025.07/develop/package/binman.html
+	  https://docs.u-boot.org/en/v2026.01/develop/package/binman.html
 
 menu "U-Boot binary format"
 
@@ -479,6 +487,14 @@ config BR2_TARGET_UBOOT_FORMAT_QSPI_BIN
 	  file for flashing by combining the spl/boot.bin and
 	  u-boot.itb files into a unified binary.
 
+config BR2_TARGET_UBOOT_FORMAT_ADSP_LDR
+	bool "u-boot.ldr"
+	depends on BR2_arm || BR2_aarch64
+	help
+	  Boot stream format for Analog Devices, Inc. ADSP-SCxxx
+	  processors including 32-bit SC589, SC592, and SC594, as
+	  well as 64-bit SC596 and SC598
+
 config BR2_TARGET_UBOOT_FORMAT_STM32
 	bool "u-boot.stm32"
 	depends on BR2_arm
@@ -575,7 +591,8 @@ config BR2_TARGET_UBOOT_INITIAL_ENV
 
 config BR2_TARGET_UBOOT_ZYNQMP
 	bool "Boot on the Xilinx ZynqMP SoCs"
-	depends on BR2_aarch64
+	depends on BR2_TARGET_XILINX_FIRMWARE_ARCH_SUPPORTS
+	depends on BR2_cortex_a53
 	help
 	  Enable options specific to the Xilinx ZynqMP family of SoCs.
 
@@ -676,7 +693,7 @@ config BR2_TARGET_UBOOT_ZYNQMP_PSU_INIT_FILE
 	string "Custom psu_init_gpl file"
 	depends on BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG
 	help
-	  On ZynqMP the booloader is responsible for some basic
+	  On ZynqMP the bootloader is responsible for some basic
 	  initializations, such as enabling peripherals and
 	  configuring pinmuxes. The psu_init_gpl.c file (and,
 	  optionally, psu_init_gpl.h) contains the code for such
@@ -700,6 +717,41 @@ config BR2_TARGET_UBOOT_ZYNQMP_PSU_INIT_FILE
 	  U-Boot, available from versions after 2018.07.
 
 endif
+
+config BR2_TARGET_UBOOT_ZYNQ
+	bool "Boot on the Xilinx Zynq SoCs"
+	depends on BR2_arm
+	depends on BR2_cortex_a9
+	help
+	  Enable options specific to the Xilinx Zynq family of SoCs.
+
+config BR2_TARGET_UBOOT_ZYNQ_PS7_INIT_FILE
+	string "Custom ps7_init_gpl file"
+	depends on BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG
+	depends on BR2_TARGET_UBOOT_ZYNQ
+	help
+	  On Zynq the bootloader is responsible for some basic
+	  initializations, such as enabling peripherals and
+	  configuring pinmuxes. The ps7_init_gpl.c file (and,
+	  optionally, ps7_init_gpl.h) contains the code for such
+	  initializations.
+
+	  Although U-Boot contains ps7_init_gpl.c files for some
+	  boards, each of them describes only one specific
+	  configuration. Users of a different board, or needing a
+	  different configuration, can generate custom files using
+	  the Xilinx Vivado development tools.
+
+	  Set this variable to the path to your ps7_init_gpl.c file
+	  (e.g. "board/myboard/ps7_init_gpl.c"). ps7_init_gpl.h, if
+	  needed, should be in the same directory. U-Boot will build
+	  and link the user-provided file instead of the built-in.
+
+	  Leave empty to use the files provided by U-Boot.
+
+	  This feature requires commit
+	  6da4f67ad09cd8b311d77b2b04e557b7ef65b56c from upstream
+	  U-Boot, available from versions after 2018.07.
 
 config BR2_TARGET_UBOOT_ALTERA_SOCFPGA_IMAGE_CRC
 	bool "CRC image for Altera SoC FPGA (mkpimage)"

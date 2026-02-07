@@ -6,20 +6,21 @@
 
 ifeq ($(BR2_PACKAGE_OPENJDK_VERSION_21),y)
 OPENJDK_VERSION_MAJOR = 21
-OPENJDK_VERSION_MINOR = 0.4+7
+OPENJDK_VERSION_MINOR = 0.4
+OPENJDK_VERSION_BUILD = 7
+
 else
 OPENJDK_VERSION_MAJOR = 17
-OPENJDK_VERSION_MINOR = 0.12+7
+OPENJDK_VERSION_MINOR = 0.12
+OPENJDK_VERSION_BUILD = 7
 endif
-OPENJDK_VERSION = $(OPENJDK_VERSION_MAJOR).$(OPENJDK_VERSION_MINOR)
+OPENJDK_VERSION = $(OPENJDK_VERSION_MAJOR).$(OPENJDK_VERSION_MINOR)+$(OPENJDK_VERSION_BUILD)
 OPENJDK_SITE = $(call github,openjdk,jdk$(OPENJDK_VERSION_MAJOR)u,jdk-$(OPENJDK_VERSION))
 
 OPENJDK_LICENSE = GPL-2.0+ with exception
 OPENJDK_LICENSE_FILES = LICENSE
 OPENJDK_INSTALL_STAGING = YES
 
-# OpenJDK requires Alsa, cups, and X11 even for a headless build.
-# host-zip is needed for the zip executable.
 OPENJDK_DEPENDENCIES = \
 	host-gawk \
 	host-openjdk-bin \
@@ -34,10 +35,6 @@ OPENJDK_DEPENDENCIES = \
 	lcms2 \
 	libpng \
 	libusb \
-	xlib_libXrandr \
-	xlib_libXrender \
-	xlib_libXt \
-	xlib_libXtst \
 	zlib
 
 # JVM variants
@@ -85,7 +82,6 @@ OPENJDK_CONF_OPTS = \
 	--disable-full-docs \
 	--disable-manpages \
 	--disable-warnings-as-errors \
-	--enable-headless-only \
 	--enable-openjdk-only \
 	--enable-unlimited-crypto \
 	--openjdk-target=$(GNU_TARGET_NAME) \
@@ -106,8 +102,15 @@ OPENJDK_CONF_OPTS = \
 	--with-native-debug-symbols=none \
 	--without-version-pre \
 	--with-sysroot=$(STAGING_DIR) \
-	--with-version-build="$(OPENJDK_VERSION_MAJOR)" \
-	--with-version-string="$(OPENJDK_VERSION_MAJOR)"
+	--with-version-build="$(OPENJDK_VERSION_BUILD)" \
+	--with-version-string="$(OPENJDK_VERSION_MAJOR).$(OPENJDK_VERSION_MINOR)"
+
+ifeq ($(BR2_PACKAGE_OPENJDK_X11),y)
+OPENJDK_CONF_OPTS += --disable-headless-only
+OPENJDK_DEPENDENCIES += xlib_libXrandr xlib_libXrender xlib_libXt xlib_libXtst
+else
+OPENJDK_CONF_OPTS += --enable-headless-only
+endif
 
 # If building for AArch64, use the provided CPU port.
 ifeq ($(BR2_aarch64),y)

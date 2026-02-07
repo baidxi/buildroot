@@ -141,6 +141,9 @@ config BR2_TOOLCHAIN_HAS_GCC_BUG_68485
 	default y if BR2_microblaze
 
 # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=81426
+# error: unable to find a register to spill in class ‘R0_REGS’
+# The bug exists at least since gcc 6.x, so we are assuming it affects
+# all GCC versions.
 config BR2_TOOLCHAIN_HAS_GCC_BUG_81426
 	bool
 	default y if BR2_sh
@@ -661,6 +664,14 @@ config BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_15
 config BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_16
 	bool
 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_15
+
+config BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_17
+	bool
+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_16
+
+config BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_18
+	bool
+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_17
 	select BR2_TOOLCHAIN_HEADERS_LATEST
 
 # This should be selected by the latest version, above, to indicate that
@@ -674,6 +685,8 @@ config BR2_TOOLCHAIN_HEADERS_LATEST
 # stops affecting a value on the first matching default.
 config BR2_TOOLCHAIN_HEADERS_AT_LEAST
 	string
+	default "6.18" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_18
+	default "6.17" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_17
 	default "6.16" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_16
 	default "6.15" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_15
 	default "6.14" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_14

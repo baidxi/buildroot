@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-SDL2_VERSION = 2.32.8
+SDL2_VERSION = 2.32.10
 SDL2_SOURCE = SDL2-$(SDL2_VERSION).tar.gz
 SDL2_SITE = http://www.libsdl.org/release
 SDL2_LICENSE = Zlib
@@ -27,6 +27,7 @@ SDL2_CONF_OPTS += \
 	--disable-video-offscreen \
 	--disable-video-vulkan \
 	--disable-video-directfb \
+	--disable-video-rpi \
 	--disable-ime \
 	--disable-ibus \
 	--disable-fcitx \
@@ -75,13 +76,6 @@ ifeq ($(BR2_X86_CPU_HAS_3DNOW),y)
 SDL2_CONF_OPTS += --enable-3dnow
 else
 SDL2_CONF_OPTS += --disable-3dnow
-endif
-
-ifeq ($(BR2_PACKAGE_SDL2_OPENGLES)$(BR2_PACKAGE_RPI_USERLAND),yy)
-SDL2_DEPENDENCIES += rpi-userland
-SDL2_CONF_OPTS += --enable-video-rpi
-else
-SDL2_CONF_OPTS += --disable-video-rpi
 endif
 
 # x-includes and x-libraries must be set for cross-compiling
