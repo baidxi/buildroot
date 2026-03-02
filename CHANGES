@@ -1,3 +1,154 @@
+2026.02-rc2, released February 24th, 2026
+
+	Fixes all over the tree.
+
+	Updated/fixed packages: bind, c-ares, libzlib, mpir, netsnmp,
+	python-anyio, python-fastapi, python-jsonschema,
+	python-pybind, python-starlette, qemu, ruby, snort, systemd,
+	wmctrl, wpewebkit
+
+2026.02-rc1, released February 17th, 2026
+
+	Fixes all over the tree and new features.
+
+	Arch:
+	- Add HPPA architecture support
+	- Drop ARC big-endian support
+
+	Toolchain:
+	- Kernel headers: use 6.19.x by default, removed 6.17.x, added
+	  6.19.x support.
+
+	- Binutils: use 2.44 by default, removed 2.42.x, added 2.45.x series.
+
+	Misc:
+	- Various tweaks to utils/generate-cyclonedx for better SBOM
+	  compatibility and more detailed annotations for CVEs fixed
+	  by patches in Buildroot.
+
+	New defconfigs: AMD Versal2 VEK385, HP-9000, QEMU HPPA B160L,
+	STM32h747i-disco
+
+	Removed defconfigs: Raspberrypi3 qt5we
+
+	New packages: adsp-ldr, aichat, k3conf, kibi, libplacebo,
+	libxmlsec1, libyang-cpp, nqptp, openscap,
+	python-annotated-doc, python-base58, python-coherent-licensed,
+	python-diskcache, python-gpiod,
+	python-ipython-pygments-lexers, python-librt,
+	python-markdown-it-py, python-mdit-py-plugins, python-mdurl,
+	python-memray, python-platformdirs, python-rich,
+	python-sdbus-systemd, python-textual, python-varlink,
+	qoriq-restool, rasdaemon, sigsum-go, sysrepo-cpp, yq, zellij
+
+	Removed packages: alure, bootstrap, chartjs, connman-gtk,
+	cppdb, criu, cvs, datatables-buttons, datatables-fixedcolumns,
+	datatables-responsive, datatables, dbus-triggerd, dmraid,
+	dvdrw-tools, explorercanvas, flot, forge, gconf, hawktracer,
+	jquery-datetimepicker, jquery-keyboard, jquery-mobile,
+	jquery-sidebar, jquery-sparkline, jquery-ui-themes, jquery-ui,
+	jquery-validation, jquery, jsmin, json-javascript, jszip,
+	let-me-create, libcgi, libcuefile, libfreeimage, libiqrf,
+	libmhash, libnids, libsvg-cairo, libsvg, libuwsc, lockdev,
+	musepack, opencv3, openlayers, openpowerlink, opentracing-cpp,
+	php-zmq, python-aioredis, qjson, racehound, rpi-userland,
+	sconeserver, softether, taskd, vis-network, vuejs-router,
+	vuejs, xdriver_xf86-input-mouse
+
+	Issues resolved:
+	- GNU GRUB (BIOS) with f2fs filesystem failed
+	  https://gitlab.com/buildroot.org/buildroot/-/issues/61
+
+	- The shadow package does not correctly configure the ENCRYPT_METHOD..
+	  https://gitlab.com/buildroot.org/buildroot/-/issues/134
+
+	- EGL not found when building libWPE from buildroot base folder
+	  https://gitlab.com/buildroot.org/buildroot/-/issues/144
+
+	- Awkward error message: "Fix you path"
+	  https://gitlab.com/buildroot.org/buildroot/-/issues/151
+
+	- Detected presence of version control tool artifacts
+	  https://gitlab.com/buildroot.org/buildroot/-/issues/154
+
+	- run-tests tool broken with Python 3.14
+	  https://gitlab.com/buildroot.org/buildroot/-/issues/156
+
+	- Moving away from bminor Github mirrors
+	  https://gitlab.com/buildroot.org/buildroot/-/issues/160
+
+	- How can I make the 'en_US' locale by default?
+	  https://gitlab.com/buildroot.org/buildroot/-/issues/161
+
+2025.11.2, released February 20, 2026
+
+	avahi: CVE-2021-3468, CVE-2023-38469, CVE-2023-38470, CVE-2023-38471,
+	  CVE-2023-38472, CVE-2023-38473, CVE-2024-52615, CVE-2024-52616,
+	  CVE-2025-68276, CVE-2025-68468, CVE-2025-68471, CVE-2026-24401
+	bind: CVE-2025-13878
+	busybox: CVE-2025-46394, CVE-2025-60876
+	expat: CVE-2026-24515, CVE-2026-25210
+	glibc: CVE-2025-15281, CVE-2026-0861, CVE-2026-0915
+	gnutls: CVE-2025-14831, CVE-2026-1584
+	go: CVE-2025-61732, CVE-2025-68121, CVE-2025-61728, CVE-2025-61726,
+	  CVE-2025-68121, CVE-2025-61731, CVE-2025-61730
+	gpsd: CVE-2025-67268, CVE-2025-67268
+	haproxy: CVE-2025-11230
+	intel-microcode: CVE-2024-24853, CVE-2025-31648
+	libopenssl: CVE-2025-11187, CVE-2025-15467, CVE-2025-15468,
+	  CVE-2025-66199, CVE-2025-68160, CVE-2025-69418, CVE-2025-69419,
+	  CVE-2025-69420, CVE-2025-69421, CVE-2026-22795, CVE-2026-22796
+	libpng: CVE-2026-22695, CVE-2026-22801, CVE-2026-25646
+	libtasn1: CVE-2025-13151
+	libvpx
+	linux-pam: CVE-2024-10963
+	nginx: CVE-2025-53859
+	nodejs: CVE-2025-27210, CVE-2025-55130, CVE-2025-55131, CVE-2025-55132,
+	  CVE-2025-59465, CVE-2025-59466, CVE-2026-21637
+	python3: gh-144125, gh-143935, gh-143925, gh-143919, gh-143916
+	python-django: CVE-2025-13473, CVE-2025-14550, CVE-2026-1207,
+	  CVE-2026-1285, CVE-2026-1287, CVE-2026-1312
+	python-urllib3: CVE-2026-21441
+	strongswan: CVE-2025-62291
+	tor: TROVE-2025-016
+	vim: CVE-2025-66476
+	webkitgtk
+
+	Infrastructure updates/fixes:
+
+	arm-trusted-firmware, at91bootstrap3, barebox, linux, opensbi, optee-os,
+	  uboot: Add support for custom license files
+	config-fragments/autobuild: drop a number of duplicated toolchains
+	generate-cyclonedx: fix dependencies
+	Makefile: add check-package-external target
+	pkg-stats: add -N/--needs-update option
+	pkg-stats: fix RuntimeError with python 3.14 asyncio
+	relocate-sdk.sh: pre-calculate files in need of relocation
+	system/Config.in: do not reference md5 for sha256 option
+	testing/run-tests: specify multiprocessing method
+	testing: fix SdbusModemmanager/SdbusNetworkmanager duplicate test name
+	testing: python-requests: new runtime test
+	testing: test_python.py: disable interpreter colors
+	testing: test_python_sdbus_modemmanager: remove unneeded systemd vconsole
+	testing/tests/package/test_firewalld: use ext2 instead of cpio
+
+	Updated / fixed packages: aardvark-dns, asterisk, at91bootstrap3, avahi,
+	berkeleydb, bind, bitcoin, blake3, brltty, brotli, busybox cryptsetup,
+	dash, dc3dd, docker-engine, easy-rsa, efl, ell, expat, frr, glibc,
+	gnutls, go, gpsd, grub2, haproxy, igmpproxy, intel-microcode,
+	kvm-unit-tests, libcec, libbsd, libcdio-paranoia, libcurl, libgphoto2,
+	libgpiod2, libite, libopenssl, libpng, libtasn1, libucl, libvpx,
+	libwebsockets, linux, linux-headers, linux-pam, localedef, lockdev,
+	m4, manual, mcelog, mesa3d, mp4v2, mpg123, mpir, mupdf, netdata,
+	netsniff-ng, nginx, nodejs, parprouted, php, php-lua, pkg-utils, podman,
+	python3, python-django, python-jinja2, python-urllib3, qemu, rp-pppoe,
+	rust-bindgen, safeclib, samba4, sane-airscan, screen, shadow, shapelib,
+	spandsp, squeezelite, strongswan, swig, syslog-ng, systemd, tor, uboot,
+	uclibc, uftp, util-linux, vim, vsftpd, webkitgtk, wireless-regdb,
+	xmlstarlet, zeek
+
+	Removed packages: criu, cvs, dbus-triggerd, dvdrw-tools, libsvg, libsvg-cairo, lockdev, gconf,
+
 2025.11.1, released January 20, 2026
 
 	Important / security related fixes:
@@ -758,6 +909,69 @@
 
 	- netsnmp: unexpected header length in /proc/net/snmp...
 	  https://gitlab.com/buildroot.org/buildroot/-/issues/110
+
+2025.02.11, released February 20, 2026
+
+	avahi: CVE-2021-3468, CVE-2023-38469, CVE-2023-38470, CVE-2023-38471,
+	  CVE-2023-38472, CVE-2023-38473, CVE-2024-52615, CVE-2024-52616,
+	  CVE-2025-68276, CVE-2025-68468, CVE-2025-68471, CVE-2026-24401
+	bind: CVE-2025-13878
+	busybox: CVE-2025-46394, CVE-2025-60876
+	expat: CVE-2026-24515, CVE-2026-25210
+	glibc: CVE-2025-15281, CVE-2026-0861, CVE-2026-0915
+	gnutls: CVE-2025-14831, CVE-2026-1584
+	haproxy: CVE-2025-11230
+	intel-microcode: CVE-2024-24853, CVE-2025-31648
+	libopenssl: CVE-2025-11187, CVE-2025-15467, CVE-2025-15468,
+	  CVE-2025-66199, CVE-2025-68160, CVE-2025-69418, CVE-2025-69419,
+	  CVE-2025-69420, CVE-2025-69421, CVE-2026-22795, CVE-2026-22796
+	libpng: CVE-2026-22695, CVE-2026-22801, CVE-2026-25646
+	libtasn1: CVE-2025-13151
+	libvpx
+	linux-pam: CVE-2024-10963
+	nginx: CVE-2025-53859
+	nodejs: CVE-2025-27210, CVE-2025-55130, CVE-2025-55131, CVE-2025-55132,
+	  CVE-2025-59465, CVE-2025-59466, CVE-2026-21637
+	python-django: CVE-2025-13473, CVE-2025-14550, CVE-2026-1207, CVE-2026-1285,
+	 CVE-2026-1287, CVE-2026-1312
+	python-urllib3: CVE-2026-21441
+	strongswan: CVE-2025-62291
+	tor: TROVE-2025-016
+	vim: CVE-2025-66476
+	webkitgtk
+
+	Infrastructure updates/fixes:
+
+	arm-trusted-firmware, at91bootstrap3, barebox, linux, opensbi, optee-os,
+	  uboot: Add support for custom license files
+	config-fragments/autobuild: drop a number of duplicated toolchains
+	generate-cyclonedx: fix dependencies
+	Makefile: add check-package-external target
+	pkg-stats: add -N/--needs-update option
+	pkg-stats: fix RuntimeError with python 3.14 asyncio
+	relocate-sdk.sh: pre-calculate files in need of relocation
+	system/Config.in: do not reference md5 for sha256 option
+	testing/run-tests: specify multiprocessing method
+	testing: python-requests: new runtime test
+	testing: test_python.py: disable interpreter colors
+	testing/tests/package/test_firewalld: use ext2 instead of cpio
+
+	Updated / fixed packages: asterisk, at91bootstrap3, avahi, berkeleydb,
+	bind, bitcoin, brltty, busybox, cryptsetup, dash, dc3dd, docker-engine,
+	easy-rsa, ell, expat, frr, glibc, gnutls, haproxy,
+	igmpproxy, intel-microcode, libcec, libcurl, libgphoto2, libgpiod2,
+	libite, libopenssl, libpng, libselinux,
+	libtasn1, libucl, libvpx, libwebsockets, linux, linux-headers,
+	linux-pam, localedef, lockdev, m4, manual, mcelog, mesa3d, mp4v2,
+	mpg123, mpir, mupdf, netdata, nginx, nodejs, php, php-lua, pkg-utils,
+	python3, python-django, python-jinja2, python-urllib3, rp-pppoe,
+	rust-bindgen, safeclib, screen, shadow, spandsp, strongswan, swig,
+	syslog-ng, tor, uclibc, uftp, util-linux, vim, webkitgtk,
+	wireless-regdb, xmlstarlet, zeek
+
+	New package: libpam-pkcs11
+
+	Removed packages: criu, cvs, dbus-triggerd, dvdrw-tools, libsvg, libsvg-cairo, lockdev, gconf,
 
 2025.02.10, released January 20, 2026
 
