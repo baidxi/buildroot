@@ -430,7 +430,6 @@ F:	package/libhdhomerun/
 F:	package/libheif/
 F:	package/libid3tag/
 F:	package/libilbc/
-F:	package/libldns/
 F:	package/libmicrohttpd/
 F:	package/libminiupnpc/
 F:	package/libmspack/
@@ -610,6 +609,9 @@ F:	package/alsa-plugins/
 
 N:	Changming Huang <jerry.huang@nxp.com>
 F:	package/qoriq-cadence-dp-firmware/
+
+N:	Chen Pei <cp0613@linux.alibaba.com>
+F:	package/iniparser/
 
 N:	Chris Packham <judge.packham@gmail.com>
 F:	package/coremark/
@@ -1260,6 +1262,7 @@ F:	package/cctz/
 F:	package/clpeak/
 F:	package/faad2/
 F:	package/fdk-aac/
+F:	package/ftxui/
 F:	package/httping/
 F:	package/iozone/
 F:	package/leptonica/
@@ -1846,6 +1849,8 @@ F:	support/testing/tests/fs/test_btrfs.py
 F:	support/testing/tests/fs/test_btrfs/
 F:	support/testing/tests/fs/test_erofs.py
 F:	support/testing/tests/fs/test_erofs/
+F:	support/testing/tests/fs/test_xfs.py
+F:	support/testing/tests/fs/test_xfs/
 F:	support/testing/tests/package/sample_python_distro.py
 F:	support/testing/tests/package/sample_python_gnupg.py
 F:	support/testing/tests/package/sample_python_hwdata.py
@@ -1874,6 +1879,7 @@ F:	support/testing/tests/package/test_btrfs_progs.py
 F:	support/testing/tests/package/test_btrfs_progs/
 F:	support/testing/tests/package/test_bzip2.py
 F:	support/testing/tests/package/test_compressor_base.py
+F:	support/testing/tests/package/test_connman.py
 F:	support/testing/tests/package/test_coremark.py
 F:	support/testing/tests/package/test_cryptsetup.py
 F:	support/testing/tests/package/test_cryptsetup/
@@ -2263,55 +2269,20 @@ F:	utils/diffconfig
 
 N:	Marcus Hoffmann <bubu@bubu1.eu>
 F:	package/nethogs/
-F:	package/pico-sdk/
-F:	package/picotool/
-F:	package/python-annotated-doc/
-F:	package/python-apscheduler/
-F:	package/python-crc/
-F:	package/python-diskcache/
 F:	package/python-django/
 F:	package/python-gpiod/
-F:	package/python-immutabledict/
 F:	package/python-jc/
-F:	package/python-log-rate-limit/
-F:	package/python-pydantic/
-F:	package/python-pydantic-core/
-F:	package/python-pydantic-settings/
-F:	package/python-ruamel-yaml-clib/
-F:	package/python-typing-inspection/
-F:	package/python-tzlocal/
-F:	package/python-sdbus-modemmanager/
-F:	package/python-sdbus-systemd/
 F:	package/python-varlink/
 F:	package/python-waitress/
 F:	package/python-whitenoise/
-F:	support/testing/tests/package/test_python_apscheduler.py
-F:	support/testing/tests/package/test_python_crc.py
-F:	support/testing/tests/package/test_python_diskcache.py
 F:	support/testing/tests/package/test_python_django.py
-F:	support/testing/tests/package/test_python_fastapi.py
-F:	support/testing/tests/package/test_python_pydantic.py
-F:	support/testing/tests/package/test_python_pydantic_settings.py
 F:	support/testing/tests/package/test_python_requests.py
-F:	support/testing/tests/package/test_python_ruamel_yaml.py
-F:	support/testing/tests/package/test_python_sdbus_modemmanager.py
-F:	support/testing/tests/package/test_python_sdbus_systemd.py
-F:	support/testing/tests/package/test_python_tzlocal.py
 F:	support/testing/tests/package/test_python_varlink.py
 F:	support/testing/tests/package/test_python_varlink/
 F:	support/testing/tests/package/test_python_waitress.py
 F:	support/testing/tests/package/test_python_whitenoise.py
-F:	support/testing/tests/package/sample_python_apscheduler.py
-F:	support/testing/tests/package/sample_python_crc.py
-F:	support/testing/tests/package/sample_python_diskcache.py
 F:	support/testing/tests/package/sample_python_django.py
-F:	support/testing/tests/package/sample_python_fastapi.py
-F:	support/testing/tests/package/sample_python_pydantic.py
-F:	support/testing/tests/package/sample_python_pydantic_settings.py
 F:	support/testing/tests/package/sample_python_requests.py
-F:	support/testing/tests/package/sample_python_ruamel_yaml.py
-F:	support/testing/tests/package/sample_python_sdbus_modemmanager.py
-F:	support/testing/tests/package/sample_python_sdbus_systemd.py
 
 N:	Marek Belisko <marek.belisko@open-nandra.com>
 F:	package/libatasmart/
@@ -2510,6 +2481,7 @@ F:	boot/xilinx-embeddedsw/
 F:	boot/xilinx-prebuilt/
 F:	configs/versal_vck190_defconfig
 F:	configs/versal_vek280_defconfig
+F:	configs/versal_vpk120_defconfig
 F:	configs/versal_vpk180_defconfig
 F:	configs/versal2_vek385_defconfig
 F:	configs/zynq_zc702_defconfig

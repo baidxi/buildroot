@@ -144,6 +144,28 @@ endif
 
 ###############################################################################
 
+comment "Legacy options removed in 2026.05"
+
+config BR2_PACKAGE_PYTHON3_OSSAUDIODEV
+	bool "python3 ossaudiodev module removed"
+	select BR2_LEGACY
+	help
+	  The ossaudiodev module was removed in Python 3.13.
+
+config BR2_TARGET_EDK2_PLATFORM_OVMF_I386
+	bool "EDK2 OVMF IA32 removed"
+	select BR2_LEGACY
+	help
+	  EDK2 OVMF IA32 support was removed in upstream version
+	  202511, so it has been dropped.
+
+config BR2_BINUTILS_VERSION_2_43_X
+	bool "binutils 2.43 has been removed"
+	select BR2_LEGACY
+	help
+	  binutils 2.43 has been removed, select a newer version
+	  instead.
+
 comment "Legacy options removed in 2026.02"
 
 config BR2_PACKAGE_QEMU_TARGET_CRIS

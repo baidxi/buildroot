@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-JASPER_VERSION = 4.2.8
+JASPER_VERSION = 4.2.9
 JASPER_SITE = https://github.com/jasper-software/jasper/releases/download/version-$(JASPER_VERSION)
 JASPER_INSTALL_STAGING = YES
 JASPER_LICENSE = JasPer-2.0
@@ -30,6 +30,12 @@ JASPER_CONF_OPTS += \
 
 ifeq ($(BR2_STATIC_LIBS),y)
 JASPER_CONF_OPTS += -DJAS_ENABLE_SHARED=OFF
+endif
+
+ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+JASPER_CONF_OPTS += -DJAS_ENABLE_MULTITHREADING_SUPPORT=ON
+else
+JASPER_CONF_OPTS += -DJAS_ENABLE_MULTITHREADING_SUPPORT=OFF
 endif
 
 ifeq ($(BR2_PACKAGE_JPEG),y)
