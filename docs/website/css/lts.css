@@ -142,8 +142,13 @@
     border: 2px solid var(--br-grid);
 
     text-decoration: none;
-    cursor: pointer;
     scroll-margin-top: 20px; /* Offset for jump to anchor */
+}
+
+@media screen and (max-width: 768px) {
+  .br-lts-section-header {
+    width: 100%;
+  }
 }
 
 .br-lts-section-header:hover {

@@ -369,6 +369,7 @@ F:	package/bcg729/
 F:	package/bento4/
 F:	package/bitcoin/
 F:	package/clamav/
+F:	package/cxxopts/
 F:	package/dav1d/
 F:	package/dht/
 F:	package/dnsmasq/
@@ -457,6 +458,7 @@ F:	package/libvorbis/
 F:	package/libvpl/
 F:	package/libvpx/
 F:	package/libyuv/
+F:	package/libzippp/
 F:	package/linux-firmware/
 F:	package/mc/
 F:	package/mesa3d/
@@ -612,6 +614,7 @@ F:	package/qoriq-cadence-dp-firmware/
 
 N:	Chen Pei <cp0613@linux.alibaba.com>
 F:	package/iniparser/
+F:	package/ndctl/
 
 N:	Chris Packham <judge.packham@gmail.com>
 F:	package/coremark/
@@ -2103,6 +2106,7 @@ F:	board/octavo/osd32mp1-brk/
 F:	board/octavo/osd32mp1-red/
 F:	configs/octavo_osd32mp1_brk_defconfig
 F:	configs/octavo_osd32mp1_red_defconfig
+F:	package/drm-info/
 
 N:	Kris Bahnsen <kris@embeddedTS.com>
 F:	package/wilc-firmware/
@@ -2209,6 +2213,29 @@ N:	Mahyar Koshkouei <mahyar.koshkouei@gmail.com>
 F:	package/ffmpeg/
 F:	package/mpv/
 F:	package/rpi-firmware/
+
+N:	Manuel Diener <manuel.diener@oss.othermo.de>
+F:	package/pico-sdk/
+F:	package/picotool/
+F:	package/python-annotated-doc/
+F:	package/python-apscheduler/
+F:	package/python-crc/
+F:	package/python-diskcache/
+F:	package/python-django/
+F:	package/python-gpiod/
+F:	package/python-immutabledict/
+F:	package/python-jc/
+F:	package/python-log-rate-limit/
+F:	package/python-pydantic/
+F:	package/python-pydantic-core/
+F:	package/python-pydantic-settings/
+F:	package/python-typing-inspection/
+F:	package/python-tzlocal/
+F:	package/python-sdbus-modemmanager/
+F:	package/python-sdbus-systemd/
+F:	package/python-varlink/
+F:	package/python-waitress/
+F:	package/python-whitenoise/
 
 N:	Marcin Bis <marcin@bis.org.pl>
 F:	package/bluez5_utils/
@@ -3408,7 +3435,6 @@ F:	package/mksh/
 F:	package/ruby/
 F:	package/uclibc/
 F:	package/uclibc-ng-test/
-F:	package/zabbix/
 F:	support/testing/tests/package/test_ruby.py
 
 N:	Will Newton <will.newton@gmail.com>
@@ -3456,6 +3482,7 @@ N:	Yann E. MORIN <yann.morin@orange.com>
 F:	.editorconfig
 F:	package/gpsd/
 F:	package/mosquitto/
+F:	package/python-humanfriendly/
 F:	package/skopeo/
 
 N:	Yegor Yefremov <yegorslists@googlemail.com>
