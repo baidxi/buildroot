@@ -5,7 +5,7 @@
 ################################################################################
 
 HAPROXY_VERSION_MAJOR = 2.6
-HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).23
+HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).27
 HAPROXY_SITE = http://www.haproxy.org/download/$(HAPROXY_VERSION_MAJOR)/src
 HAPROXY_LICENSE = GPL-2.0+ and LGPL-2.1+ with exceptions
 HAPROXY_LICENSE_FILES = LICENSE doc/lgpl.txt doc/gpl.txt
@@ -59,11 +59,6 @@ HAPROXY_DEPENDENCIES += pcre2
 HAPROXY_MAKE_OPTS += \
 	PCRE2_CONFIG=$(STAGING_DIR)/usr/bin/pcre2-config \
 	USE_PCRE2=1
-else ifeq ($(BR2_PACKAGE_PCRE),y)
-HAPROXY_DEPENDENCIES += pcre
-HAPROXY_MAKE_OPTS += \
-	PCRE_CONFIG=$(STAGING_DIR)/usr/bin/pcre-config \
-	USE_PCRE=1
 endif
 
 ifeq ($(BR2_PACKAGE_SYSTEMD),y)

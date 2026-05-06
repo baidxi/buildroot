@@ -4,18 +4,20 @@
 #
 ################################################################################
 
-TVHEADEND_VERSION = 5abbcda4d8c82d2d4889452a7056a7bfcd728fc6
+TVHEADEND_VERSION = 37453bc3fe5f9e10f3428ebb1abdc613f8b07186
 TVHEADEND_SITE = $(call github,tvheadend,tvheadend,$(TVHEADEND_VERSION))
 TVHEADEND_LICENSE = GPL-3.0+
 TVHEADEND_LICENSE_FILES = LICENSE.md
 TVHEADEND_DEPENDENCIES = \
+	dtv-scan-tables \
 	host-gettext \
 	host-pkgconf \
 	host-pngquant \
 	host-python3 \
 	openssl
 TVHEADEND_CONF_OPTS = \
-	--disable-omx
+	--disable-omx \
+	--disable-pcre
 
 ifeq ($(BR2_PACKAGE_AVAHI),y)
 TVHEADEND_DEPENDENCIES += avahi
@@ -125,19 +127,14 @@ endif
 
 ifeq ($(BR2_PACKAGE_PCRE2),y)
 TVHEADEND_DEPENDENCIES += pcre2
-TVHEADEND_CONF_OPTS += --disable-pcre --enable-pcre2
-else ifeq ($(BR2_PACKAGE_PCRE),y)
-TVHEADEND_DEPENDENCIES += pcre
-TVHEADEND_CONF_OPTS += --enable-pcre --disable-pcre2
+TVHEADEND_CONF_OPTS += --enable-pcre2
 else
-TVHEADEND_CONF_OPTS += --disable-pcre --disable-pcre2
+TVHEADEND_CONF_OPTS += --disable-pcre2
 endif
 
 ifeq ($(BR2_TOOLCHAIN_SUPPORTS_PIE),)
 TVHEADEND_CONF_OPTS += --disable-pie
 endif
-
-TVHEADEND_DEPENDENCIES += dtv-scan-tables
 
 # The tvheadend build system expects the transponder data to be present inside
 # its source tree. To prevent a download initiated by the build system just
