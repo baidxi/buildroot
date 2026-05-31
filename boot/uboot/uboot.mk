@@ -269,6 +269,7 @@ endif
 
 ifeq ($(BR2_TARGET_UBOOT_NEEDS_PYTHON3),y)
 UBOOT_DEPENDENCIES += host-python3 host-python-setuptools
+UBOOT_MAKE_OPTS += PYTHONPATH=$(HOST_DIR)/lib/python$(PYTHON3_VERSION_MAJOR)
 endif
 
 ifeq ($(BR2_TARGET_UBOOT_NEEDS_PYLIBFDT),y)
